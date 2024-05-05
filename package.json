@@ -17,11 +17,11 @@
     "@mui/lab": "^5.0.0-alpha.70",
     "@mui/material": "^5.4.0",
     "@mui/x-date-pickers": "^7.3.1",
-    "@next/react": "^12.0.0",
+    "@next/react": "^14.0.0",
     "@popperjs/core": "^2.11.2",
     "@reduxjs/toolkit": "^2.2.3",
     "apexcharts": "^3.49.0",
-    "apexcharts-clevision": "^3.28.5",
+    "apexcharts-clevision": "3.28.5",
     "babel-eslint": "^10.1.0",
     "bootstrap": "^5.3.3",
     "chart.css": "^0.1.1",
@@ -50,12 +50,12 @@
   },
   "devDependencies": {
     "eslint": "^7.32.0",
-    "eslint-config-next": "^12.0.0",
+    "eslint-config-next": "^14.0.0",
     "eslint-config-prettier": "^8.3.0",
     "eslint-import-resolver-alias": "^1.1.2",
     "eslint-import-resolver-typescript": "^2.5.0",
     "eslint-plugin-import": "^2.25.4",
-    "next-transpile-modules": "^9.0.0",
+    "next-transpile-modules": "^8.0.0",
     "prettier": "2.5.1"
   }
 }
