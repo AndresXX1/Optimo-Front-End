@@ -3425,11 +3425,6 @@ esutils@^2.0.2:
   resolved "https://registry.npmjs.org/esutils/-/esutils-2.0.3.tgz"
   integrity sha512-kVscqXk4OCp68SZ0dkgEKVi6/8ij300KBWTJq32P/dYeWTSwK41WyTxalN1eRmA5Z9UU/LX9D7FWSmV9SAYx6g==
 
-fancy-canvas@2.1.0:
-  version "2.1.0"
-  resolved "https://registry.npmjs.org/fancy-canvas/-/fancy-canvas-2.1.0.tgz"
-  integrity sha512-nifxXJ95JNLFR2NgRV4/MxVP45G9909wJTEKz5fg/TZS20JJZA6hfgRVh/bC9bwl2zBtBNcYPjiBE4njQHVBwQ==
-
 fast-deep-equal@^3.1.1, fast-deep-equal@^3.1.3:
   version "3.1.3"
   resolved "https://registry.npmjs.org/fast-deep-equal/-/fast-deep-equal-3.1.3.tgz"
@@ -3997,18 +3992,6 @@ levn@^0.4.1:
   dependencies:
     prelude-ls "^1.2.1"
     type-check "~0.4.0"
-
-lightweight-charts-react@^0.0.2:
-  version "0.0.2"
-  resolved "https://registry.npmjs.org/lightweight-charts-react/-/lightweight-charts-react-0.0.2.tgz"
-  integrity sha512-EPh8btWsIGPBG53ZrKFh2JiHARQv8tht6vOLQ6v0lnaJwojW/sugGDXaKalah6QGWS+Thq0/g+qNy+6SkR8JoA==
-
-lightweight-charts@^4.1.3:
-  version "4.1.3"
-  resolved "https://registry.npmjs.org/lightweight-charts/-/lightweight-charts-4.1.3.tgz"
-  integrity sha512-SJacmEyx3LmT2Qsc7Kq7cEX7nEHtQv0MOlujhRlcDxhW62pG6nkBlcM52/jNqkq8B28KQeVmgOQ7zrdJ4BCPDw==
-  dependencies:
-    fancy-canvas "2.1.0"
 
 lilconfig@^2.1.0:
   version "2.1.0"
@@ -4791,12 +4774,13 @@ react-transition-group@^4.4.5:
     loose-envify "^1.4.0"
     prop-types "^15.6.2"
 
-react@^18:
-  version "18.2.0"
-  resolved "https://registry.npmjs.org/react/-/react-18.2.0.tgz"
-  integrity sha512-/3IjMdb2L9QbBdWiW5e3P2/npwMBaU9mHCSCUzNln0ZCYbcfTsGbTJrU/kGemdH2IWmB2ioZ+zkxtmq6g09fGQ==
+react@^17:
+  version "17.0.2"
+  resolved "https://registry.npmjs.org/react/-/react-17.0.2.tgz"
+  integrity sha512-gnhPt75i/dq/z3/6q/0asP78D0u592D5L1pd7M8P+dck6Fu/jJeL6iVVK23fptSUZj8Vjf++7wXA8UNclGQcbA==
   dependencies:
     loose-envify "^1.1.0"
+    object-assign "^4.1.1"
 
 read-cache@^1.0.0:
   version "1.0.0"
