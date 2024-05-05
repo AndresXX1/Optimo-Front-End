@@ -1044,7 +1044,7 @@
     "@nextui-org/react-rsc-utils" "2.0.12"
     "@nextui-org/shared-utils" "2.0.5"
 
-"@nextui-org/react@^2.3.6":
+"@nextui-org/react@^2.0.0":
   version "2.3.6"
   resolved "https://registry.npmjs.org/@nextui-org/react/-/react-2.3.6.tgz"
   integrity sha512-mA3IgPBmVZLpwLxn1t97fpwjBL+dZdAt4x9+3TjJfEQjbH9j/FvUsOAIpaT53BMcDIWrqP3Co3yR+AbplgSiEg==
