@@ -1,0 +1,154 @@
+.card {
+    width: 400px;
+    height: 100px;
+    border-radius: 15.6px;
+    margin: 6.4px;
+    overflow: hidden;
+    box-shadow: 0 5.2px 10.4px rgba(198, 200, 69, 0.737);
+    background-color: #1f1f1fe5;
+    display: flex;
+    flex-direction: row;
+    position: relative;
+    transition: transform 0.3s; /* Agregar transición para suavizar el efecto */
+  }
+  /* jdnfkdn */
+  .card:hover {
+    box-shadow: 0 8px 16px rgba(202, 200, 47, 0.64);
+    transform: scale(1.05); /* Aumenta ligeramente el tamaño en un 5% */
+  }
+  
+  .card svg {
+    position: absolute;
+    top: 13.6px;
+    left: 13.6px;
+    width: 20.4px;
+    fill: #60d4ea;
+  }
+  
+  .left {
+    width: 50%;
+    padding: 27.2px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+  
+  
+  
+  .left button:hover {
+    background-color: #43bccd;
+  }
+  
+  .row {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-evenly;
+  }
+  
+  
+  
+  .card-body {
+    display: flex;
+   
+    margin-left: 20px;
+    flex-direction: column;
+    margin-top: 15px;
+  }
+  
+  .card-title {
+    font-size: 25px;
+    margin-bottom: 0.34em;
+    color: #fff;
+    margin-top: -180px;
+    margin-left: 220px;
+    border-bottom: 2px solid black ;
+    position: absolute;
+  }
+  
+  .card-text {
+    margin-bottom: 0.34em;
+    font-size: 16px;
+    color: #bbb;
+    margin-right: -10px;
+    margin-top: 10px;
+   
+  }
+  
+  .ddddd{
+    margin-left: 20px;
+    margin-top: 40px;
+  }
+  
+  .fondocard {
+    background-color: rgba(255, 255, 255, 0.5);
+  }
+  
+  .transparent-background {
+    background-color: rgba(255, 255, 255, 0);
+  }
+  
+  .texto12{
+    color: red;
+  }
+  
+  .custom-card {
+    position: relative;
+  }
+  
+  .navigation-buttons {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    display: flex;
+  }
+  
+  .navigation-button {
+    color: white; /* Color de las flechas */
+    background-color: rgba(0, 0, 0, 0.5); /* Fondo de las flechas */
+  }
+  
+  .image-indicators {
+    position: absolute;
+    bottom: 10px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+  }
+  
+  .image-indicators > div {
+    width: 8px;
+    height: 8px;
+    margin: 0 4px; /* Espacio entre los indicadores */
+    border-radius: 50%;
+  }
+  
+  .active-indicator {
+    background-color: rgb(195, 6, 6); /* Color del indicador activo */
+  }
+  
+  .inactive-indicator {
+    background-color: rgb(239, 19, 19); /* Color del indicador inactivo */
+  }
+  
+  .dot {
+    height: 10px;
+    width: 10px;
+    background-color: #655c5c;
+    border-radius: 50%;
+    display: inline-block;
+    margin: 0 5px;
+    margin-top: 0px;
+  }
+  
+  
+  .active {
+    background-color: #bf2626;
+  }
+  
+  .dotscontainer {
+    position: absolute;
+    top: 50px; /* Ajustar la posición desde la parte superior */
+     /* Centrar horizontalmente */
+    transform: translateX(-50%); /* Centrar horizontalmente */
+    padding: 20px;
+  }

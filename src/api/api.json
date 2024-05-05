@@ -1,0 +1,122 @@
+[
+    {
+        "id": 1,
+        "Nombre": "Oficina Principal",
+        "Descripcion": "Oficina principal ubicada en La Celeste II, en el Piso 5 del ala Este. Esta oficina es ideal para trabajo diario, reuniones y sesiones de colaboración. Cuenta con un espacio amplio y luminoso, equipado con escritorio, silla de oficina y computadora para una experiencia de trabajo cómoda y productiva.",
+        "Servicio": "La Celeste II",
+        "Piso": "Piso 5",
+        "Ubicacion": "Ala Este",
+        "Imagen": ["https://www.lanacion.com.ar/resizer/v2/oficina-o-63NVEMI7MVE3BOIUPRRI56VLNQ.jpg?auth=558a1247452d1c8af16f1dc6cea556831fed71a4846cbb3f8d69ed0d29fefc9c&width=420&height=280&quality=70&smart=true", "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRtQe6Rr_z2gMwHlpKefyx2tbk9akrpHKHOeOyQkXObcQ&s","https://www.equipamientointegraldeoficinas.com/wp-content/uploads/mamparas-de-oficina-principal.jpg","https://img.freepik.com/fotos-premium/fotos-oficina-fotos-oficina-principal-fotos-interior-oficina-diseno-creativo-oficina-oficina-creativa_893474-39.jpg","https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQDq17__5-ATdHj37NNlkackhpl9GIwTYR2t5oYztEl0g&s"],
+        "Tipo": "Habitación",
+        "Equipamento": ["Escritorio","Silla de oficina", "Computadora"],
+        "Planta":["https://res.cloudinary.com/ds4blfuip/image/upload/v1714684488/plano_oficin_principal_ibuxgp.png","https://res.cloudinary.com/ds4blfuip/image/upload/v1714684727/587557768_planta-baja_wxrxc9.png"]
+    },
+    {
+        "id": 2,
+        "Nombre": "Sala de reuniones",
+        "Descripcion": "Sala de reuniones ubicada en La Celeste II, en el Piso 10 del ala Oeste. Esta sala es perfecta para conferencias, presentaciones y encuentros de negocios. Con una mesa de conferencia, sillas y pizarra, ofrece un entorno profesional para discusiones y colaboraciones efectivas.",
+        "Servicio": "La Celeste II",
+        "Piso": "Piso 10",
+        "Ubicacion": "Ala Oeste",
+        "Imagen": ["https://swissrents.com/wp-content/uploads/2022/08/Sala-de-reuniones-1-1.jpg","https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ_fJ9VSgy7YAlH50dnrqP2igsgojsa63XyORlWW1FJQg&s", "https://oficinascentenario.pe/wp-content/uploads/2021/07/Sala-de-reuniones-scaled.jpg"],
+        "Tipo": "Suite",
+        "Equipamento": ["Mesa de conferencia","Sillas","Pizarra"],
+        "Planta":[""]
+    },
+    {
+        "id": 3,
+        "Nombre": "Sala de Conferencias",
+        "Descripcion": "Sala de conferencias ubicada en La Celeste II, en el Piso 2 del ala Norte. Este espacio es ideal para eventos, presentaciones y seminarios. Equipada con proyector, pantalla y micrófonos, ofrece las herramientas necesarias para comunicaciones efectivas y presentaciones impactantes.",
+        "Servicio": "La Celeste II",
+        "Piso": "Piso 2",
+        "Ubicacion": "Ala Norte",
+        "Imagen": ["https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQDfLHrKhs5rnUY1pwKXdoSIvlghsE8OBwLkHKGMIIl4g&s", "https://forumceao.com/wp-content/uploads/2020/08/espacio-sala-reuniones-y-conferencias-1.jpg"],
+        "Tipo": "Espacio de reuniones",
+        "Equipamento": ["Proyector","Pantalla", "Micrófonos"],
+        "Planta":[""]
+    },
+    {
+        "id": 4,
+        "Nombre": "Cubiculos Call",
+        "Descripcion": "Cubículos de llamadas ubicados en La Celeste II, en la Planta Baja en un área común. Estos cubículos proporcionan un entorno tranquilo y privado para realizar llamadas telefónicas y trabajo individual. Equipados con cocina industrial, mesas y sillas, ofrecen comodidad y funcionalidad para actividades laborales.",
+        "Servicio": "La Celeste II",
+        "Piso": "Planta Baja",
+        "Ubicacion": "Área común",
+        "Imagen": ["https://definicion.de/wp-content/uploads/2020/08/Cubiculo-oficina.jpg", "https://media.istockphoto.com/id/93201739/es/foto/vacante-oficina3.jpg?s=612x612&w=0&k=20&c=SNCMXyLVz_SNphAHQOudd_WYAOUlx2pJzu8nxoIiagM="],
+        "Tipo": "Restaurante",
+        "Equipamento": ["Cocina industrial", "Mesas", "Sillas"],
+        "Planta":[""]
+    },
+    {
+        "id": 5,
+        "Nombre": "Taller de artes",
+        "Descripcion": "Taller de artes ubicado en La Celeste II, en el Piso 3 del ala Sur. Este espacio está dedicado a actividades creativas y artísticas. Equipado con materiales de arte y mesas de trabajo, proporciona un entorno inspirador para expresión artística y desarrollo creativo.",
+        "Servicio": "La Celeste II",
+        "Piso": "Piso 3",
+        "Ubicacion": "Ala Sur",
+        "Imagen": ["https://www.artelista.com/blog/wp-content/uploads/2020/05/jeff-koons-taller-1024x640.jpg", "https://static.vecteezy.com/system/resources/previews/035/200/724/non_2x/painting-with-bright-colors-on-large-canvas-in-art-workshop-modern-artwork-paint-on-canvas-creative-contemporary-and-successful-fine-art-artist-drawing-masterpiece-photo.jpg"],
+        "Tipo": "Instalaciones deportivas",
+        "Equipamento": ["Materiales de arte", "Mesas de trabajo"],
+        "Planta":[""]
+    },
+    {
+        "id": 6,
+        "Nombre": "Salon de muestras",
+        "Descripcion": " Salón de muestras ubicado en La Celeste II, en el Piso 4 del ala Este. Este espacio es perfecto para exposiciones y demostraciones. Con un salón de exposiciones y stands, ofrece un entorno elegante y versátil para presentaciones de productos y eventos promocionales.",
+        "Servicio": "La Celeste II",
+        "Piso": "Piso 4",
+        "Ubicacion": "Ala Este",
+        "Imagen": ["https://bualadesign.wordpress.com/wp-content/uploads/2012/11/image.jpg", "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTTh1v7znc4YbBKPKZfqNzitbPyY00p1YUvc6cIvdeezw&s"],
+        "Tipo": "Bienestar",
+        "Equipamento": ["Salón de exposiciones", "Stands"],
+        "Planta":[""]
+    },
+    {
+        "id": 7,
+        "Nombre": "Despacho",
+        "Descripcion": "Despacho ubicado en La Celeste II, en el Piso 8 del ala Oeste. Este espacio está destinado para relajación y entretenimiento. Equipado con mesa de billar y consolas de videojuegos, ofrece un ambiente acogedor y divertido para momentos de ocio y recreación.",
+        "Servicio": "La Celeste II",
+        "Piso": "Piso 8",
+        "Ubicacion": "Ala Oeste",
+        "Imagen": ["https://www.equipamientointegraldeoficinas.com/wp-content/uploads/despacho-de-direccion-freeport.jpg", "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcShEMNIzaxWRoFQhfqwfYJ1zyUe1TqfgX52Xp4YRyVWCw&s"],
+        "Tipo": "Entretenimiento",
+        "Equipamento": ["Mesa de billar", "Consolas de videojuegos"],
+        "Planta":[""]
+    },
+    {
+        "id": 8,
+        "Nombre": "Bodega de almacenamiento",
+        "Descripcion": "Bodega de almacenamiento ubicada en La Celeste II, en el Piso 6 del ala Norte. Este espacio está dedicado para almacenamiento y logística. Equipado con estantes, carretillas y cajas de almacenamiento, ofrece una solución eficiente para gestionar inventarios y materiales.",
+        "Servicio": "La Celeste II",
+        "Piso": "Piso 6",
+        "Ubicacion": "Ala Norte",
+        "Imagen": ["https://lh4.googleusercontent.com/proxy/l3aJvvOzEEFr_day5zpvbdc8X6Oq7rrnvb4519ltWZuQymQj89pHyqTzahMYB94uQGHJdvLCP3uPA6ahT-V3nrZYnqfWDancuMmNtzKEnwYSmbVxRECO-z6LGb4ZUA5Kj_nhykRUtQk", "https://lirp.cdn-website.com/7ad3c13c/dms3rep/multi/opt/37-960w.jpg"],
+        "Tipo": "Espacio de trabajo",
+        "Equipamento": ["Estantes", "Carretillas", "Cajas de almacenamiento"],
+        "Planta":[""]
+    },
+    {
+        "id": 9,
+        "Nombre": "Sala de conferencias",
+        "Descripcion": "Sala de conferencias ubicada en La Celeste II, en la Planta Baja en un área exterior. Ideal para eventos al aire libre y reuniones informales. Equipada con tumbonas, sombrillas y duchas, ofrece un espacio relajante y cómodo para actividades al aire libre.",
+        "Servicio": "La Celeste II",
+        "Piso": "Planta Baja",
+        "Ubicacion": "Área exterior",
+        "Imagen": ["https://upload.wikimedia.org/wikipedia/commons/thumb/e/ee/Munich_Security_Conference_2010_-_Moe091_Westerwelle.jpg/1200px-Munich_Security_Conference_2010_-_Moe091_Westerwelle.jpg"],
+        "Tipo": "Instalaciones recreativas",
+        "Equipamento": ["Tumbonas", "Sombrillas","Duchas"],
+        "Planta":[""]
+    },
+    {
+        "id": 10,
+        "Nombre": "Salón de Eventos",
+        "Descripcion": "Salón de eventos ubicado en La Celeste II, en el Piso 7 del ala Sur. Este espacio es perfecto para celebraciones y banquetes. Con mesas redondas, sillas decorativas e iluminación ajustable, ofrece un ambiente elegante y versátil para eventos especiales y ceremonias.",
+        "Servicio": "La Celeste II",
+        "Piso": "Piso 7",
+        "Ubicacion": "Ala Sur",
+        "Imagen": ["https://images.adsttc.com/media/images/5e79/408c/b357/65c4/5c00/03e1/medium_jpg/LA_MORINGA_-_FOTO_(9).jpg?1585004667", "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQEZ4PCbuwqpZb97spOSl9VNlIGxAPkMSFaAsPgYo_7cA&s"],
+        "Tipo": "Salón de banquetes",
+        "Equipamento": ["Mesas redondas", "Sillas decorativas", "Iluminación ajustable"],
+        "Planta":[""]
+    }
+]

@@ -1,0 +1,105 @@
+.user {
+    width: 100%;
+    max-width: 1500px;
+    margin: 120px auto 50px;
+    padding: 20px;
+    border-radius: 10px;
+    background-color: #2b2a2aec;
+    color: #fff;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.7);
+  }
+  
+  .user::-webkit-scrollbar {
+    width: 5px;
+  }
+  
+  .user::-webkit-scrollbar-thumb {
+    background-color: rgba(255, 255, 255, 0.3);
+    border-radius: 4px;
+  }
+  
+  .user::-webkit-scrollbar-thumb:hover {
+    background-color: rgba(255, 255, 255, 0.5);
+  }
+  
+  .table-wrapper {
+    margin-top: 20px;
+    
+  }
+  
+  
+  
+  
+  
+.table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+  
+  .th {
+    padding: 15px;
+    text-align: left;
+   border: transparent;
+  }
+  .td {
+    padding: 15px;
+    text-align: left;
+   border: transparent;
+  }
+  
+  .th {
+    background-color: transparent;
+    color: transparent;
+    font-weight: bold;
+  }
+  
+  
+  
+  .actions {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .actions button {
+    margin: 0 5px;
+    padding: 8px 12px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s, color 0.3s;
+  }
+  
+  .actions button:hover {
+    background-color: #007bff;
+    color: #fff;
+  }
+  
+  .ban-button {
+    background-color: #28a745;
+  }
+  
+  .unban-button {
+    background-color: #ff4d4d;
+  }
+  
+  @media screen and (max-width: 768px) {
+    .user {
+      margin: 50px auto;
+    }
+  }
+  
+  
+  .titulod {
+    border: 1px solid rgba(128, 128, 128, 0.209);
+    position: absolute;
+    margin-top: -55px;
+    width: 250px;
+    text-align: center;
+    border-radius: 10px;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.7);
+    background-color: #ffffffa9;
+    color: #0e0d0d;
+    font-size: 30px;
+    
+  }
