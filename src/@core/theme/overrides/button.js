@@ -1,4 +1,5 @@
 // ** Theme Config Imports
+
 import themeConfig from 'src/configs/themeConfig';
 
 const Button = theme => {
@@ -15,19 +16,19 @@ const Button = theme => {
         contained: {
           boxShadow: theme.shadows[3],
           padding: `${theme.spacing(1.875, 5.5)}`,
-          backgroundColor: '#0074D9', // Color azul claro
+          backgroundColor: '#0074D9', 
           '&:hover': {
-            backgroundColor: '#005699', // Color azul claro más oscuro para el hover
+            backgroundColor: '#005699', 
           },
-          // Añade un efecto neón si lo deseas
+         
           border: '2px solid #0074D9',
           boxShadow: '0 0 10px #0074D9, 0 0 5px #0074D9',
         },
         outlined: {
           padding: `${theme.spacing(1.625, 5.25)}`,
-          borderColor: '#0074D9', // Color del borde para el estilo outlined
+          borderColor: '#0074D9', 
           '&:hover': {
-            borderColor: '#005699', // Color del borde más oscuro para el hover
+            borderColor: '#005699', 
           },
         },
         sizeSmall: {

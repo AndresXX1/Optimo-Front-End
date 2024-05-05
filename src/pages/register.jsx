@@ -3,10 +3,10 @@ import { useForm } from 'react-hook-form';
 import { Snackbar, IconButton } from '@mui/material';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import { Container, Typography, TextField, Button, FormControlLabel, Checkbox, Link, Grid } from '@mui/material';
-import Layout from '../Cliente/layuot';
+
+
 const images = [
   'https://source.unsplash.com/random?wallpapers',
-  // Agrega más URLs de imágenes aquí si es necesario
 ];
 
 export default function Register() {
@@ -37,7 +37,7 @@ export default function Register() {
 
   return (
     <div className="dsaddsadsa">
-      <Layout/>
+ 
       <Container component="main" maxWidth="xs" className="borde p-4">
         <LockOutlinedIcon />
         <Typography component="h1" variant="h5" className="mb-3">Regístrate</Typography>

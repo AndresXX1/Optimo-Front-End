@@ -5,7 +5,9 @@ export const AuthContext = createContext();
 export const AuthProvider = ({ children }) => {
   const [auth, setAuth] = useState(() => {
     const savedAuth = typeof window !== "undefined" ? localStorage.getItem("auth") : null;
+
     return savedAuth ? JSON.parse(savedAuth) : null;
+    
   });
 
   const [tab, setTab] = useState("");

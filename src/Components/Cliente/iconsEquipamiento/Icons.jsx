@@ -53,7 +53,7 @@ const equipmentIcons = {
     "Iluminación ajustable": LightbulbIcon,
     "Cajas de almacenamiento": ArchiveIcon,
     "Sillas decorativas":ChairAltIcon
-    // Agrega más mapeos según sea necesario
+
 };
 
 export default equipmentIcons

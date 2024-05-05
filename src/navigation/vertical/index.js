@@ -58,6 +58,8 @@ const navigation = (pathname) => {
     //   path: '/pages/register',
     //   openInNewTab: true
     // },
+
+
     {
       sectionTitle: 'User Interface'
     },
@@ -89,6 +91,8 @@ const navigation = (pathname) => {
       path: '/pages/error',
       
     },
+
+
     // {
     //   title: 'Typography',
     //   icon: FormatLetterCase,
@@ -109,6 +113,8 @@ const navigation = (pathname) => {
       //   icon: Table,
       //   path: '/tables'
       // },
+
+
     ]
   } else if (pathname == "/Admin" || pathname == "/Admin/tablaUsuario" 
   || pathname === "/Admin/tablaReservas"
@@ -142,9 +148,13 @@ const navigation = (pathname) => {
     //     path: '/pages/form-layouts/'
     //   },
 
+
+
     {
       sectionTitle: 'Acciones'
     },
+
+
     // {
       //   title: 'Crear nuevo servicio',
       //   icon: AlertCircleOutline,
@@ -157,6 +167,8 @@ const navigation = (pathname) => {
       //   path: '/Admin/Nuevo-Servicio',
       //   className: 'no-underline ' + styles.claseDeEstilo
       // },
+
+      
       {
         title: 'Servicios',
         icon: EditIcon,

@@ -18,7 +18,7 @@ import InformationOutline from 'mdi-material-ui/InformationOutline'
 // ** Demo Tabs Imports
 
 
-import TabAccount from "../../../Components/admin/Nuevo-Servicio/TabAccount"
+
 
 
 // ** Third Party Styles Imports
@@ -72,7 +72,7 @@ const AccountSettings = () => {
         </TabList>
 
         <TabPanel sx={{ p: 0 }} value='account'>
-          <TabAccount />
+        
         </TabPanel>
 
        

@@ -17,12 +17,16 @@ const ReservationForm = (props) => {
 
  useEffect(() => {
     setIsEnabled(true);
-    // Busca el nombre del hotel basado en el id
+
+   
+
     const hotel = data.find(item => item.id === parseInt(id));
     if (hotel) {
       setRoomName(hotel.Nombre);
     }
- }, [id]); // Dependencia en el id para actualizar cuando cambie
+ }, [id]);
+
+  
 
  const handleSubmit = (event) => {
     event.preventDefault();
@@ -37,13 +41,13 @@ const ReservationForm = (props) => {
     marginBottom: "110px",
     width: "500px",
     height: "auto",
-    boxShadow: "0 4px 8px rgba(0, 0, 0, 0.8)", // sombra sutil
+    boxShadow: "0 4px 8px rgba(0, 0, 0, 0.8)", 
     borderRadius: "10px",
-    position: "absolute", // mantener la posición específica
+    position: "absolute", 
     marginLeft:"950px",
     marginBottom:"100px",
     marginTop:"-1250px",
-    transform: "translate(-50%, -50%)", // centrar completamente en la pantalla
+    transform: "translate(-50%, -50%)", 
  });
 
  useEffect(() => {

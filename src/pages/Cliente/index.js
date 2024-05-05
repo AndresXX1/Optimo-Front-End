@@ -2,6 +2,7 @@ import React from "react";
 import Cards from "src/Components/Cliente/Cards/cards"; // Importa el componente Cards
 import jsonData from "../../api/api.json";
 import Filter from "../../Components/Cliente/Filter/filter"
+
 function Home() {
   return (
     <div>

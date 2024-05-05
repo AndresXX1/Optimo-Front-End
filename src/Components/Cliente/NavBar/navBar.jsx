@@ -20,7 +20,7 @@ export default function NavBar() {
 
   return (
     <Navbar bg="light" expand="lg" fixed="top" style={{ backgroundColor: '#f8f9fa',height:"75px" }}>
-    <Link href="/">
+    <Link passHref="/">
       <div style={{
         marginLeft: "40px",
         display: "inline-block", 

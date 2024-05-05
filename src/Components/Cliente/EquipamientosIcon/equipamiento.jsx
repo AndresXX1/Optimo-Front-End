@@ -7,7 +7,9 @@ const AllEquipmentIcons = ({ equipment }) => {
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 350px)', gap: '10px' }}>
             {equipment.map((item, index) => {
                 const IconComponent = equipmentIcons[item];
+
                 return IconComponent ? (
+                    
                     <div key={index} style={{ display: 'flex', alignItems: 'center',fontSize:"20px" }}>
                         <IconButton>
                             <IconComponent style={{ fontSize: 40 }} />

@@ -1,11 +1,15 @@
 // ** React Imports
+
 import { useState, Fragment } from 'react'
 import Image from 'next/image';
 import snfondo from '../../../../public/logos/snfondo.png'
+
 // ** Next Imports
+
 import Link from 'next/link'
 
 // ** MUI Components
+
 import Box from '@mui/material/Box'
 import Button from '@mui/material/Button'
 import Divider from '@mui/material/Divider'
@@ -23,6 +27,7 @@ import InputAdornment from '@mui/material/InputAdornment'
 import MuiFormControlLabel from '@mui/material/FormControlLabel'
 
 // ** Icons Imports
+
 import Google from 'mdi-material-ui/Google'
 import Github from 'mdi-material-ui/Github'
 import Twitter from 'mdi-material-ui/Twitter'
@@ -31,15 +36,18 @@ import EyeOutline from 'mdi-material-ui/EyeOutline'
 import EyeOffOutline from 'mdi-material-ui/EyeOffOutline'
 
 // ** Configs
+
 import themeConfig from 'src/configs/themeConfig'
 
 // ** Layout Import
+
 import BlankLayout from 'src/@core/layouts/BlankLayout'
 
 // ** Demo Imports
 
 
 // ** Styled Components
+
 const Card = styled(MuiCard)(({ theme }) => ({
   [theme.breakpoints.up('sm')]: { width: '28rem' }
 }))
@@ -60,13 +68,16 @@ const FormControlLabel = styled(MuiFormControlLabel)(({ theme }) => ({
 }))
 
 const RegisterPage = () => {
+
   // ** States
+
   const [values, setValues] = useState({
     password: '',
     showPassword: false
   })
 
   // ** Hook
+
   const theme = useTheme()
 
   const handleChange = prop => event => {
@@ -144,11 +155,17 @@ const RegisterPage = () => {
                <Button fullWidth size='large' type='submit' variant='contained' sx={{ marginBottom: 7 }}>
                  Registrate
                </Button>
+
+
+
                {/* <Link href="/Cliente">
                  <Button fullWidth size='large' type='submit' variant='contained' sx={{ marginBottom: 7 }}>
                    Volver al Inicio
                  </Button>
                </Link> */}
+
+
+
                <Box sx={{ display: 'flex', alignItems: 'center', flexWrap: 'wrap', justifyContent: 'center' }}>
                  <Typography variant='body2' sx={{ marginRight: 2 }}>
                    Ya tienes una cuenta?
@@ -159,6 +176,9 @@ const RegisterPage = () => {
                    </Link>
                  </Typography>
                </Box>
+
+
+
                {/* <Divider sx={{ my: 5 }}>or</Divider>
                <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                  <Link href='/' passHref>
@@ -184,6 +204,9 @@ const RegisterPage = () => {
                    </IconButton>
                  </Link>
                </Box> */}
+
+
+
              </form>
            </CardContent>
          </Card>
