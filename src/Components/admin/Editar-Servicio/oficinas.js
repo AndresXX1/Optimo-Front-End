@@ -118,17 +118,6 @@ const TabSecurity = () => {
               </Select>
             </FormControl>
           </Grid>
-          <Link href="/Admin/tablaOficinas/" passHref>
-            <Button
-              style={{
-                marginTop: '60px',
-              }}
-              variant='contained'
-              sx={{ marginRight: 0, backgroundColor: "transparent", marginLeft: "50px" }}
-            >
-              Opciones avanzadas
-            </Button>
-          </Link>
         </Grid>
       </CardContent>
       <CardContent>
@@ -143,6 +132,15 @@ const TabSecurity = () => {
             <Button style={{ marginLeft: "20px" }} variant='outlined' onClick={removeOffice}>
               - Quitar Oficina
             </Button>
+          <Link href="/Admin/tablaOficinas/" passHref>
+            <Button
+          
+              variant='contained'
+              sx={{ marginRight: 0, backgroundColor: "transparent", marginLeft: "315px" }}
+            >
+              Opciones avanzadas
+            </Button>
+          </Link>
           </Box>
         </Box>
         <Grid item xs={12} sm={6}>
@@ -165,7 +163,7 @@ const TabSecurity = () => {
                     <TableCell style={{ fontSize: '22px' }}>Oficinas</TableCell>
                     <TableCell align="center">Agregar imagenes del local</TableCell>
                     <TableCell style={{ textAlign: "center", width: "100px", fontSize: "11px" }} >Piso</TableCell>
-                    <TableCell style={{ aling:"center",textAlign: "center", width: "150px", fontSize: "11px" }}>Agregar Plano del piso, enmarcando la oficina</TableCell>
+                    <TableCell style={{ aling:"center",textAlign: "center", width: "150px", fontSize: "11px" }}>Moblamiento</TableCell>
                  </TableRow>
                 </TableHead>
                 <TableBody>
