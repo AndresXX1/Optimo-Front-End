@@ -147,6 +147,7 @@ const LoginPage = () => {
                   </Typography>
                 </Link>
               </Box>
+              <Link passHref href='/Cliente' >
               <Button
                 fullWidth
                 size='large'
@@ -156,6 +157,7 @@ const LoginPage = () => {
               >
                 Login
               </Button>
+              </Link>
               <Box sx={{ display: 'flex', alignItems: 'center', flexWrap: 'wrap', justifyContent: 'center' }}>
                 <Typography variant='body2' sx={{ marginRight: 2 }}>
                   Nuevo en la plataforma?
