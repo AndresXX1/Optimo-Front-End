@@ -81,16 +81,7 @@ const AccountSettings = () => {
               </Box>
             }
           />
-          <Tab
-            value='info'
-            label={
-              <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                
-                <BusinessIcon />
-                <TabName>Pisos</TabName>
-              </Box>
-            }
-          />
+
           <Tab
             value='security'
             label={
@@ -110,9 +101,7 @@ const AccountSettings = () => {
         <TabPanel sx={{ p: 0 }} value='security'>
           <TabSecurity />
         </TabPanel>
-        <TabPanel sx={{ p: 0 }} value='info'>
-          <TabInfo />
-          </TabPanel>
+
           <TabPanel sx={{ p: 0 }} value='new'>
          < TabAccountst/>
          </TabPanel>

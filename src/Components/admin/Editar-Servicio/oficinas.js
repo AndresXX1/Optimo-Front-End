@@ -69,6 +69,15 @@ const TabSecurity = () => {
     setOffices(newOffices);
  };
 
+ const addImageToFloor = file => {
+  const reader = new FileReader()
+  const { files } = file.target
+  if (files && files.length !== 0) {
+    reader.onload = () => setImgSrc(reader.result)
+    reader.readAsDataURL(files[0])
+  }
+}
+
  return (
     <form>
       <CardContent sx={{ paddingBottom: 0 }}>
@@ -155,8 +164,8 @@ const TabSecurity = () => {
                  <TableRow>
                     <TableCell style={{ fontSize: '22px' }}>Oficinas</TableCell>
                     <TableCell align="center">Agregar imagenes del local</TableCell>
-                    <TableCell align="center">Piso</TableCell>
-                    <TableCell style={{ align: "center", width: "100px", fontSize: "11px" }}>Agregar Plano del piso, enmarcando la oficina</TableCell>
+                    <TableCell style={{ textAlign: "center", width: "100px", fontSize: "11px" }} >Piso</TableCell>
+                    <TableCell style={{ aling:"center",textAlign: "center", width: "150px", fontSize: "11px" }}>Agregar Plano del piso, enmarcando la oficina</TableCell>
                  </TableRow>
                 </TableHead>
                 <TableBody>
@@ -192,7 +201,7 @@ const TabSecurity = () => {
                       </TableCell>
                       <TableCell style={{ minWidth: "100px" }}>
                         <FormControl fullWidth>
-                          <Box display="flex" alignItems="center">
+                          <Box display="flex" textAlign="center">
                             <TextField
                               type="number"
                               value={office.floor}
@@ -208,7 +217,7 @@ const TabSecurity = () => {
                           </Box>
                         </FormControl>
                       </TableCell>
-                      <TableCell style={{ alignItems: "center", minWidth: "50px", maxWidth: "40px" }}>
+                      <TableCell style={{ textAlign: "center", minWidth: "50px", maxWidth: "40px" }}>
                         <Button style={{ marginLeft: '0px', width: '3px', height: '10px', borderRadius: '200px', marginBottom: "10px", alignItems: "left" }} component='label' variant='contained' htmlFor='account-settings-upload-image'>
                           +
                           <input
