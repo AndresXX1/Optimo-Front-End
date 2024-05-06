@@ -99,7 +99,7 @@ const renderPlantaImages = () => {
 
        <Box sx={{ marginTop:"40px"}}>
         <h1>{data.Nombre} en {data.Servicio}</h1>
-        <h3 style={{marginTop: "-20px",marginBottom:"80px"}}>{data.Ubicacion} en el {data.Piso} </h3>
+        <h3 style={{marginTop: "0px",marginBottom:"80px"}}>{data.Ubicacion} en el {data.Piso} </h3>
         <div style={{
     maxWidth: "700px",
     borderTop: "1px solid gray",
