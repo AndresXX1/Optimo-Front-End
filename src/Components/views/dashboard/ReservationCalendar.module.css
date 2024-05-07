@@ -1,0 +1,11 @@
+.day-with-reservations::after {
+    content: "";
+    display: block;
+    width: 10px;
+    height: 10px;
+    background-color: red; /* Cambia el color según prefieras */
+    border-radius: 50%;
+    position: absolute;
+    bottom: 2px;
+    right: 2px;
+   }

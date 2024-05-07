@@ -64,14 +64,14 @@ const AccountSettings = () => {
           sx={{ borderBottom: theme => `1px solid ${theme.palette.divider}` }}
         >
           <Tab
-  value='new'
-  label={
-    <Box sx={{ display: 'flex', alignItems: 'center' }}>
-      <StorefrontIcon />
-      <TabName>Crear nuevo servicio</TabName>
-    </Box>
-  }
-/>
+            value='new'
+            label={
+              <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                <StorefrontIcon />
+                <TabName>Crear nuevo servicio</TabName>
+              </Box>
+            }
+          />
           <Tab
             value='account'
             label={
@@ -87,7 +87,7 @@ const AccountSettings = () => {
             label={
               <Box sx={{ display: 'flex', alignItems: 'center' }}>
                 <StorefrontIcon />
-                <TabName>Locales</TabName>
+                <TabName>Oficinas</TabName>
               </Box>
             }
           />

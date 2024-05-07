@@ -1,94 +1,113 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Calendar, momentLocalizer } from 'react-big-calendar';
 import 'react-big-calendar/lib/css/react-big-calendar.css';
 import moment from 'moment';
 import 'moment/locale/es';
+import Modal from 'react-modal'; // Asegúrate de tener react-modal instalado
+
 
 // localización de moment a español
 moment.locale('es');
 
+const localizer = momentLocalizer(moment);
+
 const ReservationCalendar = () => {
-  // Función para obtener las reservas del mes actual (esto lo puedes adaptar a la logica real)
-  const getReservationsForCurrentMonth = () => {
-    //deberías tener la lógica para obtener las reservas del mes actual
-    // Por ahora, usaremos datos de ejemplo quemados
-    return [
-      { id: 0, title: 'Piso 1 - Sala de conferencias', start: new Date(2024, 4, 20), end: new Date(2024, 4, 23) },
-      { id: 1, title: 'Piso 2 - Cubículos', start: new Date(2024, 4, 26), end: new Date(2024, 4, 29) },
-      { id: 2, title: 'Piso 4 - Oficinas 2 y 4', start: new Date(2024, 5, 3), end: new Date(2024, 5, 7) },
-      { id: 3, title: 'Planta baja - Sala de reuniones', start: new Date(2024, 5, 10), end: new Date(2024, 5, 14) },
-      { id: 4, title: 'Piso 3 - Oficinas 5-6-7-9-10', start: new Date(2024, 5, 11), end: new Date(2024, 5, 15) }
-    ];
-  };
+ const [events, setEvents] = useState([]);
+ const [modalIsOpen, setModalIsOpen] = useState(false);
+ const [selectedEvent, setSelectedEvent] = useState(null);
 
-  const localizer = momentLocalizer(moment);
-  const reservations = getReservationsForCurrentMonth();
-  const [hoveredReservation, setHoveredReservation] = useState(null);
+ useEffect(() => {
+    const generateReservations = () => {
+      const reservations = [];
+      const startDate = new Date();
+      const endDate = new Date();
+      endDate.setMonth(startDate.getMonth() + 1); // Genera reservas para el próximo mes
 
-  const getDayProp = (date) => {
-    const today = moment();
-    const isCurrentMonth = moment(date).isSame(today, 'month');
-    const isBeforeToday = moment(date).isBefore(today, 'day');
-    const isNextMonth = moment(date).isAfter(today.endOf('month'), 'day');
+      for (let i = 0; i < 50; i++) {
+        const start = new Date(startDate.getTime() + Math.random() * (endDate.getTime() - startDate.getTime()));
+        const end = new Date(start.getTime() + Math.random() * (endDate.getTime() - start.getTime()));
+        // Establece las horas de inicio y fin de manera aleatoria
+        start.setHours(Math.floor(Math.random() * 24));
+        end.setHours(start.getHours() + Math.floor(Math.random() * 8)); // Asegura que la reserva no exceda las 8 horas
+        const color = `#${Math.floor(Math.random()*16777215).toString(16)}`;
+        // Ajusta el título del evento para incluir la hora de inicio y la hora de fin
+        const title = `Reserva ${i + 1} - ${moment(start).format('HH:mm')} a ${moment(end).format('HH:mm')}`;
+        reservations.push({ id: i, title, start, end, color });
+      }
+      return reservations;
+    };
 
-    if (!isCurrentMonth) {
-      return {
-        className: 'outside-month-day'
-      };
-    } else if (isBeforeToday || isNextMonth) {
-      return {
-        className: 'outside-month-day-next'
-      };
-    }
+    const reservations = generateReservations();
+    setEvents(reservations);
+ }, []);
 
-    return {};
-  };
+ const eventStyleGetter = (event) => {
+ const style = {
+     backgroundColor: event.color,
+     borderRadius: '50%',
+     height: '8px', // Reducir el tamaño
+     width: '8px', // Reducir el tamaño
+     margin: 'auto',
+ };
+ return {
+     style: style,
+ };
+ };
 
-  const handleMouseOver = (event, reservation) => {
-    setHoveredReservation(reservation);
-  };
+ const handleSelectEvent = (event) => {
+    setSelectedEvent(event);
+    setModalIsOpen(true);
+ };
 
-  const handleMouseOut = () => {
-    setHoveredReservation(null);
-  };
+ const closeModal = () => {
+    setModalIsOpen(false);
+ };
 
-  return (
-    <div style={{ height: 450 }}>
+ return (
+    <div style={{ height: 500 }}>
       <Calendar
-     dsa
         localizer={localizer}
-        events={reservations}
-        views={['month']}
+        events={events}
         startAccessor="start"
         endAccessor="end"
-        dayPropGetter={getDayProp}
-        style={{ maxWidth: 800, margin: 'auto' }}
-        onMouseOver={handleMouseOver}
-        onMouseOut={handleMouseOut}
+        style={{ height: 500 }}
+        eventPropGetter={eventStyleGetter}
+        onSelectEvent={handleSelectEvent}
+        views={['agenda']} // Solo muestra la vista de "agenda"
       />
-      {hoveredReservation && (
-        <div style={{ position: 'absolute', top: hoveredReservation.y, left: hoveredReservation.x, backgroundColor: 'rgba(0, 0, 0, 0.8)', color: '#fff', padding: '5px', borderRadius: '5px' }}>
-          <div>{hoveredReservation.title}</div>
-          <div>{moment(hoveredReservation.start).format('DD/MM/YYYY')} - {moment(hoveredReservation.end).format('DD/MM/YYYY')}</div>
-        </div>
-      )}
-      <style>{`
-        .outside-month-day, .outside-month-day-next {
-          background-color: #1002 !important;
-          color: #222 !important;
-        }
-
-        .rbc-today {
-          background-color: #36A2EB !important;
-          color: #fff !important;
-        }
-
-        .rbc-btn-group > button {
-          color: #36A2EB !important;
-        }
-      `}</style>
+      <Modal
+        isOpen={modalIsOpen}
+        onRequestClose={closeModal}
+        contentLabel="Detalles de la Reserva"
+        style={{
+          overlay: {
+            backgroundColor: 'rgba(0, 0, 0, 0.75)',
+          },
+          content: {
+            backgroundColor: '#fff',
+            color: '#000',
+            borderRadius: '4px',
+            outline: 'none',
+            padding: '20px',
+            maxWidth: '500px',
+            maxHeight: '400px',
+            margin: 'auto',
+          },
+        }}
+      >
+        {selectedEvent && (
+          <>
+            <h2>Detalles de la Reserva</h2>
+            <p>Título: {selectedEvent.title}</p>
+            <p>Inicio: {moment(selectedEvent.start).format('DD/MM/YYYY HH:mm')}</p>
+            <p>Fin: {moment(selectedEvent.end).format('DD/MM/YYYY HH:mm')}</p>
+            <p>Color: {selectedEvent.color}</p>
+          </>
+        )}
+        <button onClick={closeModal}>Cerrar</button>
+      </Modal>
     </div>
-  );
+ );
 };
 
 export default ReservationCalendar;

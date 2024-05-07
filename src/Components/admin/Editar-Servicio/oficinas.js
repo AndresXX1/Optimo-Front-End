@@ -30,7 +30,7 @@ const TabSecurity = () => {
       office: 'Oficina 1',
       name: '',
       location: '',
-      equipment: '',
+      equipment: [],
       floor: 0,
     },
  ]);
@@ -41,22 +41,29 @@ const TabSecurity = () => {
 
  const [showMessage, setShowMessage] = useState(false);
 
- const [openDialog, setOpenDialog] = useState(false);
+ const [openDialog, setOpenDialog] = useState({});
+
+ const [openDialoglocation, setOpenDialoglocation] = useState({});
 
 const [tempDescription, setTempDescription] = useState('');
 
- const addOffice = () => {
+const [templocation, setTemplocation] = useState('');
+
+const [tempDescriptions, setTempDescriptions] = useState({});
+
+const [tempLocations, setTempLocations] = useState({});
+
+const addOffice = () => {
+  const newOfficeNumber = offices.length + 1;
   
-    const newOfficeNumber = offices.length + 1;
-
-    const newOffice = {
-      office: `Oficina ${newOfficeNumber}`,
-      name: '',
-      location: '',
-      equipment: '',
-    };
-
-    setOffices([...offices, newOffice]);
+  const newOffice = {
+     office: `Oficina ${newOfficeNumber}`,
+     name: '',
+     location: '',
+     equipment: [], 
+     floor: 0,
+  };
+  setOffices([...offices, newOffice]);
  };
 
  const removeOffice = () => {
@@ -70,14 +77,14 @@ const [tempDescription, setTempDescription] = useState('');
  };
 
  const handleOfficeChange = (event, index, field) => {
-    const newOffices = [...offices];
-    if (field === 'floor') {
-      const value = parseInt(event.target.value, 10);
-      newOffices[index][field] = isNaN(value) || value < 0 ? 0 : value;
-    } else {
-      newOffices[index][field] = event.target.value;
-    }
-    setOffices(newOffices);
+  const newOffices = [...offices];
+  if (field === 'floor') {
+     const value = parseInt(event.target.value, 10);
+     newOffices[index][field] = isNaN(value) || value < 0 ? 0 : value;
+  } else {
+     newOffices[index][field] = event.target.value;
+  }
+  setOffices(newOffices);
  };
 
  const addImageToFloor = file => {
@@ -88,6 +95,25 @@ const [tempDescription, setTempDescription] = useState('');
     reader.readAsDataURL(files[0])
   }
 }
+
+const openDescriptionDialog = (index) => {
+  setTempDescriptions({ ...tempDescriptions, [index]: offices[index].Description });
+  setOpenDialog({ ...openDialog, [index]: true });
+ };
+ 
+ const closeDescriptionDialog = (index) => {
+  setOpenDialog({ ...openDialog, [index]: false });
+ };
+ 
+ const openLocationDialog = (index) => {
+  setTempLocations({ ...tempLocations, [index]: offices[index].location });
+  setOpenDialoglocation({ ...openDialoglocation, [index]: true });
+ };
+ 
+ const closeLocationDialog = (index) => {
+  setOpenDialoglocation({ ...openDialoglocation, [index]: false });
+ };
+
 
 return (
   <form>
@@ -116,12 +142,38 @@ return (
       </Grid>
     </CardContent>
     <CardContent>
-      <Typography style={{ marginTop: "50px" }} variant="h6" gutterBottom>
-        Oficinas
-      </Typography>
 
+      <Typography style={{ marginTop: "50px" }} variant="h6" gutterBottom>
+          Crea nuevas oficinas
+        </Typography>
+        <Box style={{ marginLeft: '00px', marginBottom: '20px', marginTop: "20px" }}>
+          <Box sx={{ mt: 2 }}>
+            <Button variant='contained' onClick={addOffice}>
+              + Añadir Oficina
+            </Button>
+            <Button style={{ marginLeft: "20px" }} variant='outlined' onClick={removeOffice}>
+              - Quitar Oficina
+            </Button>
+
+          </Box>
+        </Box>
+           
       <Grid item xs={12} sm={6}>
-        <Box>
+
+        <Box 
+               sx={{
+                border: '1px solid',
+                borderRadius: '4px',
+                padding: '0px',
+                position: 'relative',
+                overflowX: 'auto',
+                maxHeight: '400px',
+                scrollbarWidth: 'thin',
+                scrollbarColor: '#0091EA black',
+                width:"925px",
+                marginLeft:"-20px"
+              }}>
+                  <Box>
           <TableContainer component={Paper}>
             <Table aria-label="simple table">
               <TableHead>
@@ -138,10 +190,10 @@ return (
               </TableHead>
               <TableBody>
                {offices.map((office, index) => (
-                  <TableRow key={index} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
-                    <TableCell align="center">
+                  <TableRow key={index} sx={{ '&:last-child td, &:last-child th': { border: 0 }, }}>
+                    <TableCell>
                       <TextField
-                        style={{ minWidth: "100px" }}
+                       
                         fullWidth
                         label="Nombre"
                         value={office.name}
@@ -168,49 +220,44 @@ return (
                       </FormControl>
                     </TableCell>
 
-                    <TableCell align="center">
+                   
+                   
                     <TableCell align="center">
                       <TextField
-                          style={{ minWidth: "100px" }}
+                          style={{ minWidth: "80px" }}
                           fullWidth
-                          
                           value={office.Description}
-                          onClick={() => {
-                            setTempDescription(office.Description); // Copia la descripción actual al estado temporal
-                            setOpenDialog(true); 
-                          }}
+                          onClick={() => openDescriptionDialog(index)} // Abre el diálogo al hacer clic
                           onChange={(e) => handleOfficeChange(e, index, 'Description')}
                       />
-                      </TableCell>
-
-                      <Dialog open={openDialog} onClose={() => setOpenDialog(false)}>
+                      <Dialog open={openDialog[index]} onClose={() => closeDescriptionDialog(index)}>
                       <DialogTitle>Escribir Descripción</DialogTitle>
                       <DialogContent>
-                      <TextField
-                        autoFocus
-                        margin="dense"
-                        label="Descripción"
-                        type="text"
-                        fullWidth
-                        multiline // Habilita el modo multilinea
-                        rows={4} // Número de filas iniciales
-                        rowsMax={10} // Número máximo de filas
-                        value={tempDescription}
-                        onChange={(e) => setTempDescription(e.target.value)}
-                        variant="outlined" // Opcional: Cambia el estilo del TextField
-                        sx={{ width: '500px' }} // Ajusta el ancho al 100% del contenedor
-                        />
+                          <TextField
+                            autoFocus
+                            margin="dense"
+                            label="Descripción"
+                            type="text"
+                            fullWidth
+                            multiline
+                            rows={4}
+                            rowsMax={10}
+                            value={tempDescriptions[index] || ''}
+                            onChange={(e) => setTempDescriptions({ ...tempDescriptions, [index]: e.target.value })}
+                            variant="outlined"
+                            sx={{ width: '500px' }}
+                          />
                       </DialogContent>
                       <DialogActions>
-                          <Button onClick={() => setOpenDialog(false)}>Cancelar</Button>
+                          <Button onClick={() => closeDescriptionDialog(index)}>Cancelar</Button>
                           <Button onClick={() => {
-                            handleOfficeChange({ target: { value: tempDescription } }, index, 'Description'); // Actualiza la descripción
-                            setOpenDialog(false); // Cierra el modal
+                            handleOfficeChange({ target: { value: tempDescriptions[index] } }, index, 'Description');
+                            closeDescriptionDialog(index);
                           }}>Guardar</Button>
                       </DialogActions>
                       </Dialog>
 
-                        </TableCell>
+                      </TableCell>
 
 
                     <TableCell style={{ minWidth: "100px", maxWidth:"170px" }}>
@@ -219,23 +266,20 @@ return (
                           <Select
                               label='Servicios'
                               multiple
-                              value={selectedEquipment}
+                              value={office.equipment} // Utiliza la propiedad 'equipment' del local
                               onChange={(event) => {
-                                  // Obtiene los valores seleccionados
                                   const selectedValues = event.target.value;
-                                  // Verifica si se ha seleccionado más de 6 elementos
                                   if (selectedValues.length <= 6) {
-                                    // Si no se ha excedido el límite, actualiza el estado y oculta el mensaje
-                                    setSelectedEquipment(selectedValues);
+                                    const newOffices = [...offices];
+                                    newOffices[index].equipment = selectedValues; // Actualiza la propiedad 'equipment' del local
+                                    setOffices(newOffices);
                                     setShowMessage(false); // Oculta el mensaje
                                   } else {
-                                    // Si se ha excedido el límite, muestra el mensaje
                                     setShowMessage(true);
                                   }
                               }}
                               id='form-layouts-separator-select'
                               labelId='form-layouts-separator-select-label'
-
                               >
                                                        {showMessage && (
                             <Typography variant="body2" color="error">
@@ -291,15 +335,36 @@ return (
                       </FormControl>
                       </TableCell>
 
-                    <TableCell align="center">
-                      <TextField
-                        style={{ minWidth: "100px" }}
-                        fullWidth
-                        label="location"
-                        value={office.location}
-                        onChange={(e) => handleOfficeChange(e, index, 'location')}
-                      />
-                    </TableCell>
+                      <TableCell align="center">
+                        <TextField
+                            style={{ minWidth: "80px" }}
+                            fullWidth
+                            value={office.location}
+                            onClick={() => openLocationDialog(index)} // Corregido para abrir el diálogo de ubicación
+                            onChange={(e) => handleOfficeChange(e, index, 'location')}
+                        />
+                        <Dialog open={openDialoglocation[index]} onClose={() => closeLocationDialog(index)}>
+                            <DialogTitle>Ubicación en el piso</DialogTitle>
+                            <DialogContent>
+                              <TextField
+                                autoFocus
+                                margin="dense"
+                                label="Ubicación"
+                                type="text"
+                                fullWidth
+                                value={tempLocations[index] || ''}
+                                onChange={(e) => setTempLocations({ ...tempLocations, [index]: e.target.value })}
+                              />
+                            </DialogContent>
+                            <DialogActions>
+                              <Button onClick={() => closeLocationDialog(index)}>Cancelar</Button>
+                              <Button onClick={() => {
+                                handleOfficeChange({ target: { value: tempLocations[index] } }, index, 'location');
+                                closeLocationDialog(index);
+                              }}>Guardar</Button>
+                            </DialogActions>
+                        </Dialog>
+                        </TableCell>
 
                   <TableCell style={{ textAlign: "center", minWidth: "50px", maxWidth: "100px" }}>
                       <Button style={{ marginLeft: '0px', width: '3px', height: '10px', borderRadius: '200px', marginBottom: "10px", alignItems: "left" }} component='label' variant='contained' htmlFor='account-settings-upload-image'>
@@ -347,6 +412,7 @@ return (
               </TableBody>
             </Table>
           </TableContainer>
+          </Box>
         </Box>
       </Grid>
     </CardContent>

@@ -209,14 +209,23 @@ const [tempDescription, setTempDescription] = useState('');
                                 value={selectedEquipment}
                                 onChange={(event) => {
                                     // Obtiene los valores seleccionados
+                                    
                                     const selectedValues = event.target.value;
+                                    
                                     // Verifica si se ha seleccionado más de 6 elementos
+
+                                    
                                     if (selectedValues.length <= 6) {
+                                    
                                       // Si no se ha excedido el límite, actualiza el estado y oculta el mensaje
+                                   
                                       setSelectedEquipment(selectedValues);
                                       setShowMessage(false); // Oculta el mensaje
+                                   
                                     } else {
+                                   
                                       // Si se ha excedido el límite, muestra el mensaje
+                                   
                                       setShowMessage(true);
                                     }
                                 }}
