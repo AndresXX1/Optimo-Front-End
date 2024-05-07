@@ -87,7 +87,7 @@ const AccountSettings = () => {
             label={
               <Box sx={{ display: 'flex', alignItems: 'center' }}>
                 <StorefrontIcon />
-                <TabName>Editar Locales</TabName>
+                <TabName>Locales</TabName>
               </Box>
             }
           />
