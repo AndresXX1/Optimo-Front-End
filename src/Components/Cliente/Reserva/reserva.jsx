@@ -55,8 +55,11 @@ const ReservationForm = (props) => {
     // Asegura que la hora de fin no sea anterior o igual a la hora de inicio
     if (newReservations[index].startTime && time <= newReservations[index].startTime) {
       alert("La hora de fin no puede ser anterior o igual a la hora de inicio.");
+
       return;
+    
     }
+
     newReservations[index].endTime = time;
   }
   setReservations(newReservations);
@@ -72,8 +75,10 @@ const ReservationForm = (props) => {
 
  const removeReservation = (index) => {
     if (index === 0) {
+
       return;
     }
+
     const newReservations = [...reservations];
     newReservations.splice(index, 1);
     setReservations(newReservations);
@@ -83,7 +88,7 @@ const ReservationForm = (props) => {
     event.preventDefault();
     console.log(reservations);
  };
- 
+
 
  return (
  <div style={containerStyle}>
