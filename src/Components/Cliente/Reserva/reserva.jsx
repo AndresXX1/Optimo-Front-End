@@ -1,24 +1,32 @@
 import React, { useState, useEffect } from 'react';
-import { TextField, Button, Box } from '@mui/material';
+import { TextField, Button, Box, IconButton, MenuItem, Table, TableBody, TableCell, TableRow } from '@mui/material';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
-import { format } from 'date-fns';
 import data from "../../../api/api.json";
 import { useRouter } from 'next/router';
+import DeleteIcon from '@mui/icons-material/Delete';
 
 const ReservationForm = (props) => {
+ const containerStyle = {
+    margin: '20px',
+    padding: '20px',
+    border: '1px solid #ccc',
+    borderRadius: '4px',
+ };
+
  const router = useRouter();
- const [startDate, setStartDate] = useState(new Date());
- const [endDate, setEndDate] = useState(null);
- const [guests, setGuests] = useState('');
+ const [reservations, setReservations] = useState([{ startDate: new Date(), endDate: new Date(), startTime: null, endTime: null, eventName: '' }]);
  const [isEnabled, setIsEnabled] = useState(false);
  const [RoomName, setRoomName] = useState('');
+ const [eventName, setEventName] = useState('');
  const { id } = router.query;
+ 
+
+ // Genera una lista de horas para usar en los select
+ const hours = Array.from({ length: 24 }, (_, i) => i);
 
  useEffect(() => {
     setIsEnabled(true);
-
-   
 
     const hotel = data.find(item => item.id === parseInt(id));
     if (hotel) {
@@ -26,117 +34,140 @@ const ReservationForm = (props) => {
     }
  }, [id]);
 
-  
+ const handleDateChange = (index, date) => {
+    const newReservations = [...reservations];
+    newReservations[index].startDate = date;
+    newReservations[index].endDate = date; // Asegura que la fecha de fin sea la misma que la fecha de inicio
+    setReservations(newReservations);
+ };
+
+ const handleEventNameChange = (index, name) => {
+  const newReservations = [...reservations];
+  newReservations[index].eventName = name;
+  setReservations(newReservations);
+ };
+
+ const handleTimeChange = (index, time, isStartTime) => {
+  const newReservations = [...reservations];
+  if (isStartTime) {
+    newReservations[index].startTime = time;
+  } else {
+    // Asegura que la hora de fin no sea anterior o igual a la hora de inicio
+    if (newReservations[index].startTime && time <= newReservations[index].startTime) {
+      alert("La hora de fin no puede ser anterior o igual a la hora de inicio.");
+      return;
+    }
+    newReservations[index].endTime = time;
+  }
+  setReservations(newReservations);
+};
+
+ const addReservation = () => {
+    const lastReservation = reservations[reservations.length - 1];
+    const newStartDate = new Date(lastReservation.endDate);
+    newStartDate.setDate(newStartDate.getDate() + 1);
+
+    setReservations([...reservations, { startDate: newStartDate, endDate: newStartDate, startTime: null, endTime: null }]);
+ };
+
+ const removeReservation = (index) => {
+    if (index === 0) {
+      return;
+    }
+    const newReservations = [...reservations];
+    newReservations.splice(index, 1);
+    setReservations(newReservations);
+ };
 
  const handleSubmit = (event) => {
     event.preventDefault();
-    console.log('Fecha de entrada:', format(startDate, 'yyyy-MM-dd'));
-    console.log('Fecha de salida:', format(endDate, 'yyyy-MM-dd'));
-    console.log('Cantidad de huéspedes:', guests);
+    console.log(reservations);
  };
 
- const [containerStyle, setContainerStyle] = useState({
-    border: "1px solid black",
-    padding: "40px",
-    marginBottom: "110px",
-    width: "500px",
-    height: "auto",
-    boxShadow: "0 4px 8px rgba(0, 0, 0, 0.8)", 
-    borderRadius: "10px",
-    position: "absolute", 
-    marginLeft:"950px",
-    marginBottom:"100px",
-    marginTop:"-1250px",
-    transform: "translate(-50%, -50%)", 
- });
-
- useEffect(() => {
-    const handleResize = () => {
-      const screenWidth = window.innerWidth;
-
-      if (screenWidth <= 768) {
-        setContainerStyle(prevStyle => ({
-          ...prevStyle,
-          marginLeft: 'calc(50% - 00px)',
-          marginTop: 'calc(50% - -400px)',
-          marginBottom:"40px"
-        }));
-      } else {
-        setContainerStyle(prevStyle => ({
-          ...prevStyle,
-          marginLeft: '950px',
-          marginTop: '-300px',
-          marginBottom:"40px"
-        }));
-      }
-    };
-
-    handleResize();
-
-    window.addEventListener('resize', handleResize);
-
-    return () => {
-      window.removeEventListener('resize', handleResize);
-    };
- }, []);
-
  return (
-    <div style={containerStyle}>
-      <h2 style={{marginTop:"-20px", marginBottom:"10px"}}>Reservar {RoomName}</h2>
-      <form onSubmit={handleSubmit}>
-        <Box component="div" sx={{ marginBottom: 1 }}>
-          <p>Huespedes</p>
-          <TextField
-            fullWidth
-            label="Cantidad de Huéspedes"
-            type="number"
-            InputProps={{
-              inputProps: {
-                min: 1,
-                max: 10,
-              },
-            }}
-            disabled={!isEnabled}
-            value={guests}
-            onChange={(e) => setGuests(e.target.value)}
-          />
+ <div style={containerStyle}>
+    <h2 style={{ marginTop: "20px", marginBottom: "40px" }}>Reservar {RoomName}</h2>
+    <form onSubmit={handleSubmit}>
+      {reservations.map((reservation, index) => (
+        <Box key={index} component="div" sx={{ marginBottom: 1 }}>
+          <Table>
+            <TableBody>
+              <TableRow>
+      <TableCell>   
+           <TextField
+              label="Nombre del Evento"
+              value={reservation.eventName}
+              onChange={(e) => handleEventNameChange(index, e.target.value)}
+              fullWidth
+              margin="normal"
+              />
+      </TableCell> 
+
+                <TableCell>
+                 <DatePicker
+                    selected={reservation.startDate}
+                    onChange={(date) => handleDateChange(index, date)}
+                    dateFormat="yyyy-MM-dd"
+                    placeholderText="Fecha de Entrada"
+                    disabled={!isEnabled}
+                    showMonthDropdown
+                    showYearDropdown
+                    scrollableYearDropdown
+                    dropdownMode="select"
+                    customInput={<TextField fullWidth />}
+                 />
+                </TableCell>
+                <TableCell>
+                 {/* Select para la hora de inicio */}
+                 <TextField
+                 style={{width:"170px"}}
+                    select
+                    label="Hora de Entrada"
+                    value={reservation.startTime}
+                    onChange={(e) => handleTimeChange(index, e.target.value, true)}
+                   
+                 >
+                    {hours.map((hour) => (
+                      <MenuItem key={hour} value={hour}>
+                        {hour}:00
+                      </MenuItem>
+                    ))}
+                 </TextField>
+                </TableCell>
+                <TableCell>
+                 {/* Select para la hora de fin */}
+                 <TextField
+                    select
+                    label="Hora de Fin"
+                    value={reservation.endTime}
+                    onChange={(e) => handleTimeChange(index, e.target.value, false)}
+                 >
+                    {hours.map((hour) => (
+                      <MenuItem key={hour} value={hour} disabled={hour < reservation.startTime}>
+                        {hour}:00
+                      </MenuItem>
+                    ))}
+                 </TextField>
+                </TableCell>
+                <TableCell>
+                    <IconButton onClick={() => removeReservation(index)} disabled={index === 0}>
+                      <DeleteIcon />
+                    </IconButton>
+                </TableCell>
+              </TableRow>
+            </TableBody>
+          </Table>
         </Box>
-        <Box component="div" sx={{ marginBottom: 1 }}>
-          <p>Inicio de reserva</p>
-          <DatePicker
-            selected={startDate}
-            onChange={(date) => setStartDate(date)}
-            dateFormat="yyyy-MM-dd"
-            placeholderText="Fecha de Entrada"
-            disabled={!isEnabled}
-            showMonthDropdown
-            showYearDropdown
-            scrollableYearDropdown
-            dropdownMode="select"
-            customInput={<TextField fullWidth />}
-          />
-        </Box>
-        <Box component="div" sx={{ marginBottom: 1 }}>
-          <p>Fin de reserva</p>
-          <DatePicker
-            selected={endDate}
-            onChange={(date) => setEndDate(date)}
-            dateFormat="yyyy-MM-dd"
-            placeholderText="Fecha de Salida"
-            minDate={startDate}
-            disabled={!isEnabled}
-            showMonthDropdown
-            showYearDropdown
-            scrollableYearDropdown
-            customInput={<TextField fullWidth />}
-          />
-        </Box>
-        <Button style={{marginTop:"30px",backgroundColor:"red",boxShadow:"none", border:"solid red"}} type="submit" variant="contained" disabled={!isEnabled} fullWidth>
-          Reservar
-        </Button>
-      </form>
-    </div>
- );
+      ))}
+      <Button onClick={addReservation} style={{ marginTop: "30px", backgroundColor: "red", boxShadow: "none", border: "solid red" }} variant="contained" fullWidth>
+        Agregar Reservación
+      </Button>
+      <Button style={{ marginTop: "30px", backgroundColor: "red", boxShadow: "none", border: "solid red" }} type="submit" variant="contained" disabled={!isEnabled} fullWidth>
+        Reservar
+      </Button>
+    </form>
+ </div>
+);
 };
 
 export default ReservationForm;

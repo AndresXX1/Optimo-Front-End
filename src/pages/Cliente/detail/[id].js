@@ -52,35 +52,35 @@ function Detail() {
     );
    };
 
-const renderPlantaImages = () => {
+   const renderPlantaImages = () => {
+    // Accede directamente al primer elemento del array
+    const plantaUrl = data.Planta[0];
+
     return (
-       <div style={{
-           display: 'flex',
-           flexWrap: 'wrap',
-           justifyContent: 'space-between',
-           gap: '10px'
-       }}>
-         {data.Planta.map((plantaUrl, index) => (
-           <div key={index} style={{
-               flex: '0 0 calc(50% - 10px)', 
-               maxWidth: 'calc(50% - 10px)', 
-               height: 'auto', 
-               marginBottom: '10px' 
-           }}>
-               <img src={plantaUrl} alt={`Planta ${index + 1}`} style={{
-                   width: '70%', 
-                   height: 'auto',
-                   objectFit: 'cover', 
-                   borderRadius: '10px', 
-                   marginLeft:"40px",
-                   marginTop:"60px",
-                  
-               }} />
-           </div>
-         ))}
-       </div>
+        <div style={{
+            display: 'flex',
+            flexWrap: 'wrap',
+            justifyContent: 'space-between',
+            gap: '10px'
+        }}>
+            <div style={{
+                flex: '0 0 calc(50% - 10px)', 
+                maxWidth: 'calc(50% - 10px)', 
+                height: 'auto', 
+                marginBottom: '10px' 
+            }}>
+                <img src={plantaUrl} alt={`Planta 1`} style={{
+                    width: '70%', 
+                    height: 'auto',
+                    objectFit: 'cover', 
+                    borderRadius: '10px', 
+                    marginLeft:"320px",
+                    marginTop:"0px",
+                }} />
+            </div>
+        </div>
     );
-   };
+};
 
  return (
     <div>   
