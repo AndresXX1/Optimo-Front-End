@@ -85,7 +85,7 @@ function Detail() {
  return (
     <div>   
         <h1 style={{     
-            marginBottom:"40px"
+            marginBottom:"40px", textAlign:"center"
     }}>
         {data.Nombre}</h1>
         <div style={{ display: 'flex' }}>
