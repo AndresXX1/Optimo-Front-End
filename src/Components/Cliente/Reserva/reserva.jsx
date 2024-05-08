@@ -88,6 +88,9 @@ const ReservationForm = (props) => {
  <div style={containerStyle}>
     <h2 style={{ marginTop: "20px", marginBottom: "40px" }}>Reservar {RoomName}</h2>
     <form onSubmit={handleSubmit}>
+                <Button onClick={addReservation} style={{ marginTop: "30px", backgroundColor: "#36A2EB", boxShadow: "none", border: "solid #36A2EB", width:"200px" }} variant="contained" fullWidth>
+        Agregar Reservación
+      </Button>
       {reservations.map((reservation, index) => (
         <Box key={index} component="div" sx={{ marginBottom: 1 }}>
           <Table>
@@ -159,9 +162,7 @@ const ReservationForm = (props) => {
           </Table>
         </Box>
       ))}
-      <Button onClick={addReservation} style={{ marginTop: "30px", backgroundColor: "red", boxShadow: "none", border: "solid red" }} variant="contained" fullWidth>
-        Agregar Reservación
-      </Button>
+
       <Button style={{ marginTop: "30px", backgroundColor: "red", boxShadow: "none", border: "solid red" }} type="submit" variant="contained" disabled={!isEnabled} fullWidth>
         Reservar
       </Button>

@@ -97,9 +97,9 @@ function Detail() {
             </div>
         </div>
 
-       <Box sx={{ marginTop:"40px"}}>
-        <h1>{data.Nombre} en {data.Servicio}</h1>
-        <h3 style={{marginTop: "0px",marginBottom:"80px"}}>{data.Ubicacion} en el {data.Piso} </h3>
+       <Box sx={{ marginTop:"40px", textAlign:"center"}}>
+        <h1 style={{textAlign:"center"}}>{data.Nombre} en {data.Servicio}</h1>
+        <h3 style={{marginTop: "0px",marginBottom:"80px",textAlign:"center"}}>{data.Ubicacion} en el {data.Piso} </h3>
         <div style={{
     maxWidth: "700px",
     borderTop: "1px solid gray",
@@ -111,23 +111,25 @@ function Detail() {
     margin: "0 auto", // Centrar el contenedor horizontalmente
     fontSize: "16px", // Tamaño de texto predeterminado
     lineHeight: "1.5", // Espaciado entre líneas
-    marginLeft:"-0px"
+    marginLeft:"150px",
+    textAlign:"center"
 }}>
-    <p style={{ textAlign: "justify" }}>{data.Descripcion}</p>
+    <p style={{ textAlign: "center" }}>{data.Descripcion}</p>
 </div>
        </Box>
         
     
-       <div style={{fontFamily:"arial", borderBottom:"1px solid gray", padding:"20px"}}>
+       <div style={{fontFamily:"arial", borderBottom:"1px solid gray", padding:"30px", textAlign:"center"}}>
         <h2> ¿Que ofrece este lugar?</h2>
+        <div style={{marginLeft:"150px",marginTop:"30px"}}>
         <AllEquipmentIcons equipment={data.Equipamento} />
-        
         </div>
-       <ReservationForm/>
+        </div>
        <div style={{borderBottom:"1px solid gray",padding:"20px"}}>
         <h2>¿Donde esta el local?</h2>
         <h3> {data.Ubicacion} en el {data.Piso} </h3>
        {renderPlantaImages()}
+       <ReservationForm/>
        </div>
     </div>
        
