@@ -171,7 +171,7 @@ return (
                 scrollbarWidth: 'thin',
                 scrollbarColor: '#0091EA black',
                 width:"925px",
-                marginLeft:"-20px"
+                marginLeft:"-10px"
               }}>
                   <Box>
           <TableContainer component={Paper}>
