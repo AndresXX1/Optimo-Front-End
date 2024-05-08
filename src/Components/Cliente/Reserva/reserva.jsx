@@ -83,6 +83,7 @@ const ReservationForm = (props) => {
     event.preventDefault();
     console.log(reservations);
  };
+ 
 
  return (
  <div style={containerStyle}>
