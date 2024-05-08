@@ -74,8 +74,9 @@ function Detail() {
                     height: 'auto',
                     objectFit: 'cover', 
                     borderRadius: '10px', 
-                    marginLeft:"320px",
-                    marginTop:"0px",
+                    marginLeft:"00px",
+                    marginTop:"41px",
+                    marginBottom:"23px"
                 }} />
             </div>
         </div>
@@ -97,9 +98,9 @@ function Detail() {
             </div>
         </div>
 
-       <Box sx={{ marginTop:"40px", textAlign:"center"}}>
-        <h1 style={{textAlign:"center"}}>{data.Nombre} en {data.Servicio}</h1>
-        <h3 style={{marginTop: "0px",marginBottom:"80px",textAlign:"center"}}>{data.Ubicacion} en el {data.Piso} </h3>
+       <Box sx={{ marginTop:"40px", }}>
+        <h1 >{data.Nombre} en {data.Servicio}</h1>
+        <h3 style={{marginTop: "0px",marginBottom:"80px",}}>{data.Ubicacion} en el {data.Piso} </h3>
         <div style={{
     maxWidth: "700px",
     borderTop: "1px solid gray",
@@ -111,17 +112,17 @@ function Detail() {
     margin: "0 auto", // Centrar el contenedor horizontalmente
     fontSize: "16px", // Tamaño de texto predeterminado
     lineHeight: "1.5", // Espaciado entre líneas
-    marginLeft:"150px",
+    marginLeft:"0px",
     textAlign:"center"
 }}>
-    <p style={{ textAlign: "center" }}>{data.Descripcion}</p>
+    <p>{data.Descripcion}</p>
 </div>
        </Box>
         
     
-       <div style={{fontFamily:"arial", borderBottom:"1px solid gray", padding:"30px", textAlign:"center"}}>
+       <div style={{fontFamily:"arial", borderBottom:"1px solid gray", padding:"30px", }}>
         <h2> ¿Que ofrece este lugar?</h2>
-        <div style={{marginLeft:"150px",marginTop:"30px"}}>
+        <div style={{marginLeft:"0px",marginTop:"30px"}}>
         <AllEquipmentIcons equipment={data.Equipamento} />
         </div>
         </div>
