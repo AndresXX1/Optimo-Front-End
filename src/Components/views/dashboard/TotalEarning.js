@@ -3,7 +3,10 @@ import { Calendar, momentLocalizer } from 'react-big-calendar';
 import 'react-big-calendar/lib/css/react-big-calendar.css';
 import moment from 'moment';
 import 'moment/locale/es';
-import Modal from 'react-modal'; // Asegúrate de tener react-modal instalado
+import { createTheme, ThemeProvider } from '@mui/material/styles';
+import Modal from '@mui/material/Modal';
+import Box from '@mui/material/Box';
+import eventsData from '../../../api/events.json';
 
 
 // localización de moment a español
@@ -11,48 +14,76 @@ moment.locale('es');
 
 const localizer = momentLocalizer(moment);
 
+
+const theme = createTheme({
+ palette: {
+    primary: {
+      main: '#1976d9',
+    },
+    secondary: {
+      main: '#dc004e',
+    },
+ },
+
+});
+
 const ReservationCalendar = () => {
  const [events, setEvents] = useState([]);
  const [modalIsOpen, setModalIsOpen] = useState(false);
  const [selectedEvent, setSelectedEvent] = useState(null);
+ const [hoveredReservation, setHoveredReservation] = useState(null);
+
 
  useEffect(() => {
-    const generateReservations = () => {
-      const reservations = [];
-      const startDate = new Date();
-      const endDate = new Date();
-      endDate.setMonth(startDate.getMonth() + 1); // Genera reservas para el próximo mes
-
-      for (let i = 0; i < 50; i++) {
-        const start = new Date(startDate.getTime() + Math.random() * (endDate.getTime() - startDate.getTime()));
-        const end = new Date(start.getTime() + Math.random() * (endDate.getTime() - start.getTime()));
-        // Establece las horas de inicio y fin de manera aleatoria
-        start.setHours(Math.floor(Math.random() * 24));
-        end.setHours(start.getHours() + Math.floor(Math.random() * 8)); // Asegura que la reserva no exceda las 8 horas
-        const color = `#${Math.floor(Math.random()*16777215).toString(16)}`;
-        // Ajusta el título del evento para incluir la hora de inicio y la hora de fin
-        const title = `Reserva ${i + 1} - ${moment(start).format('HH:mm')} a ${moment(end).format('HH:mm')}`;
-        reservations.push({ id: i, title, start, end, color });
-      }
-      return reservations;
-    };
-
-    const reservations = generateReservations();
-    setEvents(reservations);
+    setEvents(eventsData);
  }, []);
 
- const eventStyleGetter = (event) => {
- const style = {
-     backgroundColor: event.color,
-     borderRadius: '50%',
-     height: '8px', // Reducir el tamaño
-     width: '8px', // Reducir el tamaño
-     margin: 'auto',
+ const dayPropGetter = (date) => {
+  const currentMonth = moment().month();
+  const month = moment(date).month();
+  const year = moment().year();
+  const dateYear = moment(date).year();
+ 
+ 
+  if (month < currentMonth || (month === currentMonth && dateYear < year)) {
+    
+     return {
+       style: {
+         backgroundColor: 'transparent',
+       },
+     };
+  } else if (month > currentMonth || (month === currentMonth && dateYear > year)) {
+   
+     return {
+       style: {
+         backgroundColor: 'transparent', 
+       },
+     };
+  }
+ 
+  return {};
  };
- return {
-     style: style,
- };
- };
+
+
+ const eventStyleGetter = (event, start, end, isSelected) => {
+  
+  if (event.title) {
+    return {
+      style: {
+        backgroundColor: event.color,
+        borderRadius: '50%',
+        height: '11px', 
+        width: '11px',
+        margin: 'auto',
+        cursor: 'pointer', 
+        backgroundColor:"salmon"
+      },
+    };
+  } else {
+   
+    return {};
+  }
+};
 
  const handleSelectEvent = (event) => {
     setSelectedEvent(event);
@@ -65,47 +96,87 @@ const ReservationCalendar = () => {
 
  return (
     <div style={{ height: 500 }}>
-      <Calendar
-        localizer={localizer}
-        events={events}
-        startAccessor="start"
-        endAccessor="end"
-        style={{ height: 500 }}
-        eventPropGetter={eventStyleGetter}
-        onSelectEvent={handleSelectEvent}
-        views={['agenda']} // Solo muestra la vista de "agenda"
-      />
-      <Modal
-        isOpen={modalIsOpen}
-        onRequestClose={closeModal}
-        contentLabel="Detalles de la Reserva"
-        style={{
-          overlay: {
-            backgroundColor: 'rgba(0, 0, 0, 0.75)',
-          },
-          content: {
-            backgroundColor: '#fff',
-            color: '#000',
-            borderRadius: '4px',
-            outline: 'none',
-            padding: '20px',
-            maxWidth: '500px',
-            maxHeight: '400px',
-            margin: 'auto',
-          },
-        }}
-      >
-        {selectedEvent && (
-          <>
-            <h2>Detalles de la Reserva</h2>
-            <p>Título: {selectedEvent.title}</p>
-            <p>Inicio: {moment(selectedEvent.start).format('DD/MM/YYYY HH:mm')}</p>
-            <p>Fin: {moment(selectedEvent.end).format('DD/MM/YYYY HH:mm')}</p>
-            <p>Color: {selectedEvent.color}</p>
-          </>
-        )}
-        <button onClick={closeModal}>Cerrar</button>
-      </Modal>
+
+          <Calendar
+          localizer={localizer}
+          events={events}
+          startAccessor="start"
+          endAccessor="end"
+          style={{ height: 470 }}
+          eventPropGetter={eventStyleGetter}
+          dayPropGetter={dayPropGetter}
+          onSelectEvent={handleSelectEvent}
+          views={['agenda', "month"]}
+          />
+
+          {hoveredReservation && (
+        <div style={{ position: 'absolute', top: hoveredReservation.y, left: hoveredReservation.x, backgroundColor: 'rgba(0, 0, 0, 0.8)', color: '#fff', padding: '5px', borderRadius: '5px' }}>
+          <div>{hoveredReservation.title}</div>
+          <div>{moment(hoveredReservation.start).format('DD/MM/YYYY')} - {moment(hoveredReservation.end).format('DD/MM/YYYY')}</div>
+        </div>
+      )}
+      <style>{`
+        .outside-month-day, .outside-month-day-next {
+          background-color: red !important;
+          color: red !important;
+        }
+
+        .rbc-today {
+          background-color: #36A2EB !important;
+          color: re !important;
+        }
+
+        .rbc-btn-group > button {
+          color: #36A2EB !important;
+        }
+      `}</style>
+      <ThemeProvider theme={theme}>
+        <Modal
+          open={modalIsOpen}
+          onClose={closeModal}
+          aria-labelledby="modal-modal-title"
+          aria-describedby="modal-modal-description"
+        >
+          <Box
+            sx={{
+              color: "black",
+              position: 'absolute',
+              top: '50%',
+              left: '50%',
+              transform: 'translate(-50%, -50%)',
+              width: 400,
+              bgcolor: 'background.paper',
+              border: '2px solid #000',
+              boxShadow: 24,
+              p: 4,
+            }}
+          >
+            {selectedEvent && (
+              <>
+              <h2 style={{ marginBottom: '20px' }}>Detalles de la Reserva</h2>
+              <div style={{ marginBottom: '20px' }}>
+                <p>Título: {selectedEvent.title}</p>
+                <p>Inicio: {moment(selectedEvent.start).format('DD/MM/YYYY HH:mm')}</p>
+                <p>Fin: {moment(selectedEvent.end).format('DD/MM/YYYY HH:mm')}</p>
+               <p>Usuario:</p>
+               <p>Oficina:</p>
+              </div>
+            </>
+            )}
+              <button style={{
+                  backgroundColor: '#333', 
+                  color: '#fff', 
+                  border: 'none',
+                  borderRadius: '4px',
+                  padding: '10px 20px',
+                  cursor: 'pointer',
+                  fontSize: '16px',
+                  marginLeft:"130px"
+                }} onClick={closeModal}>X</button>
+          </Box>
+        </Modal>
+      </ThemeProvider>
+
     </div>
  );
 };
