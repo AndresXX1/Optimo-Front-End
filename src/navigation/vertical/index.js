@@ -170,7 +170,7 @@ const navigation = (pathname) => {
 
       
       {
-        title: 'Servicios',
+        title: 'Administrar Edificios',
         icon: EditIcon,
         path: '/Admin/Editar-Servicio'
       },
@@ -193,7 +193,7 @@ const navigation = (pathname) => {
     },
 
     {
-      title: 'Servicios',
+      title: 'Edificios',
       icon: SettingsIcon,
       path: '/Admin/tablaServicios',
       

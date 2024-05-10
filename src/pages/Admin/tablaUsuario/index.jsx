@@ -22,7 +22,7 @@ const UsersComponent = () => {
   const [modifiedFields, setModifiedFields] = useState({}); // Para rastrear los campos modificados
   const dispatch = useDispatch();
   const usersFromRedux = useSelector((state) => state.users.entities);
-  const roles = ["admin", "user", "superAdmin"];
+  const roles = ["admin", "user", ];
 
   useEffect(() => {
     dispatch(fetchUsers());
@@ -46,27 +46,31 @@ const UsersComponent = () => {
     }));
   };
 
-  const handleSave = async () => {
-    if (window.confirm('¿Estás seguro de que quieres guardar los cambios?')) {
-      try {
-        // Crea un nuevo objeto con solo el ID y los campos modificados
-        // Asegúrate de cambiar _id a id para coincidir con el backend
-        const updatedUser = {
-          id: editableUserValues._id, // Cambia _id a id
-         ...Object.keys(modifiedFields).reduce((acc, key) => {
-            acc[key] = editableUserValues[key];
-            return acc;
-          }, {})
-        };
-        console.log('Objeto a enviar:', updatedUser);
-        
-        await dispatch(updateUser(updatedUser)); // Despacha updateUser con el objeto actualizado
-        setEditableUserId(null);
-      } catch (error) {
-        console.error('Error updating user:', error);
-      }
+const handleSave = async () => {
+  if (window.confirm('¿Estás seguro de que quieres guardar los cambios?')) {
+    try {
+      // Filtrar solo los campos modificados que existen en editableUserValues
+      const updatedFields = Object.keys(modifiedFields).filter(key => key in editableUserValues).reduce((acc, key) => {
+        acc[key] = editableUserValues[key];
+        return acc;
+      }, {});
+
+      // Construir el objeto a enviar con solo los campos modificados y el ID
+      const updatedUser = {
+        id: editableUserValues._id, // Asegurarse de que este sea el ID correcto
+        ...updatedFields
+      };
+
+      console.log('Objeto a enviar:', updatedUser);
+
+      // Despachar updateUser con el objeto actualizado
+      await dispatch(updateUser(updatedUser));
+      setEditableUserId(null);
+    } catch (error) {
+      console.error('Error updating user:', error);
     }
-  };
+  }
+};
 
   const handleCancel = () => {
     setEditableUserId(null);

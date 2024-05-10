@@ -1,174 +1,169 @@
 import React, { useEffect, useState } from 'react';
- import styles from './producto.module.css'; // Importa los estilos como un módulo de CSS
-import CancelIcon from '@mui/icons-material/Cancel';
+import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, TextField, Button } from '@mui/material';
 import SaveIcon from '@mui/icons-material/Save';
+import CancelIcon from '@mui/icons-material/Cancel';
 import EditIcon from '@mui/icons-material/Edit';
-import DeleteIcon from '@mui/icons-material/Delete';
-import CheckCircleIcon from '@mui/icons-material/CheckCircle';
-import DoneIcon from '@mui/icons-material/Done';
-import BlockIcon from '@mui/icons-material/Block';
+import { useDispatch, useSelector } from 'react-redux';
+import { fetchBuildings, updateBuilding } from '../../../Redux/reducer/reducer.js'; // Importa updateBuilding
 
-const UsersComponent = ({ users }) => {
-  const [editableUser, setEditableUser] = useState(null);
-  const [editableUserValues, setEditableUserValues] = useState({});
-  const roles = ["admin", "buyer"];
+const BuildingsComponent = () => {
+  const [editableBuildingId, setEditableBuildingId] = useState(null);
+  const [editableBuildingValues, setEditableBuildingValues] = useState({});
+  const [modifiedFields, setModifiedFields] = useState({});
 
-  const handleBanUser = async (userId) => {
-    if (window.confirm('¿Estás seguro de que quieres bannear este usuario?')) {
-       // Lógica para banear al usuario
-    }
+  const dispatch = useDispatch();
+  const buildingsFromRedux = useSelector((state) => state.users.entities);
+
+  useEffect(() => {
+    dispatch(fetchBuildings());
+  }, [dispatch]);
+
+  const handleEdit = (buildingId) => {
+    setEditableBuildingId(buildingId);
+    const building = buildingsFromRedux.find(building => building._id === buildingId);
+    setEditableBuildingValues(building);
+    setModifiedFields({});
   };
-   
-  const handleUnbanUser = async (userId) => {
-    if (window.confirm('¿Estás seguro de que quieres des-bannear este Usuario?')) {
-       // Lógica para des-bannear al usuario
-    }
+
+  const handleInputChange = (field, value) => {
+    setEditableBuildingValues(prevValues => ({
+      ...prevValues,
+      [field]: value
+    }));
+    setModifiedFields(prevFields => ({
+      ...prevFields,
+      [field]: true
+    }));
   };
-   
-  const handleDelete = async (userId) => {
-    if (window.confirm('¿Estás seguro de que quieres eliminar este Usuario? Esta acción es irreversible y se borrará de la base de datos')) {
-       // Lógica para eliminar al usuario
-    }
-  };
-   
-  const handleSave = async (userId) => {
+
+  const handleSave = async () => {
     if (window.confirm('¿Estás seguro de que quieres guardar los cambios?')) {
-       // Lógica para guardar los cambios del usuario
+      try {
+        const updatedFields = Object.keys(modifiedFields).filter(key => key !== '_id').filter(key => key in editableBuildingValues).reduce((acc, key) => {
+          acc[key] = editableBuildingValues[key];
+          return acc;
+        }, {});
+  
+        console.log('Objeto a enviar al backend:', updatedFields); // Añade esta línea para imprimir el objeto antes de enviarlo al backend
+  
+        await dispatch(updateBuilding({ id: editableBuildingValues._id, updatedBuilding: updatedFields })); // Corrige esta línea para usar updateBuilding y pasar el ID por la URL
+        setEditableBuildingId(null);
+      } catch (error) {
+        console.error('Error updating building:', error);
+      }
     }
-  };
-
-  const handleEdit = (userId) => {
-    setEditableUser(userId);
-    setEditableUserValues((prevValues) => ({
-      ...prevValues,
-      [userId]: { ...users.find((user) => user.id === userId) },
-    }));
-  };
-
-  const handleInputChange = (userId, field, value) => {
-    setEditableUserValues((prevValues) => ({
-      ...prevValues,
-      [userId]: {
-        ...prevValues[userId],
-        [field]: value,
-      },
-    }));
   };
 
   const handleCancel = () => {
-    setEditableUser(null);
-    setEditableUserValues({});
+    setEditableBuildingId(null);
   };
-
   return (
-    <div className={styles.userContainer}>
-      <h2 className={styles.title}>Tabla de Servicios</h2>
-      <div className={styles.tableWrapper}>
-        <table className={styles.table}>
-          <thead>
-            <tr>
-              <th>Nombre</th>
-              <th>Direccion</th>
-              <th>Pais</th>
-              <th>Ciudad</th>
-              <th>Pisos Totales</th>
-              <th>Oficinas Totales</th>
-              <th>Estado</th>
-              <th>Acciones</th>
-            </tr>
-          </thead>
-          <tbody>
-            {users && users.map(user => (
-              <tr key={user.id} className={styles.row}>
-                <td>{user.id}</td>
-                <td>
-                  {editableUser === user.id ? (
-                    <select
-                      value={editableUserValues[user.id]?.rol || user.rol}
-                      onChange={(e) => handleInputChange(user.id, 'rol', e.target.value)}
-                    >
-                      {roles.map((role) => (
-                        <option key={role} value={role}>
-                          {role}
-                        </option>
-                      ))}
-                    </select>
-                  ) : (
-                    user.rol
-                  )}
-                </td>
-                <td>
-                  {editableUser === user.id ? (
-                    <input
-                      type="text"
-                      value={editableUserValues[user.id]?.name || ''}
-                      onChange={(e) => handleInputChange(user.id, 'name', e.target.value)}
+    <div>
+      <h2>Tabla de edificios</h2>
+      <TableContainer component={Paper}>
+        <Table>
+          <TableHead>
+            <TableRow>
+              <TableCell>Nombre</TableCell>
+              <TableCell>Dirección</TableCell>
+              <TableCell>Descripción</TableCell>
+              <TableCell>Ciudad</TableCell>
+              <TableCell>País</TableCell>
+              <TableCell>Propietario</TableCell>
+              <TableCell>Número de pisos</TableCell>
+              <TableCell>Acciones</TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {buildingsFromRedux && buildingsFromRedux.map(building => (
+              <TableRow key={building._id}>
+                <TableCell>
+                  {editableBuildingId === building._id ? (
+                    <TextField
+                      value={editableBuildingValues.name}
+                      onChange={(e) => handleInputChange('name', e.target.value)}
                     />
                   ) : (
-                    user.name
+                    building.name
                   )}
-                </td>
-                <td>
-                  {editableUser === user.id ? (
-                    <input
-                      type="text"
-                      value={editableUserValues[user.id]?.surName || ''}
-                      onChange={(e) => handleInputChange(user.id, 'surName', e.target.value)}
+                </TableCell>
+                <TableCell>
+                  {editableBuildingId === building._id ? (
+                    <TextField
+                      value={editableBuildingValues.address}
+                      onChange={(e) => handleInputChange('address', e.target.value)}
                     />
                   ) : (
-                    user.surName
+                    building.address
                   )}
-                </td>
-                <td>
-                  {editableUser === user.id ? (
-                    <input
-                      type="text"
-                      value={editableUserValues[user.id]?.email || ''}
-                      onChange={(e) => handleInputChange(user.id, 'email', e.target.value)}
+                </TableCell>
+                <TableCell>
+                  {editableBuildingId === building._id ? (
+                    <TextField
+                      value={editableBuildingValues.description}
+                      onChange={(e) => handleInputChange('description', e.target.value)}
                     />
                   ) : (
-                    user.email
+                    building.description
                   )}
-                </td>
-                <td>
-                  {editableUser === user.id ? (
-                    <input
-                      type="text"
-                      value={editableUserValues[user.id]?.password || ''}
-                      onChange={(e) => handleInputChange(user.id, 'password', e.target.value)}
+                </TableCell>
+                <TableCell>
+                  {editableBuildingId === building._id ? (
+                    <TextField
+                      value={editableBuildingValues.city}
+                      onChange={(e) => handleInputChange('city', e.target.value)}
                     />
                   ) : (
-                    user.password
+                    building.city
                   )}
-                </td>
-                <td>
-                  {user.banned ? "True" : "False"}
-                </td>
-                <td>
-                  {editableUser === user.id ? (
+                </TableCell>
+                <TableCell>
+                  {editableBuildingId === building._id ? (
+                    <TextField
+                      value={editableBuildingValues.country}
+                      onChange={(e) => handleInputChange('country', e.target.value)}
+                    />
+                  ) : (
+                    building.country
+                  )}
+                </TableCell>
+                <TableCell>
+                  {editableBuildingId === building._id ? (
+                    <TextField
+                      value={editableBuildingValues.owner}
+                      onChange={(e) => handleInputChange('owner', e.target.value)}
+                    />
+                  ) : (
+                    building.owner
+                  )}
+                </TableCell>
+                <TableCell>
+                  {editableBuildingId === building._id ? (
+                    <TextField
+                      value={editableBuildingValues.numberOfFloors}
+                      onChange={(e) => handleInputChange('numberOfFloors', e.target.value)}
+                    />
+                  ) : (
+                    building.numberOfFloors
+                  )}
+                </TableCell>
+                <TableCell>
+                  {editableBuildingId === building._id ? (
                     <div>
-                      <button className={styles.button} onClick={() => handleCancel()}><CancelIcon/></button>
-                      <button className={styles.button} onClick={() => handleSave(user.id)}><SaveIcon/></button>
+                      <Button onClick={handleSave}><SaveIcon /> Guardar</Button>
+                      <Button onClick={handleCancel}><CancelIcon /> Cancelar</Button>
                     </div>
                   ) : (
-                    <div>
-                      <button className={styles.button} onClick={() => handleEdit(user.id)}><EditIcon/></button>
-                      <button className={styles.button} onClick={() => handleDelete(user.id)}><DeleteIcon/></button>
-                      {user.banned ? (
-                        <button className={styles.button} onClick={() => handleUnbanUser(user.id)}><CheckCircleIcon /> des-bannear</button>
-                      ) : (
-                        <button className={styles.button} onClick={() => handleBanUser(user.id)}><BlockIcon /> bannear</button>
-                      )}
-                    </div>
+                    <Button onClick={() => handleEdit(building._id)}><EditIcon /> Editar</Button>
                   )}
-                </td>
-              </tr>
+                </TableCell>
+              </TableRow>
             ))}
-          </tbody>
-        </table>
-      </div>
+          </TableBody>
+        </Table>
+      </TableContainer>
     </div>
   );
-            };
+};
 
-            export default UsersComponent;
+export default BuildingsComponent;

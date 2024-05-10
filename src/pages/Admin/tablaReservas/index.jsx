@@ -1,121 +1,85 @@
 import React, { useEffect, useState } from 'react';
- import styles from './reservas.module.css'; // Importa los estilos como un módulo de CSS
-import CancelIcon from '@mui/icons-material/Cancel';
-import SaveIcon from '@mui/icons-material/Save';
-import EditIcon from '@mui/icons-material/Edit';
-import DeleteIcon from '@mui/icons-material/Delete';
-import CheckCircleIcon from '@mui/icons-material/CheckCircle';
-import DoneIcon from '@mui/icons-material/Done';
-import BlockIcon from '@mui/icons-material/Block';
+import { 
+  Table, 
+  TableBody, 
+  TableCell, 
+  TableContainer, 
+  TableHead, 
+  TableRow, 
+  Paper, 
+  Button, 
+  CircularProgress,
+  Typography,
+  Grid,
+  Container
+} from '@mui/material';
+import { useDispatch, useSelector } from 'react-redux';
+import { fetchBookings } from '../../../Redux/reducer/reducer.js';
 
-const UsersComponent = ({ users }) => {
-  const [editableUser, setEditableUser] = useState(null);
-  const [editableUserValues, setEditableUserValues] = useState({});
-  const roles = ["admin", "buyer"];
+const BookingsComponent = () => {
+  const dispatch = useDispatch();
+  const [bookings, setBookings] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
 
-  const handleBanUser = async (userId) => {
-    if (window.confirm('¿Estás seguro de que quieres bannear este usuario?')) {
-       // Lógica para banear al usuario
-    }
-  };
-   
-  const handleUnbanUser = async (userId) => {
-    if (window.confirm('¿Estás seguro de que quieres des-bannear este Usuario?')) {
-       // Lógica para des-bannear al usuario
-    }
-  };
-   
-  const handleDelete = async (userId) => {
-    if (window.confirm('¿Estás seguro de que quieres eliminar este Usuario? Esta acción es irreversible y se borrará de la base de datos')) {
-       // Lógica para eliminar al usuario
-    }
-  };
-   
-  const handleSave = async (userId) => {
-    if (window.confirm('¿Estás seguro de que quieres guardar los cambios?')) {
-       // Lógica para guardar los cambios del usuario
-    }
-  };
-
-  const handleEdit = (userId) => {
-    setEditableUser(userId);
-    setEditableUserValues((prevValues) => ({
-      ...prevValues,
-      [userId]: { ...users.find((user) => user.id === userId) },
-    }));
-  };
-
-  const handleInputChange = (userId, field, value) => {
-    setEditableUserValues((prevValues) => ({
-      ...prevValues,
-      [userId]: {
-        ...prevValues[userId],
-        [field]: value,
-      },
-    }));
-  };
-
-  const handleCancel = () => {
-    setEditableUser(null);
-    setEditableUserValues({});
-  };
+  useEffect(() => {
+    const fetchBookingsData = async () => {
+      setLoading(true);
+      try {
+        const response = await dispatch(fetchBookings());
+        setBookings(response.payload);
+        setLoading(false);
+      } catch (error) {
+        setError(error);
+        setLoading(false);
+      }
+    };
+    fetchBookingsData();
+  }, [dispatch]);
 
   return (
-    <div className={styles.userContainer}>
-      <h2 className={styles.title}>Tabla de usuarios</h2>
-      <div className={styles.tableWrapper}>
-        <table className={styles.table}>
-          <thead>
-            <tr>
-              <th>Nombre</th>
-              <th>Apellido</th>
-              <th>ROL</th>
-              <th>Email</th>
-              <th>Fecha de creación</th>
-              <th>Estado</th>
-              <th>Acciones</th>
-            </tr>
-          </thead>
-          <tbody>
-            {users && users.map(user => (
-              <tr key={user.id} className={styles.row}>
-                <td className={styles.cell}>{user.id}</td>
-                <td className={styles.cell}>
-                  {editableUser === user.id ? (
-                    <select
-                      className={styles.input}
-                      value={editableUserValues[user.id]?.rol || user.rol}
-                      onChange={(e) => handleInputChange(user.id, 'rol', e.target.value)}
-                    >
-                      {roles.map((role) => (
-                        <option key={role} value={role}>
-                          {role}
-                        </option>
-                      ))}
-                    </select>
-                  ) : (
-                    user.rol
-                  )}
-                </td>
-                <td className={styles.cell}>
-                  {editableUser === user.id ? (
-                    <input
-                      type="text"
-                      value={editableUserValues[user.id]?.name || ''}
-                      onChange={(e) => handleInputChange(user.id, 'name', e.target.value)}
-                    />
-                  ) : (
-                    user.name
-                  )}
-                </td>
-                {/* Agrega celdas similares para los otros campos */}
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
-    </div>
+    <Container maxWidth="lg">
+      <Typography variant="h4" gutterBottom>Tabla de reservas</Typography>
+      {loading ? (
+        <Grid container justifyContent="center">
+          <CircularProgress />
+        </Grid>
+      ) : error ? (
+        <Typography variant="body1" color="error" gutterBottom>
+          Error al cargar las reservas: {error.message}
+        </Typography>
+      ) : (
+        <TableContainer component={Paper}>
+          <Table>
+            <TableHead>
+              <TableRow>
+                <TableCell>Token de reserva</TableCell>
+                <TableCell>Inicio</TableCell>
+                <TableCell>Fin</TableCell>
+                <TableCell>Estado</TableCell>
+                <TableCell>Usuario</TableCell>
+                <TableCell>Habitación</TableCell>
+                <TableCell>Comentario</TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {bookings && bookings.map((booking) => (
+                <TableRow key={booking._id}>
+                  <TableCell>{booking.bookingToken}</TableCell>
+                  <TableCell>{booking.startTime}</TableCell>
+                  <TableCell>{booking.endingTime}</TableCell>
+                  <TableCell>{booking.state}</TableCell>
+                  <TableCell>{booking.user}</TableCell>
+                  <TableCell>{booking.room}</TableCell>
+                  <TableCell>{booking.comment}</TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </TableContainer>
+      )}
+    </Container>
   );
-            };
+};
 
-            export default UsersComponent;
+export default BookingsComponent;
