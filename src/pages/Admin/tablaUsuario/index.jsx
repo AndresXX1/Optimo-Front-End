@@ -1,174 +1,173 @@
 import React, { useEffect, useState } from 'react';
- import styles from './usuarioss.module.css';
+import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, TextField, Select, MenuItem, Button } from '@mui/material';
 import CancelIcon from '@mui/icons-material/Cancel';
 import SaveIcon from '@mui/icons-material/Save';
 import EditIcon from '@mui/icons-material/Edit';
-import DeleteIcon from '@mui/icons-material/Delete';
-import CheckCircleIcon from '@mui/icons-material/CheckCircle';
-import DoneIcon from '@mui/icons-material/Done';
-import BlockIcon from '@mui/icons-material/Block';
+import { useDispatch, useSelector } from 'react-redux';
+import { fetchUsers, updateUser } from '../../../Redux/reducer/reducer.js'; // Asegúrate de importar updateUser aquí
 
-const UsersComponent = ({ users }) => {
-  const [editableUser, setEditableUser] = useState(null);
-  const [editableUserValues, setEditableUserValues] = useState({});
-  const roles = ["admin", "buyer"];
+const UsersComponent = () => {
+  const [editableUserId, setEditableUserId] = useState(null);
+  const [editableUserValues, setEditableUserValues] = useState({
+    _id: '', // Asegúrate de incluir el ID del usuario
+    status: '',
+    resetPasswordToken: null,
+    name: '',
+    email: '',
+    role: '',
+    phone: '',
+    bookings: [],
+    __v: 0
+  });
+  const [modifiedFields, setModifiedFields] = useState({}); // Para rastrear los campos modificados
+  const dispatch = useDispatch();
+  const usersFromRedux = useSelector((state) => state.users.entities);
+  const roles = ["admin", "user", "superAdmin"];
 
-  const handleBanUser = async (userId) => {
-    if (window.confirm('¿Estás seguro de que quieres bannear este usuario?')) {
-       // Lógica para banear al usuario
-    }
-  };
-   
-  const handleUnbanUser = async (userId) => {
-    if (window.confirm('¿Estás seguro de que quieres des-bannear este Usuario?')) {
-       // Lógica para des-bannear al usuario
-    }
-  };
-   
-  const handleDelete = async (userId) => {
-    if (window.confirm('¿Estás seguro de que quieres eliminar este Usuario? Esta acción es irreversible y se borrará de la base de datos')) {
-       // Lógica para eliminar al usuario
-    }
-  };
-   
-  const handleSave = async (userId) => {
-    if (window.confirm('¿Estás seguro de que quieres guardar los cambios?')) {
-       // Lógica para guardar los cambios del usuario
-    }
-  };
+  useEffect(() => {
+    dispatch(fetchUsers());
+  }, [dispatch]);
 
   const handleEdit = (userId) => {
-    setEditableUser(userId);
-    setEditableUserValues((prevValues) => ({
-      ...prevValues,
-      [userId]: { ...users.find((user) => user.id === userId) },
+    setEditableUserId(userId);
+    const user = usersFromRedux.find(user => user._id === userId);
+    setEditableUserValues(user);
+    setModifiedFields({}); // Reinicia los campos modificados cuando se edita un nuevo usuario
+  };
+
+  const handleInputChange = (field, value) => {
+    setEditableUserValues(prevValues => ({
+    ...prevValues,
+      [field]: value
+    }));
+    setModifiedFields(prevFields => ({
+    ...prevFields,
+      [field]: true // Marca el campo como modificado
     }));
   };
 
-  const handleInputChange = (userId, field, value) => {
-    setEditableUserValues((prevValues) => ({
-      ...prevValues,
-      [userId]: {
-        ...prevValues[userId],
-        [field]: value,
-      },
-    }));
+  const handleSave = async () => {
+    if (window.confirm('¿Estás seguro de que quieres guardar los cambios?')) {
+      try {
+        // Crea un nuevo objeto con solo el ID y los campos modificados
+        // Asegúrate de cambiar _id a id para coincidir con el backend
+        const updatedUser = {
+          id: editableUserValues._id, // Cambia _id a id
+         ...Object.keys(modifiedFields).reduce((acc, key) => {
+            acc[key] = editableUserValues[key];
+            return acc;
+          }, {})
+        };
+        console.log('Objeto a enviar:', updatedUser);
+        
+        await dispatch(updateUser(updatedUser)); // Despacha updateUser con el objeto actualizado
+        setEditableUserId(null);
+      } catch (error) {
+        console.error('Error updating user:', error);
+      }
+    }
   };
 
   const handleCancel = () => {
-    setEditableUser(null);
-    setEditableUserValues({});
+    setEditableUserId(null);
   };
 
   return (
-    <div className={styles.userContainer}>
-      <h2 className={styles.title}>Tabla de usuarios</h2>
-      <div className={styles.tableWrapper}>
-        <table className={styles.table}>
-          <thead>
-            <tr>
-              
-              <th>Nombre</th>
-              <th>Apellido</th>
-              <th>ROL</th>
-              <th>Email</th>
-              <th>Fecha de creacion</th>
-              <th>Estado</th>
-              <th>Acciones</th>
-            </tr>
-          </thead>
-          <tbody>
-            {users && users.map(user => (
-              <tr key={user.id} className={styles.row}>
-                <td>{user.id}</td>
-                <td>
-                  {editableUser === user.id ? (
-                    <select
-                      value={editableUserValues[user.id]?.rol || user.rol}
-                      onChange={(e) => handleInputChange(user.id, 'rol', e.target.value)}
-                    >
-                      {roles.map((role) => (
-                        <option key={role} value={role}>
-                          {role}
-                        </option>
-                      ))}
-                    </select>
-                  ) : (
-                    user.rol
-                  )}
-                </td>
-                <td>
-                  {editableUser === user.id ? (
-                    <input
-                      type="text"
-                      value={editableUserValues[user.id]?.name || ''}
-                      onChange={(e) => handleInputChange(user.id, 'name', e.target.value)}
+    <div>
+      <h2>Tabla de usuarios</h2>
+      <TableContainer component={Paper}>
+        <Table>
+          <TableHead>
+            <TableRow>
+              <TableCell>Nombre</TableCell>
+              <TableCell>Telefono</TableCell>
+              <TableCell>ROL</TableCell>
+              <TableCell>Email</TableCell>
+              <TableCell>Estado</TableCell>
+              <TableCell>Acciones</TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {usersFromRedux && usersFromRedux.map(user => (
+              <TableRow key={user._id}>
+                <TableCell>
+                  {editableUserId === user._id? (
+                    <TextField
+                      value={editableUserValues.name}
+                      onChange={(e) => handleInputChange('name', e.target.value)}
                     />
                   ) : (
                     user.name
                   )}
-                </td>
-                <td>
-                  {editableUser === user.id ? (
-                    <input
-                      type="text"
-                      value={editableUserValues[user.id]?.surName || ''}
-                      onChange={(e) => handleInputChange(user.id, 'surName', e.target.value)}
+                </TableCell>
+                <TableCell>
+                  {editableUserId === user._id? (
+                    <TextField
+                      value={editableUserValues.phone}
+                      onChange={(e) => handleInputChange('phone', e.target.value)}
                     />
                   ) : (
-                    user.surName
+                    user.phone
                   )}
-                </td>
-                <td>
-                  {editableUser === user.id ? (
-                    <input
-                      type="text"
-                      value={editableUserValues[user.id]?.email || ''}
-                      onChange={(e) => handleInputChange(user.id, 'email', e.target.value)}
+                </TableCell>
+                <TableCell>
+                  {editableUserId === user._id? (
+                    <Select
+                      value={editableUserValues.role}
+                      onChange={(e) => handleInputChange('role', e.target.value)}
+                    >
+                      {roles.map((role) => (
+                        <MenuItem key={role} value={role}>
+                          {role}
+                        </MenuItem>
+                      ))}
+                    </Select>
+                  ) : (
+                    user.role
+                  )}
+                </TableCell>
+                <TableCell>
+                  {editableUserId === user._id? (
+                    <TextField
+                      value={editableUserValues.email}
+                      onChange={(e) => handleInputChange('email', e.target.value)}
                     />
                   ) : (
                     user.email
                   )}
-                </td>
-                <td>
-                  {editableUser === user.id ? (
-                    <input
-                      type="text"
-                      value={editableUserValues[user.id]?.password || ''}
-                      onChange={(e) => handleInputChange(user.id, 'password', e.target.value)}
-                    />
+                </TableCell>
+                <TableCell>
+                  {editableUserId === user._id? (
+                    <Select
+                      value={editableUserValues.status}
+                      onChange={(e) => handleInputChange('status', e.target.value)}
+                    >
+                      <MenuItem value="active">Activo</MenuItem>
+                      <MenuItem value="inactive">Inactivo</MenuItem>
+                      <MenuItem value="banned">Baneado</MenuItem>
+                      <MenuItem value="invisible">Invisible</MenuItem>
+                    </Select>
                   ) : (
-                    user.password
+                    user.status
                   )}
-                </td>
-                <td>
-                  {user.banned ? "True" : "False"}
-                </td>
-                <td>
-                  {editableUser === user.id ? (
+                </TableCell>
+                <TableCell>
+                  {editableUserId === user._id? (
                     <div>
-                      <button className={styles.button} onClick={() => handleCancel()}><CancelIcon/></button>
-                      <button className={styles.button} onClick={() => handleSave(user.id)}><SaveIcon/></button>
+                      <Button onClick={handleSave}><SaveIcon /> Guardar</Button>
+                      <Button onClick={handleCancel}><CancelIcon /> Cancelar</Button>
                     </div>
                   ) : (
-                    <div>
-                      <button className={styles.button} onClick={() => handleEdit(user.id)}><EditIcon/></button>
-                      <button className={styles.button} onClick={() => handleDelete(user.id)}><DeleteIcon/></button>
-                      {user.banned ? (
-                        <button className={styles.button} onClick={() => handleUnbanUser(user.id)}><CheckCircleIcon /> des-bannear</button>
-                      ) : (
-                        <button className={styles.button} onClick={() => handleBanUser(user.id)}><BlockIcon /> bannear</button>
-                      )}
-                    </div>
+                    <Button onClick={() => handleEdit(user._id)}><EditIcon /> Editar</Button>
                   )}
-                </td>
-              </tr>
+                </TableCell>
+              </TableRow>
             ))}
-          </tbody>
-        </table>
-      </div>
+          </TableBody>
+        </Table>
+      </TableContainer>
     </div>
   );
-            };
+};
 
-            export default UsersComponent;
+export default UsersComponent;

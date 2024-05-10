@@ -1,19 +1,23 @@
 import React from "react";
 import Cards from "src/Components/Cliente/Cards/cards"; // Importa el componente Cards
 import jsonData from "../../api/api.json";
-import Filter from "../../Components/Cliente/Filter/filter"
+import Filter from "../../Components/Cliente/Filter/filter";
+import { Grid } from '@mui/material';
 
 function Home() {
-  return (
-    <div>
+ return (
+    <Grid container spacing={2}>
+      <Grid item xs={12} md={6}>
+        <div style={{marginBottom:"50px"}}>
+          <Filter/>
+        </div>
+      </Grid>
+
+   
+        <Cards data={jsonData} />
       
-      <div style={{marginBottom:"50px",marginLeft:"340px"}}>
-      <Filter/>
-      </div>
-      {/* Pasa los datos del JSON como propiedades a Cards */}
-      <Cards data={jsonData} />
-    </div>
-  );
+    </Grid>
+ );
 }
 
 export default Home;

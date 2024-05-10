@@ -199,12 +199,7 @@ const navigation = (pathname) => {
       
     },
 
-    {
-      title: 'Pisos',
-      icon: SettingsIcon,
-      path: '/Admin/tablaPisos',
-      
-    },
+
     {
       title: 'Oficinas',
       icon: SettingsIcon,
@@ -212,12 +207,7 @@ const navigation = (pathname) => {
       
     },
 
-    {
-      title: 'Reseñas',
-      icon: SettingsIcon,
-      path: '/Admin/tablaResenias',
-      
-    },
+
   ]
 }
 }
