@@ -44,9 +44,9 @@ const BuildingsComponent = () => {
           return acc;
         }, {});
   
-        console.log('Objeto a enviar al backend:', updatedFields); // Añade esta línea para imprimir el objeto antes de enviarlo al backend
+        console.log('Objeto a enviar al backend:', updatedFields); // línea para imprimir el objeto antes de enviarlo al backend
   
-        await dispatch(updateBuilding({ id: editableBuildingValues._id, updatedBuilding: updatedFields })); // Corrige esta línea para usar updateBuilding y pasar el ID por la URL
+        await dispatch(updateBuilding({ id: editableBuildingValues._id, updatedBuilding: updatedFields })); //  esta es línea para usar updateBuilding y pasar el ID por la URL
         setEditableBuildingId(null);
       } catch (error) {
         console.error('Error updating building:', error);
