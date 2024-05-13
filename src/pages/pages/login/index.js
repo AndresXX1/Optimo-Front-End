@@ -54,7 +54,7 @@ const FormControlLabel = styled(MuiFormControlLabel)(({ theme }) => ({
 }));
 
 const LoginPage = () => {
-  const authState = useSelector(state => state.auth); // Accede al estado de auth
+  const authState = useSelector(state => state.register); // Actualiza esto si cambias el nombre del reducer a 'register'
   const [redirected, setRedirected] = useState(false);
   const [userRole, setUserRole] = useState(null);
   const [values, setValues] = useState({
@@ -71,13 +71,26 @@ const LoginPage = () => {
     console.log("authState:", authState); // Verificar el valor de authState
     if (authState && authState.decodedToken && authState.decodedToken.role) {
       console.log("Role encontrado:", authState.decodedToken.role);
-      setUserRole(authState.decodedToken.role); // Usa authState.decodedToken.role
+      setUserRole(authState.decodedToken.role);
+
+      // Verificar si se debe redirigir y solo si no se ha redirigido antes
+      if (!redirected) {
+        setRedirected(true);
+        if (authState.decodedToken.role === 'user') {
+          router.push('/Cliente');
+        } else if (authState.decodedToken.role === 'admin') {
+          router.push('/Admin');
+        } else {
+          console.log('Usuario sin rol válido');
+        }
+      }
     }
-  }, [authState]);
+  }, [authState, redirected]);
 
   useEffect(() => {
-    console.log("userRoledsd:", userRole); // Agregar este console.log para verificar el valor de userRole
+    console.log("userRole:", userRole); // Agregar este console.log para verificar el valor de userRole
   }, [userRole]);
+
 
   const handleChange = prop => event => {
     setValues({...values, [prop]: event.target.value });
@@ -112,7 +125,7 @@ const LoginPage = () => {
                 width={200}
                 height={200}
                 style={{
-                  marginTop:"-90px",
+                  marginTop:"-50px",
                   marginBottom:"-50px",
                   marginLeft:"0px"
                 }}

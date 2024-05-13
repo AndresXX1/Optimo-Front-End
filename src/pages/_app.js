@@ -1,4 +1,4 @@
-import Head from 'next/head';
+import { useEffect } from 'react';
 import { useRouter, Router } from 'next/router'; // Importa useRouter
 import NProgress from 'nprogress'; // Loader Import
 import { CacheProvider } from '@emotion/react'; // Emotion Imports
@@ -11,6 +11,7 @@ import { SettingsConsumer, SettingsProvider } from 'src/@core/context/settingsCo
 import { createEmotionCache } from 'src/@core/utils/create-emotion-cache'; // Utils Imports
 import 'react-perfect-scrollbar/dist/css/styles.css'; // React Perfect Scrollbar Style
 import '../styles/globals.css'; // Global css styles
+import Head from 'next/head';
 
 const clientSideEmotionCache = createEmotionCache();
 
@@ -44,13 +45,12 @@ const App = props => {
   return (
     <Provider store={store}> {/* Envuelve tu aplicación en el Provider */}
       <CacheProvider value={emotionCache}>
-        <Head>
+        <Head> 
           <title>{`${themeConfig.templateName} - Building Organization`}</title>
           <meta name='description' content={`${themeConfig.templateName}`} />
           <meta name='keywords' />
           <meta name='viewport' />
         </Head>
-
         <SettingsProvider>
           <SettingsConsumer>
             {({ settings }) => {

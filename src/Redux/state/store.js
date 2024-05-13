@@ -6,7 +6,7 @@ import authSlice from "../reducer/auth"
 const rootReducer = {
   users: userReducer,
   rooms: roomsSlice, 
-  register:authSlice,
+  register:authSlice
 };
 
 const store = configureStore({

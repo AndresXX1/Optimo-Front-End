@@ -109,6 +109,9 @@ const UserDropdown = () => {
             >
               <AccountCircleIcon sx={{ width: '2.5rem', height: '2.5rem' }}/>
             </Badge>
+            <Box>
+              <p></p>
+            </Box>
           </Box>
         </Box>
         <Divider sx={{ mt: 0, mb: 1 }} />
