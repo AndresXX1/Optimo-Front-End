@@ -1,9 +1,11 @@
 // ** React Imports
 
-import { useState, Fragment } from 'react'
+
 import Image from 'next/image';
 import snfondo from '../../../../public/logos/snfondo.png'
-
+import { useState, Fragment } from 'react';
+import { useDispatch } from 'react-redux';
+import { registerUser } from '../../../Redux/reducer/auth';
 // ** Next Imports
 
 import Link from 'next/link'
@@ -68,32 +70,52 @@ const FormControlLabel = styled(MuiFormControlLabel)(({ theme }) => ({
 }))
 
 const RegisterPage = () => {
-
-  // ** States
+  const dispatch = useDispatch();
 
   const [values, setValues] = useState({
     password: '',
-    showPassword: false
-  })
+    showPassword: false,
+    name: '',
+    email: '',
+    phone: '',
+    lastName: '',
+  });
+ 
+
 
   // ** Hook
 
   const theme = useTheme()
 
   const handleChange = prop => event => {
-    setValues({ ...values, [prop]: event.target.value })
-  }
+    setValues({ ...values, [prop]: event.target.value });
+  };
 
   const handleClickShowPassword = () => {
-    setValues({ ...values, showPassword: !values.showPassword })
-  }
+    setValues({ ...values, showPassword: !values.showPassword });
+  };
 
   const handleMouseDownPassword = event => {
-    event.preventDefault()
-  }
+    event.preventDefault();
+  };
+
+  const handleFormSubmit = () => {
+    const userData = {
+      name: values.name,
+      email: values.email,
+      password: values.password,
+      phone: values.phone,
+      lastName: values.lastName,
+    };
+  
+    console.log('Datos del usuario a enviar:', userData);
+  
+    // Aquí puedes enviar los datos del usuario al backend o a la acción de Redux
+    dispatch(registerUser(userData));
+  };
 
   return (
-    <div style={{ position: "fixed", top: 0, left: 0, width: "100%", height: "100%", }}>
+    <div style={{ position: "absolute", top: 0, left: 0, width: "100%", height: "100%", }}>
        <img src="/fondos/fonde.jpg" alt="fondo" style={{ width: "100%", height: "100%", objectFit: "cover", position: "absolute", zIndex: -1 }} />
       
        <Box className='content-center'>
@@ -117,8 +139,23 @@ const RegisterPage = () => {
                <Typography variant='body2'>¡Haz que la gestión de tu aplicación sea fácil y divertida!</Typography>
              </Box>
              <form noValidate autoComplete='off' onSubmit={e => e.preventDefault()}>
-               <TextField autoFocus fullWidth id='username' label='Nombre de usuario' sx={{ marginBottom: 4 }} />
-               <TextField fullWidth type='email' label='Email' sx={{ marginBottom: 4 }} />
+             <TextField
+                  autoFocus
+                  fullWidth
+                  id='name'
+                  label='Nombre de usuario'
+                  sx={{ marginBottom: 4 }}
+                  value={values.name} // Agrega el valor del estado local
+                  onChange={handleChange('name')} // Agrega el manejador de cambio para actualizar el estado local
+                />
+                <TextField
+                  fullWidth
+                  type='email'
+                  label='email'
+                  sx={{ marginBottom: 4 }}
+                  value={values.email} // Agrega el valor del estado local
+                  onChange={handleChange('email')} // Agrega el manejador de cambio para actualizar el estado local
+                />
                <FormControl fullWidth>
                  <InputLabel htmlFor='auth-register-password'>Contraseña</InputLabel>
                  <OutlinedInput
@@ -141,6 +178,22 @@ const RegisterPage = () => {
                    }
                  />
                </FormControl>
+                <TextField
+                  fullWidth
+                  type='phone'
+                  label='Telefono'
+                  sx={{ marginBottom: 4 }}
+                  value={values.phone} // Agrega el valor del estado local
+                  onChange={handleChange('phone')} // Agrega el manejador de cambio para actualizar el estado local
+                />
+                <TextField
+                  fullWidth
+                  type='lastName'
+                  label='Apellido'
+                  sx={{ marginBottom: 4 }}
+                  value={values.lastName} // Agrega el valor del estado local
+                  onChange={handleChange('lastName')} // Agrega el manejador de cambio para actualizar el estado local
+                />
                <FormControlLabel
                  control={<Checkbox />}
                  label={
@@ -152,18 +205,15 @@ const RegisterPage = () => {
                    </Fragment>
                  }
                />
-               <Button fullWidth size='large' type='submit' variant='contained' sx={{ marginBottom: 7 }}>
-                 Registrate
-               </Button>
-
-
-
-               {/* <Link href="/Cliente">
-                 <Button fullWidth size='large' type='submit' variant='contained' sx={{ marginBottom: 7 }}>
-                   Volver al Inicio
-                 </Button>
-               </Link> */}
-
+    <Button
+      fullWidth
+      size='large'
+      variant='contained'
+      sx={{ marginBottom: 7 }}
+      onClick={handleFormSubmit} // Llama a handleFormSubmit al hacer clic en el botón
+    >
+      Registrate
+    </Button>
 
 
                <Box sx={{ display: 'flex', alignItems: 'center', flexWrap: 'wrap', justifyContent: 'center' }}>
@@ -176,36 +226,6 @@ const RegisterPage = () => {
                    </Link>
                  </Typography>
                </Box>
-
-
-
-               {/* <Divider sx={{ my: 5 }}>or</Divider>
-               <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                 <Link href='/' passHref>
-                   <IconButton component='a' onClick={e => e.preventDefault()}>
-                    <Facebook sx={{ color: '#497ce2' }} />
-                   </IconButton>
-                 </Link>
-                 <Link href='/' passHref>
-                   <IconButton component='a' onClick={e => e.preventDefault()}>
-                    <Twitter sx={{ color: '#1da1f2' }} />
-                   </IconButton>
-                 </Link>
-                 <Link href='/' passHref>
-                   <IconButton component='a' onClick={e => e.preventDefault()}>
-                    <Github
-                       sx={{ color: theme => (theme.palette.mode === 'light' ? '#272727' : theme.palette.grey[300]) }}
-                    />
-                   </IconButton>
-                 </Link>
-                 <Link href='/' passHref>
-                   <IconButton component='a' onClick={e => e.preventDefault()}>
-                    <Google sx={{ color: '#db4437' }} />
-                   </IconButton>
-                 </Link>
-               </Box> */}
-
-
 
              </form>
            </CardContent>

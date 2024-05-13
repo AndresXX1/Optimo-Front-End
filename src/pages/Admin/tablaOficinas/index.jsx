@@ -11,7 +11,6 @@ import Dialog from '@mui/material/Dialog';
 import DialogTitle from '@mui/material/DialogTitle';
 import DialogContent from '@mui/material/DialogContent';
 import DialogActions from '@mui/material/DialogActions';
-import {FormControl, InputLabel, Select, MenuItem} from '@mui/material';
 
 const RoomsComponent = () => {
     const [editableRoomId, setEditableRoomId] = useState(null);
@@ -23,8 +22,7 @@ const RoomsComponent = () => {
     const selectedBuildingId = useSelector((state) => state.rooms.selectedBuildingId);
     const [openDescriptionDialog, setOpenDescriptionDialog] = useState({});
     const [openLocationDialog, setOpenLocationDialog] = useState({});
-    const [showMessage, setShowMessage] = useState(false);
-
+  
 
     useEffect(() => {
         console.log("Selected Building ID:", selectedBuildingId);
@@ -188,81 +186,16 @@ const RoomsComponent = () => {
     </DialogActions>
   </Dialog>
 </TableCell>
-
-<TableCell style={{ minWidth: "100px", maxWidth:"170px" }}>
-                      <FormControl fullWidth>
-                          <InputLabel id='form-layouts-separator-select-label'>Seleccione</InputLabel>
-                          <Select
-                              label='Servicios'
-                              multiple
-                              value={editableRoomValues.equipment} // Utiliza la propiedad 'equipment' del local
-                              onChange={(event) => {
-                                  const selectedValues = event.target.value;
-                                  if (selectedValues.length <= 6) {
-                                    const newOffices = [...offices];
-                                    newOffices[index].equipment = selectedValues; // Actualiza la propiedad 'equipment' del local
-                                    setOffices(newOffices);
-                                    setShowMessage(false); // Oculta el mensaje
-                                  } else {
-                                    setShowMessage(true);
-                                  }
-                              }}
-                              id='form-layouts-separator-select'
-                              labelId='form-layouts-separator-select-label'
-                              >
-                                                       {showMessage && (
-                            <Typography variant="body2" color="error">
-                                Solo puede elegir 6 amoblamientos.
-                            </Typography>
-                            )}
-                            <MenuItem value='Escritorio'>Escritorio</MenuItem>
-                            <MenuItem value='Silla de oficina'>Silla de oficina</MenuItem>
-                            <MenuItem value='Sillas'>Sillas</MenuItem>
-                            <MenuItem value='Computadora'>Computadora</MenuItem>
-                            <MenuItem value='Mesa de conferencia'>Mesa de conferencia</MenuItem>
-                            <MenuItem value='Mesas'>Mesas</MenuItem>
-                            <MenuItem value='Mesas de trabajo'>Mesas de trabajo</MenuItem>
-                            <MenuItem value='Mesas redondas'>Mesas redondas</MenuItem>
-                            <MenuItem value='Cocina industrial'>Cocina industrial</MenuItem>
-                            <MenuItem value='Materiales de arte'>Materiales de arte</MenuItem>
-                            <MenuItem value='Tumbonas'>Tumbonas</MenuItem>
-                            <MenuItem value='Sombrillas'>Sombrillas</MenuItem>
-                            <MenuItem value='Duchas'>Duchas</MenuItem>
-                            {showMessage && (
-                            <Typography variant="body2" color="error">
-                                Solo puede elegir 6 amoblamientos.
-                            </Typography>
-                            )}
-                            <MenuItem value='Instalaciones deportivas'>Instalaciones deportivas</MenuItem>
-                            <MenuItem value='Instalaciones recreativas'>Instalaciones recreativas</MenuItem>
-                            <MenuItem value='Salón de Eventos'>Salón de Eventos</MenuItem>
-                            <MenuItem value='Estantes'>Estantes</MenuItem>
-                            <MenuItem value='Pantalla'>Pantalla</MenuItem>
-                            <MenuItem value='Pizarra'>Pizarra</MenuItem>
-                            <MenuItem value='Proyector'>Proyector</MenuItem>
-                            <MenuItem value='Micrófonos'>Micrófonos</MenuItem>
-                            <MenuItem value='Mesa de billar'>Mesa de billar</MenuItem>
-                            <MenuItem value='Consolas de videojuegos'>Consolas de videojuegos</MenuItem>
-                            {showMessage && (
-                            <Typography variant="body2" color="error">
-                                Solo puede elegir 6 amoblamientos.
-                            </Typography>
-                            )}
-                            <MenuItem value='Salón de exposiciones'>Salón de exposiciones</MenuItem>
-                            <MenuItem value='Stands'>Stands</MenuItem>
-                            <MenuItem value='Carretillas'>Carretillas</MenuItem>
-                            <MenuItem value='Iluminación ajustable'>Iluminación ajustable</MenuItem>
-                            <MenuItem value='Cajas de almacenamiento'>Cajas de almacenamiento</MenuItem>
-                            <MenuItem value='Sillas decorativas'>Sillas decorativas</MenuItem>
-                            {showMessage && (
-                            <Typography variant="body2" color="error">
-                                Solo puede elegir 6 amoblamientos.
-                            </Typography>
-                            )}
-                          </Select>
-                     
-                      </FormControl>
-                      </TableCell>
+                <TableCell>
+                  {editableRoomId === room.id ? (
+                    <TextField
+                      value={editableRoomValues.equipment}
+                      onChange={(e) => handleInputChange('equipment', e.target.value)}
+                    />
+                  ) : (
+                    room.equipment
+                  )}
+                </TableCell>
 
                 <TableCell>
                   {editableRoomId === room._id ? (

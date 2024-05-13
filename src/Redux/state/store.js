@@ -1,10 +1,12 @@
 import { configureStore } from '@reduxjs/toolkit';
-import userReducer from '../reducer/reducer'; // Asegúrate de que la ruta sea correcta
-import roomsSlice from '../reducer/rooms'; // Asegúrate de que la ruta sea correcta
+import userReducer from '../reducer/reducer'; 
+import roomsSlice from '../reducer/rooms'; 
+import authSlice from "../reducer/auth"
 
 const rootReducer = {
   users: userReducer,
-  rooms: roomsSlice, // Incluye el reducer de habitaciones
+  rooms: roomsSlice, 
+  register:authSlice,
 };
 
 const store = configureStore({
