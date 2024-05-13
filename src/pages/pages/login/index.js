@@ -105,11 +105,11 @@ const LoginPage = () => {
   };
 
   const handleSubmit = async (e) => {
-    console.log("userRole:", userRole); // Agregar este console.log para verificar el valor de userRole
     e.preventDefault();
     await dispatch(loginUser({ email: values.email, password: values.password }));
+    // Suponiendo que loginUser es exitoso, guarda el token en localStorage
+    localStorage.setItem('authToken', authState.token);
   };
-
 
   
   return (
