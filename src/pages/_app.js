@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
-import { useRouter, Router } from 'next/router'; // Importa useRouter
-import NProgress from 'nprogress'; // Loader Import
-import { CacheProvider } from '@emotion/react'; // Emotion Imports
+import { useRouter } from 'next/router';
+import NProgress from 'nprogress';
+import 'nprogress/nprogress.css';
 import { Provider } from 'react-redux'; // Importa Provider de react-redux
 import store from '../Redux/state/store'; // Asegúrate de que la ruta sea correcta
 import themeConfig from 'src/configs/themeConfig'; // Config Imports
@@ -12,54 +12,63 @@ import { createEmotionCache } from 'src/@core/utils/create-emotion-cache'; // Ut
 import 'react-perfect-scrollbar/dist/css/styles.css'; // React Perfect Scrollbar Style
 import '../styles/globals.css'; // Global css styles
 import Head from 'next/head';
+import parseJwt from '../utils/jwtUtils'; // Asegúrate de que tienes esta función disponible
+import { AuthProvider } from '../Components/localStore/authContext';
 
 const clientSideEmotionCache = createEmotionCache();
 
-// Pace Loader
-if (themeConfig.routingLoader) {
-  Router.events.on('routeChangeStart', () => {
-    NProgress.start();
-  });
-  Router.events.on('routeChangeError', () => {
-    NProgress.done();
-  });
-  Router.events.on('routeChangeComplete', () => {
-    NProgress.done();
-  });
-}
+const App = ({ Component, emotionCache = clientSideEmotionCache, pageProps }) => {
+  const router = useRouter();
 
-const App = props => {
-  const { Component, emotionCache = clientSideEmotionCache, pageProps } = props;
-  const router = useRouter(); // Usa useRouter para obtener la ruta actual
+  useEffect(() => {
+    // Manejar la lógica del localStorage aquí
+    const token = localStorage.getItem('authToken');
+    if (token) {
+      const decodedToken = parseJwt(token);
+      // Aquí puedes establecer el estado de autenticación en tu aplicación
+      // Por ejemplo, podrías establecer el estado de autenticación en tu contexto de autenticación
+      // login(); // Esto asume que la función login maneja la lógica de autenticación
+    }
+  }, []);
 
-  // Variables
-  const getLayout = Component.getLayout?? (page => <UserLayout>{page}</UserLayout>);
+  useEffect(() => {
+    if (themeConfig.routingLoader) {
+      NProgress.configure({ showSpinner: false });
+      const handleStart = () => NProgress.start();
+      const handleComplete = () => NProgress.done();
 
-  // Verifica si la ruta es "/"
-  if (router.pathname === "/") {
-    // Para la ruta raíz ("/"), solo renderiza el componente de la página actual sin ningún layout adicional
-    return <Component {...pageProps} />;
-  }
+      router.events.on('routeChangeStart', handleStart);
+      router.events.on('routeChangeComplete', handleComplete);
+      router.events.on('routeChangeError', handleComplete);
 
-  // Para todas las demás rutas, renderiza el contenido de la página actual con el layout correspondiente
+      return () => {
+        router.events.off('routeChangeStart', handleStart);
+        router.events.off('routeChangeComplete', handleComplete);
+        router.events.off('routeChangeError', handleComplete);
+      };
+    }
+  }, [router]);
+
+  const getLayout = Component.getLayout ?? (page => <UserLayout>{page}</UserLayout>);
+
   return (
-    <Provider store={store}> {/* Envuelve tu aplicación en el Provider */}
-      <CacheProvider value={emotionCache}>
-        <Head> 
-          <title>{`${themeConfig.templateName} - Building Organization`}</title>
-          <meta name='description' content={`${themeConfig.templateName}`} />
-          <meta name='keywords' />
-          <meta name='viewport' />
-        </Head>
+    <Provider store={store}>
+      <Head>
+        {/* Head content */}
+      </Head>
+      {/* Añade AuthProvider aquí */}
+      <AuthProvider>
         <SettingsProvider>
           <SettingsConsumer>
-            {({ settings }) => {
-              return <ThemeComponent settings={settings}>{getLayout(<Component {...pageProps} />)}</ThemeComponent>
-            }}
+            {({ settings }) => (
+              <ThemeComponent settings={settings}>
+                {getLayout(<Component {...pageProps} />)}
+              </ThemeComponent>
+            )}
           </SettingsConsumer>
         </SettingsProvider>
-      </CacheProvider>
-    </Provider> 
+      </AuthProvider>
+    </Provider>
   );
 };
 

@@ -9,6 +9,8 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@cloudinary/react": "^1.13.0",
+    "@cloudinary/url-gen": "^1.19.0",
     "@emotion/cache": "^11.6.0",
     "@emotion/react": "^11.11.4",
     "@emotion/server": "^11.11.0",
@@ -31,6 +33,7 @@
     "bootstrap": "^5.3.3",
     "chart.css": "^0.1.1",
     "chart.js": "^4.4.2",
+    "cloudinary-react": "^1.8.1",
     "clsx": "^1.1.1",
     "date-fns": "^3.6.0",
     "dayz": "^2.9.1",

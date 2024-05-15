@@ -43,6 +43,7 @@ const initialState = {
   rooms: [], // Almacena las habitaciones directamente en el estado raíz
   loading: false,
   error: null,
+  entities: []
   
 };
 

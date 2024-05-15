@@ -67,6 +67,19 @@ const UserDropdown = () => {
     }
   };
 
+  // Obtener el nombre de usuario del objeto decodificado guardado en localStorage
+  const userName = typeof window !== 'undefined' ? JSON.parse(localStorage.getItem('decodedToken') ?? '{}')?.name  ?? '' : '';
+  const userRole = typeof window !== 'undefined' ? JSON.parse(localStorage.getItem('decodedToken') ?? '{}')?.role  ?? '' : '';
+  // Función para cerrar sesión y limpiar el localStorage
+const handleLogout = () => {
+  localStorage.removeItem('authToken');
+  localStorage.removeItem('decodedToken');
+  // Limpiar el estado del componente
+  setCurrentPath('');
+  // Redireccionar a la página de inicio de sesión
+  router.push('/pages/login');
+};
+
   const styles = {
     py: 2,
     px: 4,
@@ -109,8 +122,9 @@ const UserDropdown = () => {
             >
               <AccountCircleIcon sx={{ width: '2.5rem', height: '2.5rem' }}/>
             </Badge>
-            <Box>
-              <p></p>
+            <Box sx={{marginLeft:"15px"}}>
+              <Typography style={{fontSize:"16px"}}>{userName}</Typography> 
+              <Typography style={{fontSize:"11px"}}>({userRole})</Typography> 
             </Box>
           </Box>
         </Box>
@@ -139,7 +153,7 @@ const UserDropdown = () => {
           </Box>
         </MenuItem>
         <Divider />
-        <MenuItem sx={{ py: 2 }} onClick={() => handleDropdownClose('/pages/login')}>
+        <MenuItem sx={{ py: 2 }} onClick={handleLogout}>
           <LogoutVariant sx={{ marginRight: 2, fontSize: '1.375rem', color: 'text.secondary' }} />
           Logout
         </MenuItem>

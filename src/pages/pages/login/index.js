@@ -32,7 +32,7 @@ import themeConfig from 'src/configs/themeConfig';
 import BlankLayout from 'src/@core/layouts/BlankLayout';
 
 // ** Redux Action Import
-import { loginUser } from '../../../Redux/reducer/auth';
+import { loginUser, clearAuthState} from '../../../Redux/reducer/auth';
 
 
 // ** Styled Components
@@ -63,6 +63,8 @@ const LoginPage = () => {
     showPassword: false
   });
 
+  
+
   const theme = useTheme();
   const router = useRouter();
   const dispatch = useDispatch();
@@ -91,6 +93,16 @@ const LoginPage = () => {
     console.log("userRole:", userRole); // Agregar este console.log para verificar el valor de userRole
   }, [userRole]);
 
+  useEffect(() => {
+    // Limpiar el estado una vez que se ha guardado el token en localStorage
+    if (localStorage.getItem('authToken')) {
+      setValues({
+        email: '',
+        password: '',
+        showPassword: false
+      });
+    }
+  }, [authState]);
 
   const handleChange = prop => event => {
     setValues({...values, [prop]: event.target.value });
@@ -109,6 +121,8 @@ const LoginPage = () => {
     await dispatch(loginUser({ email: values.email, password: values.password }));
     // Suponiendo que loginUser es exitoso, guarda el token en localStorage
     localStorage.setItem('authToken', authState.token);
+    // Despacha la acción para limpiar el estado específico
+    dispatch(clearAuthState());
   };
 
   
