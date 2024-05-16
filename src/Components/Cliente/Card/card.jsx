@@ -18,24 +18,24 @@ const CustomCard = ({ data }) => {
   };
 
   const handleNextImage = () => {
-    setCurrentImageIndex((prevIndex) => (prevIndex + 1) % data.Imagen.length);
+    setCurrentImageIndex((prevIndex) => (prevIndex + 1) % data.images.length);
    };
    
    const handlePreviousImage = () => {
-    setCurrentImageIndex((prevIndex) => (prevIndex - 1 + data.Imagen.length) % data.Imagen.length);
+    setCurrentImageIndex((prevIndex) => (prevIndex - 1 + data.images.length) % data.Imagen.length);
    };
    
   return (
     <Card className="custom-card" onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
       <CardActionArea>
 
-        <Link href={`/Cliente/detail/${data.id}`} passHref> {/* Usa Link de Next.js */}
-          <CardMedia
-            component="img"
-            height="200" // Altura fija para todas las imágenes
-            image={data.Imagen[currentImageIndex]}
-            alt={data.Nombre}
-          />
+        <Link href={`/Cliente/detail/${data._id}`} passHref> {/* Usa Link de Next.js */}
+        <CardMedia
+  component="img"
+  height="200" // Altura fija para todas las imágenes
+  image={data && data.images && data.images[currentImageIndex]} // Asegúrate de que data y data.images existan
+  alt={data? data.name : ''}
+/>
         </Link>
 
       </CardActionArea>
@@ -59,19 +59,19 @@ const CustomCard = ({ data }) => {
       </Box>
       <CardContent>
         <Typography gutterBottom variant="h5" component="div">
-          {data.Nombre}
+          {data.name}
         </Typography>
         <Typography variant="body2" color="textSecondary" component="p" style={{ overflow: "hidden", textOverflow: "ellipsis", maxHeight: "40px" }}>
-          Ubicación: {data.Ubicacion}
+          Ubicación:
         </Typography>
         <Typography variant="body2" color="textSecondary" component="p" style={{ overflow: "hidden", textOverflow: "ellipsis", maxHeight: "40px" }}>
           Servicio: {data.Servicio}
         </Typography>
         <Typography variant="body2" color="textSecondary" component="p" style={{ overflow: "hidden", textOverflow: "ellipsis", maxHeight: "40px" }}>
-          Piso: {data.Piso}
+          Piso: {data.floorNumber}
         </Typography>
         <Typography variant="body2" color="textSecondary" component="p" style={{ overflow: "hidden", textOverflow: "ellipsis", maxHeight: "40px" }}>
-          Equipamento: {data.Equipamento}
+          Equipamento: {data.equipment}
         </Typography>
       </CardContent>
 

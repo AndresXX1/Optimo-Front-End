@@ -12,19 +12,32 @@ import FormControl from '@mui/material/FormControl';
 import OutlinedInput from '@mui/material/OutlinedInput';
 import InputAdornment from '@mui/material/InputAdornment';
 import FormHelperText from '@mui/material/FormHelperText';
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogContentText from '@mui/material/DialogContentText';
+import DialogTitle from '@mui/material/DialogTitle';
+import MenuItem from '@mui/material/MenuItem';
+
 // ** Icons Imports
 import EyeOutline from 'mdi-material-ui/EyeOutline';
-import { toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
 import EyeOffOutline from 'mdi-material-ui/EyeOffOutline';
-import {  ToastContainer } from 'react-toastify'; 
+import LogoutVariant from 'mdi-material-ui/LogoutVariant';
+
+// ** Router Import
+import { useRouter } from 'next/router';
 
 // ** Redux Imports
 import { useDispatch } from 'react-redux';
 import { changePassword } from '../../Redux/reducer/updateUser';
 
+// ** Toast Imports
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
 const TabSecurity = () => {
   const dispatch = useDispatch();
+  const router = useRouter();
 
   // ** States
   const [values, setValues] = useState({
@@ -38,6 +51,8 @@ const TabSecurity = () => {
     confirmPasswordError: ''
   });
 
+  const [open, setOpen] = useState(false);
+
   useEffect(() => {
     const token = localStorage.getItem('Token');
     if (token) {
@@ -47,10 +62,9 @@ const TabSecurity = () => {
     }
   }, []);
 
-
   const handleSubmit = async (event) => {
     event.preventDefault();
-  
+
     // Verifica si las contraseñas coinciden
     if (values.newPassword === values.confirmNewPassword) {
       // Construye el objeto con la contraseña antigua y la nueva contraseña
@@ -58,15 +72,17 @@ const TabSecurity = () => {
         oldestPassword: values.currentPassword,
         newPassword: values.newPassword,
       };
-  
+
       try {
         // Envía la acción para cambiar la contraseña
         const response = await dispatch(changePassword(passwordData));
-  
+
         // Verifica si la solicitud ha tenido éxito (código de estado 200)
         if (response.meta.requestStatus === 'fulfilled') {
           // Mostrar notificación de éxito solo si no hay error 400
-          toast.success('Contraseña cambiada exitosamente');
+          toast.success('Contraseña cambiada exitosamente', {
+            onClose: () => handleClickOpen() // Mostrar el modal al cerrar la notificación
+          });
         } else {
           // Mostrar notificación de error si la solicitud no tuvo éxito
           toast.error('Ha ocurrido un error al cambiar la contraseña');
@@ -87,11 +103,28 @@ const TabSecurity = () => {
     }
   };
 
-  const handleCurrentPasswordChange = (prop) => (event) => {
-    console.log('Valor ingresado:', event.target.value); // Agrega esto para depurar
-    setValues({...values, [prop]: event.target.value });
+  const handleClickOpen = () => {
+    setOpen(true);
   };
 
+  const handleClose = (shouldLogout) => {
+    setOpen(false);
+    if (shouldLogout) {
+      handleLogout();
+    }
+  };
+
+  const handleLogout = () => {
+    localStorage.removeItem('authToken');
+    localStorage.removeItem('decodedToken');
+    // Redireccionar a la página de inicio de sesión
+    router.push('/pages/login');
+  };
+
+  const handleCurrentPasswordChange = (prop) => (event) => {
+    console.log('Valor ingresado:', event.target.value);
+    setValues({ ...values, [prop]: event.target.value });
+  };
 
   const handleClickShowCurrentPassword = () => {
     setValues({ ...values, showCurrentPassword: !values.showCurrentPassword });
@@ -101,19 +134,12 @@ const TabSecurity = () => {
     event.preventDefault();
   };
 
-  // Handle New Password
-
   const handleClickShowNewPassword = () => {
     setValues({ ...values, showNewPassword: !values.showNewPassword });
   };
 
   const handleMouseDownNewPassword = (event) => {
     event.preventDefault();
-  };
-
-  // Handle Confirm New Password
-  const handleConfirmNewPasswordChange = (prop) => (event) => {
-    setValues({ ...values, [prop]: event.target.value });
   };
 
   const handleClickShowConfirmNewPassword = () => {
@@ -123,7 +149,6 @@ const TabSecurity = () => {
   const handleMouseDownConfirmNewPassword = (event) => {
     event.preventDefault();
   };
-
 
   const validatePassword = (value) => {
     if (!value || value.length < 8) {
@@ -138,18 +163,41 @@ const TabSecurity = () => {
   const handleNewPasswordChange = (event) => {
     const newValue = event.target.value;
     const error = validatePassword(newValue);
-    setValues(prevValues => ({...prevValues, newPassword: newValue, newPasswordError: error }));
+    setValues(prevValues => ({ ...prevValues, newPassword: newValue, newPasswordError: error }));
   };
 
   const handleConfirmPasswordChange = (event) => {
     const newValue = event.target.value;
-    const error = newValue!== values.newPassword? 'Las contraseñas no coinciden' : '';
-    setValues(prevValues => ({...prevValues, confirmNewPassword: newValue, confirmPasswordError: error }));
+    const error = newValue !== values.newPassword ? 'Las contraseñas no coinciden' : '';
+    setValues(prevValues => ({ ...prevValues, confirmNewPassword: newValue, confirmPasswordError: error }));
   };
 
   return (
     <form onSubmit={handleSubmit}>
-       <ToastContainer />
+      <ToastContainer />
+      <Dialog
+        open={open}
+        onClose={() => handleClose(false)}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+      >
+        <DialogTitle sx={{color:"salmon"}} id="alert-dialog-title">{"Aplicar Cambios"}</DialogTitle>
+        <DialogContent>
+          <DialogContentText style={{color:"white"}} id="alert-dialog-description">
+            Para aplicar los cambios necesitas volver a iniciar sesión.
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => handleClose(false)} color="primary">
+            Mas tarde
+          </Button>
+          <MenuItem sx={{ py: 2 }} onClick={() => handleClose(true)}>
+            <LogoutVariant sx={{ marginRight: 2, fontSize: '1.375rem', color: 'text.secondary',color:"blueviolet" }} />
+            Logout
+          </MenuItem>
+        </DialogActions>
+      </Dialog>
+
       <CardContent sx={{ paddingBottom: 0 }}>
         <Grid container spacing={5}>
           <Grid item xs={12} sm={6}>
@@ -183,54 +231,54 @@ const TabSecurity = () => {
               </Grid>
 
               <Grid item xs={12} sx={{ marginTop: 6 }}>
-        <FormControl fullWidth error={Boolean(values.newPasswordError)}>
-          <InputLabel htmlFor='account-settings-new-password'>New Password</InputLabel>
-          <OutlinedInput
-            label='New Password'
-            value={values.newPassword}
-            id='account-settings-new-password'
-            onChange={handleNewPasswordChange}
-            type={values.showNewPassword? 'text' : 'password'}
-            endAdornment={
-              <InputAdornment position='end'>
-                <IconButton
-                  edge='end'
-                  onClick={handleClickShowNewPassword}
-                  onMouseDown={handleMouseDownNewPassword}
-                >
-                  {values.showNewPassword? <EyeOutline /> : <EyeOffOutline />}
-                </IconButton>
-              </InputAdornment>
-            }
-          />
-          {values.newPasswordError && <FormHelperText>{values.newPasswordError}</FormHelperText>}
-        </FormControl>
-      </Grid>
+                <FormControl fullWidth error={Boolean(values.newPasswordError)}>
+                  <InputLabel htmlFor='account-settings-new-password'>New Password</InputLabel>
+                  <OutlinedInput
+                    label='New Password'
+                    value={values.newPassword}
+                    id='account-settings-new-password'
+                    onChange={handleNewPasswordChange}
+                    type={values.showNewPassword ? 'text' : 'password'}
+                    endAdornment={
+                      <InputAdornment position='end'>
+                        <IconButton
+                          edge='end'
+                          onClick={handleClickShowNewPassword}
+                          onMouseDown={handleMouseDownNewPassword}
+                        >
+                          {values.showNewPassword ? <EyeOutline /> : <EyeOffOutline />}
+                        </IconButton>
+                      </InputAdornment>
+                    }
+                  />
+                  {values.newPasswordError && <FormHelperText>{values.newPasswordError}</FormHelperText>}
+                </FormControl>
+              </Grid>
 
-      <Grid item xs={12}>
-        <FormControl fullWidth error={Boolean(values.confirmPasswordError)}>
-          <InputLabel htmlFor='account-settings-confirm-new-password'>Confirm New Password</InputLabel>
-          <OutlinedInput
-            label='Confirm New Password'
-            value={values.confirmNewPassword}
-            id='account-settings-confirm-new-password'
-            onChange={handleConfirmPasswordChange}
-            type={values.showConfirmNewPassword? 'text' : 'password'}
-            endAdornment={
-              <InputAdornment position='end'>
-                <IconButton
-                  edge='end'
-                  onClick={handleClickShowConfirmNewPassword}
-                  onMouseDown={handleMouseDownConfirmNewPassword}
-                >
-                  {values.showConfirmNewPassword? <EyeOutline /> : <EyeOffOutline />}
-                </IconButton>
-              </InputAdornment>
-            }
-          />
-          {values.confirmPasswordError && <FormHelperText>{values.confirmPasswordError}</FormHelperText>}
-        </FormControl>
-      </Grid>
+              <Grid item xs={12}>
+                <FormControl fullWidth error={Boolean(values.confirmPasswordError)}>
+                  <InputLabel htmlFor='account-settings-confirm-new-password'>Confirm New Password</InputLabel>
+                  <OutlinedInput
+                    label='Confirm New Password'
+                    value={values.confirmNewPassword}
+                    id='account-settings-confirm-new-password'
+                    onChange={handleConfirmPasswordChange}
+                    type={values.showConfirmNewPassword ? 'text' : 'password'}
+                    endAdornment={
+                      <InputAdornment position='end'>
+                        <IconButton
+                          edge='end'
+                          onClick={handleClickShowConfirmNewPassword}
+                          onMouseDown={handleMouseDownConfirmNewPassword}
+                        >
+                          {values.showConfirmNewPassword ? <EyeOutline /> : <EyeOffOutline />}
+                        </IconButton>
+                      </InputAdornment>
+                    }
+                  />
+                  {values.confirmPasswordError && <FormHelperText>{values.confirmPasswordError}</FormHelperText>}
+                </FormControl>
+              </Grid>
             </Grid>
           </Grid>
 
@@ -244,7 +292,7 @@ const TabSecurity = () => {
           </Grid>
         </Grid>
       </CardContent>
-      <Box sx={{ mt: 11, marginBottom:"20px", marginLeft:"40px"}}>
+      <Box sx={{ mt: 11, marginBottom: "20px", marginLeft: "40px" }}>
         <Button type='submit' variant='contained' sx={{ marginRight: 3.5 }}>
           Save Changes
         </Button>
@@ -256,7 +304,6 @@ const TabSecurity = () => {
         >
           Reset
         </Button>
-
       </Box>
     </form>
   );

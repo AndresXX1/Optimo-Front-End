@@ -21,6 +21,7 @@ export const updateUser = createAsyncThunk(
   }
 );
 
+
 //action para el cambio de password
 
 export const changePassword = createAsyncThunk(
@@ -37,6 +38,28 @@ export const changePassword = createAsyncThunk(
       console.log('Token enviado en los encabezados:', headers);
 
       const response = await api.patch('/api/auth/change-password', { oldestPassword, newPassword }, { headers });
+      return response.data;
+    } catch (error) {
+      return rejectWithValue(error.response.data);
+    }
+  }
+);
+
+//action para el cambio de email
+export const changeEmail = createAsyncThunk(
+  'auth/changeEmail',
+  async (emailData, { rejectWithValue }) => {
+    try {
+      const { newEmail, password } = emailData;
+      const token = localStorage.getItem('Token'); 
+      const headers = {
+        Authorization: `Bearer ${token}`,
+      };
+
+      console.log('Datos enviados a la API:', { newEmail, password });
+      console.log('Token enviado en los encabezados:', headers);
+
+      const response = await api.patch('/api/auth/change-email', { newEmail, password }, { headers });
       return response.data;
     } catch (error) {
       return rejectWithValue(error.response.data);
@@ -91,9 +114,30 @@ const updateUsersSlice = createSlice({
     state.loading = false;         // Desactivamos el indicador de carga
     state.error = action.payload;  // Guardamos el mensaje de error
     state.success = false;         // Indicamos que la operación no fue exitosa
+  })
+
+  //casos para el cambio de email
+
+  builder
+  .addCase(changeEmail.pending, (state) => {
+    state.loading = true;
+    state.error = null;
+    state.success = false;
+  })
+  .addCase(changeEmail.fulfilled, (state) => {
+    state.loading = false;
+    state.error = null;
+    state.success = true;
+  })
+  .addCase(changeEmail.rejected, (state, action) => {
+    state.loading = false;
+    state.error = action.payload;
+    state.success = false;
   });
+
+
   },
-});
+})
 
 // Exportamos las acciones y el reducer del slice
 export default updateUsersSlice.reducer;

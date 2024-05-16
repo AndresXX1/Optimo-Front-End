@@ -1,126 +1,206 @@
-// ** React Imports
-import { forwardRef, useState } from 'react'
+import { useState, useEffect } from 'react';
+import { useDispatch } from 'react-redux';
+import { changeEmail } from '../../Redux/reducer/updateUser';
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import { useAuth } from "../../Components/localStore/authContext";
+import { useRouter } from 'next/router';
+import LogoutVariant from 'mdi-material-ui/LogoutVariant';
 
 // ** MUI Imports
-import Grid from '@mui/material/Grid'
-import Radio from '@mui/material/Radio'
-import Select from '@mui/material/Select'
-import Button from '@mui/material/Button'
-import MenuItem from '@mui/material/MenuItem'
-import TextField from '@mui/material/TextField'
-import FormLabel from '@mui/material/FormLabel'
-import InputLabel from '@mui/material/InputLabel'
-import RadioGroup from '@mui/material/RadioGroup'
-import CardContent from '@mui/material/CardContent'
-import FormControl from '@mui/material/FormControl'
-import OutlinedInput from '@mui/material/OutlinedInput'
-import FormControlLabel from '@mui/material/FormControlLabel'
+import Box from '@mui/material/Box';
+import Grid from '@mui/material/Grid';
+import Button from '@mui/material/Button';
+import InputLabel from '@mui/material/InputLabel';
+import IconButton from '@mui/material/IconButton';
+import Typography from '@mui/material/Typography';
+import CardContent from '@mui/material/CardContent';
+import FormControl from '@mui/material/FormControl';
+import OutlinedInput from '@mui/material/OutlinedInput';
+import InputAdornment from '@mui/material/InputAdornment';
+import TextField from '@mui/material/TextField';
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogContentText from '@mui/material/DialogContentText';
+import DialogTitle from '@mui/material/DialogTitle';
 
-// ** Third Party Imports
-import DatePicker from 'react-datepicker'
+// ** Icons Imports
+import EyeOutline from 'mdi-material-ui/EyeOutline';
+import EyeOffOutline from 'mdi-material-ui/EyeOffOutline';
 
-// ** Styled Components
-import DatePickerWrapper from 'src/@core/styles/libs/react-datepicker'
+const TabEmailChange = () => {
+  const dispatch = useDispatch();
+  const { logout } = useAuth();
+  const router = useRouter();
 
-const CustomInput = forwardRef((props, ref) => {
-  return <TextField inputRef={ref} label='Birth Date' fullWidth {...props} />
-})
+  // ** States
+  const [values, setValues] = useState({
+    newEmail: '',
+    currentPassword: '',
+    showCurrentPassword: false,
+    emailError: '',
+  });
+  const [open, setOpen] = useState(false);
 
-const TabInfo = () => {
-  // ** State
-  const [date, setDate] = useState(null)
+  useEffect(() => {
+    const token = localStorage.getItem('Token');
+    if (token) {
+      console.log('Token sin codificar:', token);
+    } else {
+      console.log('No se encontró el token sin codificar en el localStorage.');
+    }
+  }, []);
+
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+  
+    const emailData = {
+      newEmail: values.newEmail,
+      password: values.currentPassword,
+    };
+
+    console.log('Datos enviados:', emailData);
+  
+    try {
+      const response = await dispatch(changeEmail(emailData));
+  
+      if (response.meta.requestStatus === 'fulfilled') {
+        toast.success('Correo electrónico cambiado exitosamente');
+        handleClickOpen(); // Abrir el modal después de éxito
+      } else {
+        toast.error('Ha ocurrido un error al cambiar el correo electrónico');
+      }
+    } catch (error) {
+      if (error.message === 'Request failed with status code 400') {
+        toast.error('Contraseña actual incorrecta');
+      } else {
+        toast.error('Ha ocurrido un error al cambiar el correo electrónico');
+      }
+    }
+  };
+
+  const handleCurrentPasswordChange = (event) => {
+    setValues({ ...values, currentPassword: event.target.value });
+  };
+
+  const handleNewEmailChange = (event) => {
+    setValues({ ...values, newEmail: event.target.value });
+  };
+
+  const handleClickShowCurrentPassword = () => {
+    setValues({ ...values, showCurrentPassword: !values.showCurrentPassword });
+  };
+
+  const handleMouseDownCurrentPassword = (event) => {
+    event.preventDefault();
+  };
+
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+  
+  const handleClose = (shouldLogout) => {
+    setOpen(false);
+    if (shouldLogout) {
+      handleLogout();
+    }
+  };
+
+  const handleLogout = () => {
+    localStorage.removeItem('authToken');
+    localStorage.removeItem('decodedToken');
+    router.push('/pages/login');
+  };
 
   return (
-    <CardContent>
-      <form>
-        <Grid container spacing={7}>
-          <Grid item xs={12} sx={{ marginTop: 4.8 }}>
-            <TextField
-              fullWidth
-              multiline
-              label='Bio'
-              minRows={2}
-              placeholder='Bio'
-              defaultValue='The name’s John Deo. I am a tireless seeker of knowledge, occasional purveyor of wisdom and also, coincidentally, a graphic designer. Algolia helps businesses across industries quickly create relevant 😎, scalable 😀, and lightning 😍 fast search and discovery experiences.'
-            />
+    <>
+      <ToastContainer />
+      <Dialog
+        open={open}
+        onClose={() => handleClose(false)}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+      >
+        <DialogTitle sx={{ color: "salmon" }} id="alert-dialog-title">{"Aplicar Cambios"}</DialogTitle>
+        <DialogContent>
+          <DialogContentText style={{ color: "white" }} id="alert-dialog-description">
+            Para aplicar los cambios necesitas volver a iniciar sesión.
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => handleClose(false)} color="primary">
+            Más tarde
+          </Button>
+          <Button onClick={() => handleClose(true)} color="primary">
+            <LogoutVariant sx={{ marginRight: 2, fontSize: '1.375rem', color: 'text.secondary', color: "blueviolet" }} />
+            Logout
+          </Button>
+        </DialogActions>
+      </Dialog>
+      <form onSubmit={handleSubmit}>
+        <CardContent sx={{ paddingBottom: 0 }}>
+          <Grid container spacing={5}>
+            <Grid item xs={12} sm={6}>
+              <Typography>
+                <h2>Cambio de correo electrónico</h2>
+              </Typography>
+              <Grid container spacing={5}>
+                <Grid item xs={12} sx={{ marginTop: 4.75 }}>
+                  <TextField
+                    fullWidth
+                    id='new-email'
+                    label='Nuevo correo electrónico'
+                    value={values.newEmail}
+                    onChange={handleNewEmailChange}
+                    error={Boolean(values.emailError)}
+                    helperText={values.emailError}
+                  />
+                </Grid>
+                <Grid item xs={12} sx={{ marginTop: 6 }}>
+                  <FormControl fullWidth>
+                    <InputLabel htmlFor='account-settings-current-password'>Contraseña Actual</InputLabel>
+                    <OutlinedInput
+                      label='Contraseña Actual'
+                      value={values.currentPassword}
+                      id='account-settings-current-password'
+                      type={values.showCurrentPassword ? 'text' : 'password'}
+                      onChange={handleCurrentPasswordChange}
+                      endAdornment={
+                        <InputAdornment position='end'>
+                          <IconButton
+                            edge='end'
+                            aria-label='toggle password visibility'
+                            onClick={handleClickShowCurrentPassword}
+                            onMouseDown={handleMouseDownCurrentPassword}
+                          >
+                            {values.showCurrentPassword ? <EyeOutline /> : <EyeOffOutline />}
+                          </IconButton>
+                        </InputAdornment>
+                      }
+                    />
+                  </FormControl>
+                </Grid>
+              </Grid>
+            </Grid>
           </Grid>
-          <Grid item xs={12} sm={6}>
-            <DatePickerWrapper>
-              <DatePicker
-                selected={date}
-                showYearDropdown
-                showMonthDropdown
-                id='account-settings-date'
-                placeholderText='MM-DD-YYYY'
-                customInput={<CustomInput />}
-                onChange={date => setDate(date)}
-              />
-            </DatePickerWrapper>
-          </Grid>
-          <Grid item xs={12} sm={6}>
-            <TextField fullWidth type='number' label='Phone' placeholder='(123) 456-7890' />
-          </Grid>
-          <Grid item xs={12} sm={6}>
-            <TextField
-              fullWidth
-              label='Website'
-              placeholder='https://example.com/'
-              defaultValue='https://themeselection.com/'
-            />
-          </Grid>
-          <Grid item xs={12} sm={6}>
-            <FormControl fullWidth>
-              <InputLabel>Country</InputLabel>
-              <Select label='Country' defaultValue='USA'>
-                <MenuItem value='USA'>USA</MenuItem>
-                <MenuItem value='UK'>UK</MenuItem>
-                <MenuItem value='Australia'>Australia</MenuItem>
-                <MenuItem value='Germany'>Germany</MenuItem>
-              </Select>
-            </FormControl>
-          </Grid>
-          <Grid item xs={12} sm={6}>
-            <FormControl fullWidth>
-              <InputLabel id='form-layouts-separator-multiple-select-label'>Languages</InputLabel>
-              <Select
-                multiple
-                defaultValue={['English']}
-                id='account-settings-multiple-select'
-                labelId='account-settings-multiple-select-label'
-                input={<OutlinedInput label='Languages' id='select-multiple-language' />}
-              >
-                <MenuItem value='English'>English</MenuItem>
-                <MenuItem value='French'>French</MenuItem>
-                <MenuItem value='Spanish'>Spanish</MenuItem>
-                <MenuItem value='Portuguese'>Portuguese</MenuItem>
-                <MenuItem value='Italian'>Italian</MenuItem>
-                <MenuItem value='German'>German</MenuItem>
-                <MenuItem value='Arabic'>Arabic</MenuItem>
-              </Select>
-            </FormControl>
-          </Grid>
-          <Grid item xs={12} sm={6}>
-            <FormControl>
-              <FormLabel sx={{ fontSize: '0.875rem' }}>Gender</FormLabel>
-              <RadioGroup row defaultValue='male' aria-label='gender' name='account-settings-info-radio'>
-                <FormControlLabel value='male' label='Male' control={<Radio />} />
-                <FormControlLabel value='female' label='Female' control={<Radio />} />
-                <FormControlLabel value='other' label='Other' control={<Radio />} />
-              </RadioGroup>
-            </FormControl>
-          </Grid>
-          <Grid item xs={12}>
-            <Button variant='contained' sx={{ marginRight: 3.5 }}>
-              Save Changes
-            </Button>
-            <Button type='reset' variant='outlined' color='secondary' onClick={() => setDate(null)}>
-              Reset
-            </Button>
-          </Grid>
-        </Grid>
+        </CardContent>
+        <Box sx={{ mt: 11, marginBottom: "20px", marginLeft: "40px" }}>
+          <Button type='submit' variant='contained' sx={{ marginRight: 3.5 }}>
+            Guardar Cambios
+          </Button>
+          <Button
+            type='reset'
+            variant='outlined'
+            color='secondary'
+            onClick={() => setValues({ ...values, currentPassword: '', newEmail: '' })}
+          >
+            Reiniciar
+          </Button>
+        </Box>
       </form>
-    </CardContent>
-  )
-}
+    </>
+  );
+};
 
-export default TabInfo
+export default TabEmailChange;
