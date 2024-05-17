@@ -5,6 +5,7 @@ import CubeOutline from 'mdi-material-ui/CubeOutline'
 import HomeOutline from 'mdi-material-ui/HomeOutline'
 import FormatLetterCase from 'mdi-material-ui/FormatLetterCase'
 import AccountCogOutline from 'mdi-material-ui/AccountCogOutline'
+import CalendarCheckOutlineIcon from 'mdi-material-ui/CalendarCheckOutline';
 import CreditCardOutline from 'mdi-material-ui/CreditCardOutline'
 import AccountPlusOutline from 'mdi-material-ui/AccountPlusOutline'
 import AlertCircleOutline from 'mdi-material-ui/AlertCircleOutline'
@@ -16,26 +17,30 @@ import styles from "./estilos.module.css"
 
 const navigation = (pathname) => {
   const isClienteDetail = pathname.startsWith("/Cliente/detail/");
- 
-  if (pathname == "/Cliente"
-     || pathname == "/Cliente/perfilUsers"
-     || pathname == "/Cliente/Config-User"
-     || isClienteDetail
+
+  if (
+    pathname === "/Cliente" ||
+    pathname === "/Cliente/perfilUsers" ||
+    pathname === "/Cliente/Config-User" ||
+    isClienteDetail ||
+    pathname.startsWith("/Cliente/Bookings")
   ) {
-
-  return [
-    {
-      title: 'Panel principal',
-      icon: HomeOutline,
-      path: '/Cliente',
-    },
-    {
-      title: 'Configuracion de cuenta',
-      icon: AccountCogOutline,
-      path: '/Cliente/Config-User'
-    },
-    
-
+    return [
+      {
+        title: 'Panel principal',
+        icon: HomeOutline,
+        path: '/Cliente',
+      },
+      {
+        title: 'Configuracion de cuenta',
+        icon: AccountCogOutline,
+        path: '/Cliente/Config-User'
+      },
+      {
+        title: 'Reservaciones realizadas',
+        icon: CalendarCheckOutlineIcon,
+        path: '/Cliente/Bookings/'
+      },
 
     // {
     //   sectionTitle: 'Pages'
@@ -126,6 +131,7 @@ const navigation = (pathname) => {
      || pathname === "/Admin/tablaOficinas"
      || pathname === "/Admin/perfilUser"
      || pathname === "/Admin/Config-User"
+     ||  pathname == "/Cliente/Bookings/"
     ){
       return [
         

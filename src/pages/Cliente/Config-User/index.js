@@ -19,6 +19,7 @@ import InformationOutline from 'mdi-material-ui/InformationOutline'
 import TabInfo from '../../../Components/Config-User/TabInfo'
 import TabSecurity from '../../../Components/Config-User/TabSecurity'
 
+
 // ** Third Party Styles Imports
 import 'react-datepicker/dist/react-datepicker.css'
 
@@ -57,6 +58,7 @@ const AccountSettings = () => {
           sx={{ borderBottom: theme => `1px solid ${theme.palette.divider}` }}
         >
 
+
           <Tab
             value='security'
             label={
@@ -76,6 +78,7 @@ const AccountSettings = () => {
             }
           />
         </TabList>
+
 
 
         <TabPanel sx={{ p: 0 }} value='security'>

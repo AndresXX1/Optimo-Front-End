@@ -2,34 +2,23 @@ import { useEffect } from 'react';
 import { useRouter } from 'next/router';
 import NProgress from 'nprogress';
 import 'nprogress/nprogress.css';
-import { Provider } from 'react-redux'; // Importa Provider de react-redux
-import store from '../Redux/state/store'; // Asegúrate de que la ruta sea correcta
-import themeConfig from 'src/configs/themeConfig'; // Config Imports
-import UserLayout from 'src/layouts/UserLayout'; // Component Imports
+import { Provider } from 'react-redux';
+import store from '../Redux/state/store';
+import themeConfig from 'src/configs/themeConfig';
+import UserLayout from 'src/layouts/UserLayout';
 import ThemeComponent from 'src/@core/theme/ThemeComponent';
-import { SettingsConsumer, SettingsProvider } from 'src/@core/context/settingsContext'; // Contexts
-import { createEmotionCache } from 'src/@core/utils/create-emotion-cache'; // Utils Imports
-import 'react-perfect-scrollbar/dist/css/styles.css'; // React Perfect Scrollbar Style
-import '../styles/globals.css'; // Global css styles
+import { SettingsConsumer, SettingsProvider } from 'src/@core/context/settingsContext';
+import { createEmotionCache } from 'src/@core/utils/create-emotion-cache';
+import 'react-perfect-scrollbar/dist/css/styles.css';
+import '../styles/globals.css';
 import Head from 'next/head';
-import parseJwt from '../utils/jwtUtils'; // Asegúrate de que tienes esta función disponible
+import parseJwt from '../utils/jwtUtils';
 import { AuthProvider } from '../Components/localStore/authContext';
 
 const clientSideEmotionCache = createEmotionCache();
 
 const App = ({ Component, emotionCache = clientSideEmotionCache, pageProps }) => {
   const router = useRouter();
-
-  useEffect(() => {
-    // Manejar la lógica del localStorage aquí
-    const token = localStorage.getItem('authToken');
-    if (token) {
-      const decodedToken = parseJwt(token);
-      // Aquí puedes establecer el estado de autenticación en tu aplicación
-      // Por ejemplo, podrías establecer el estado de autenticación en tu contexto de autenticación
-      // login(); // Esto asume que la función login maneja la lógica de autenticación
-    }
-  }, []);
 
   useEffect(() => {
     if (themeConfig.routingLoader) {
@@ -49,14 +38,14 @@ const App = ({ Component, emotionCache = clientSideEmotionCache, pageProps }) =>
     }
   }, [router]);
 
-  const getLayout = Component.getLayout ?? (page => <UserLayout>{page}</UserLayout>);
+  const getLayout = Component.getLayout?? (page => <UserLayout>{page}</UserLayout>);
 
   return (
     <Provider store={store}>
       <Head>
-        {/* Head content */}
+        
       </Head>
-      {/* Añade AuthProvider aquí */}
+   
       <AuthProvider>
         <SettingsProvider>
           <SettingsConsumer>

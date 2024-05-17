@@ -124,7 +124,7 @@ const handleLogout = () => {
             </Badge>
             <Box sx={{marginLeft:"15px"}}>
               <Typography style={{fontSize:"16px"}}>{userName}</Typography> 
-              <Typography style={{fontSize:"11px"}}>({userRole})</Typography> 
+              <Typography style={{fontSize:"11px"}}>{userRole}</Typography> 
             </Box>
           </Box>
         </Box>
@@ -146,12 +146,7 @@ const handleLogout = () => {
             </Box>
           </Link>
         </MenuItem>
-        <MenuItem sx={{ p: 0 }} onClick={() => handleDropdownClose()}>
-          <Box sx={styles}>
-            <HelpCircleOutline sx={{ marginRight: 2 }} />
-            FAQ
-          </Box>
-        </MenuItem>
+
         <Divider />
         <MenuItem sx={{ py: 2 }} onClick={handleLogout}>
           <LogoutVariant sx={{ marginRight: 2, fontSize: '1.375rem', color: 'text.secondary' }} />

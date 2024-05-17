@@ -20,7 +20,8 @@ import MuiFormControlLabel from '@mui/material/FormControlLabel';
 import Checkbox from '@mui/material/Checkbox';
 import TextField from '@mui/material/TextField';
 import InputLabel from '@mui/material/InputLabel';
-
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 // ** Icons Imports
 import EyeOutline from 'mdi-material-ui/EyeOutline';
 import EyeOffOutline from 'mdi-material-ui/EyeOffOutline';
@@ -118,11 +119,35 @@ const LoginPage = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    await dispatch(loginUser({ email: values.email, password: values.password }));
-    // Suponiendo que loginUser es exitoso, guarda el token en localStorage
-    localStorage.setItem('authToken', authState.token);
-    // Despacha la acción para limpiar el estado específico
-    dispatch(clearAuthState());
+    try {
+      await dispatch(loginUser({ email: values.email, password: values.password }));
+      // Suponiendo que loginUser es exitoso, guarda el token en localStorage
+      localStorage.setItem('authToken', authState.token);
+      // Despacha la acción para limpiar el estado específico
+      dispatch(clearAuthState());
+      // Muestra notificación de éxito
+      toast.success('¡Inicio de sesión exitoso!', {
+        position: 'top-right',
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      });
+    } catch (error) {
+      console.error('Error al iniciar sesión:', error);
+      // Muestra notificación de error
+      toast.error('Error al iniciar sesión. Por favor, verifica tus credenciales.', {
+        position: 'top-right',
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      });
+    }
   };
 
   
@@ -132,6 +157,7 @@ const LoginPage = () => {
       <Box className='content-center' sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', minHeight: '100vh' }}>
         <Card sx={{ zIndex: 1 }}>
           <CardContent sx={{ padding: theme => `${theme.spacing(12, 9, 7)}important` }}>
+          <ToastContainer />
             <Box sx={{ mb: 8, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
               <Image
                 src={snfondo}

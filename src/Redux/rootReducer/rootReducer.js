@@ -4,14 +4,15 @@ import roomsSlice from '../reducer/rooms';
 import authSlice from "../reducer/auth"
 import updateUsersSlice from "../reducer/updateUser"
 import buildingsSlice from "../reducer/building"
-
+import bookingsSlice from "../reducer/bookings"
 
 const rootReducer = combineReducers({
   user: userReducer, // Asegúrate de que el nombre coincida con cómo lo usas en tu aplicación
   rooms: roomsSlice,
   auth: authSlice, 
   updateUser: updateUsersSlice,
-  building: buildingsSlice
+  building: buildingsSlice,
+  bookings:bookingsSlice
 
 });
 

@@ -29,7 +29,7 @@ const Cards = ({ data }) => {
       {data?.length === 0 ? (
         <Grid item xs={12}>
           <Typography variant="body1" color="black" textAlign="center" fontSize="25px" border="1px solid red" padding="10px" borderRadius="5px" backgroundColor="salmon">
-            No hay ofertas disponibles.
+            No hay oficinas disponibles.
           </Typography>
         </Grid>
       ) : (
