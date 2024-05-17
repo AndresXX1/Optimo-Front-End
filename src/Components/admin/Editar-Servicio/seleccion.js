@@ -19,7 +19,7 @@ import CardContent from '@mui/material/CardContent';
 import { styled } from '@mui/material/styles';
 
 // ** Custom Component Imports
-import BuildingSelect from '../../../pages/Admin/tablaOficinas/buildingSelect';
+import Selecteeed from '../../../pages/Admin/tablaOficinas/Select';
 
 // ** Toastify Imports
 import { toast, ToastContainer } from 'react-toastify';
@@ -42,7 +42,9 @@ const ButtonStyled = styled(Button)(({ theme }) => ({
 const TabAccount = () => {
   const [imgSrc, setImgSrc] = useState('/images/logos/iconocam.png');
   const [imageFile, setImageFile] = useState(null);
+
   const [formData, setFormData] = useState({
+
     name: '',
     address: '',
     country: '',
@@ -96,19 +98,20 @@ const TabAccount = () => {
     if (imageFile) {
       const formData = new FormData();
       formData.append('file', imageFile);
-      formData.append('upload_preset', 'osbs0ds6'); // Reemplazar con tu upload preset
-      formData.append('cloud_name', 'dot1uumxf'); // Reemplazar con tu cloud name
-
+      formData.append('upload_preset', 'osbs0ds6');
+      formData.append('cloud_name', 'dot1uumxf'); 
       try {
         const response = await axios.post('https://api.cloudinary.com/v1_1/dot1uumxf/image/upload', formData);
         updatedFormData.blueprints = response.data.secure_url;
       } catch (error) {
         toast.error('Error uploading image', { autoClose: 2000, onClose: () => window.location.reload() });
+        
         return;
+
       }
     }
 
-    console.log('Updated Form Data:', updatedFormData); // Agregar este console log
+    console.log('Updated Form Data:', updatedFormData); 
 
     try {
       await dispatch(updateBuilding({ id: building._id, updatedBuilding: updatedFormData }));
@@ -122,7 +125,7 @@ const TabAccount = () => {
     <CardContent>
       <ToastContainer />
       <form onSubmit={handleSubmit}>
-      <BuildingSelect onSelectBuilding={handleBuildingSelect} />
+      <Selecteeed onSelectBuilding={handleBuildingSelect} />
         <Typography style={{ marginTop: '10px', marginBottom: '20px' }} variant="h6" gutterBottom>
           Seleccione un Servicio
         </Typography>

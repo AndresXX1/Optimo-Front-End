@@ -28,11 +28,14 @@ const BuildingSelect2 = ({ onSelectBuilding }) => {
       
       const selectedBuilding = buildings.find(building => building._id === selectedBuildingId);
       const selectedBuildingName = selectedBuilding ? selectedBuilding.name : '';
+
+      
     const handleBuildingChange = (event) => {
+
         const selectedId = event.target.value;
         console.log("Selected Building ID:", selectedId);
-        setSelectedBuildingIdLocal(selectedId); // Actualiza el estado local de selectedBuildingId
-        dispatch(setSelectedBuildingId(selectedId)); // Despacha la acción setSelectedBuildingId
+        setSelectedBuildingIdLocal(selectedId);
+        dispatch(setSelectedBuildingId(selectedId)); 
         onSelectBuilding(selectedId);
         console.log("Fetching rooms for building ID:", selectedId);
     };

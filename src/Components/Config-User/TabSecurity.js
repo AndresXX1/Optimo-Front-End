@@ -65,40 +65,39 @@ const TabSecurity = () => {
   const handleSubmit = async (event) => {
     event.preventDefault();
 
-    // Verifica si las contraseñas coinciden
+  
     if (values.newPassword === values.confirmNewPassword) {
-      // Construye el objeto con la contraseña antigua y la nueva contraseña
       const passwordData = {
         oldestPassword: values.currentPassword,
         newPassword: values.newPassword,
       };
 
       try {
-        // Envía la acción para cambiar la contraseña
+    
         const response = await dispatch(changePassword(passwordData));
 
-        // Verifica si la solicitud ha tenido éxito (código de estado 200)
+        
         if (response.meta.requestStatus === 'fulfilled') {
-          // Mostrar notificación de éxito solo si no hay error 400
+         
           toast.success('Contraseña cambiada exitosamente', {
-            onClose: () => handleClickOpen() // Mostrar el modal al cerrar la notificación
+            onClose: () => handleClickOpen() 
           });
         } else {
-          // Mostrar notificación de error si la solicitud no tuvo éxito
+         
           toast.error('Ha ocurrido un error al cambiar la contraseña');
         }
       } catch (error) {
-        // Verifica si el error es debido a una contraseña incorrecta (400)
+       
         if (error.message === 'Request failed with status code 400') {
-          // Si es así, muestra una notificación de error específica
+       
           toast.error('Contraseña actual incorrecta');
         } else {
-          // Si no, muestra una notificación de error genérica
+        
           toast.error('Ha ocurrido un error al cambiar la contraseña');
         }
       }
     } else {
-      // Si las contraseñas no coinciden, mostrar una notificación de error
+     
       toast.error('Las contraseñas no coinciden');
     }
   };
@@ -117,7 +116,6 @@ const TabSecurity = () => {
   const handleLogout = () => {
     localStorage.removeItem('authToken');
     localStorage.removeItem('decodedToken');
-    // Redireccionar a la página de inicio de sesión
     router.push('/pages/login');
   };
 
@@ -157,9 +155,12 @@ const TabSecurity = () => {
     if (!/[a-zA-Z]/.test(value) || !/\d/.test(value) || !/[!@#$%^&*.-]/.test(value)) {
       return 'La contraseña debe contener al menos una letra, un número y un carácter especial';
     }
+
     return '';
+
   };
 
+  
   const handleNewPasswordChange = (event) => {
     const newValue = event.target.value;
     const error = validatePassword(newValue);

@@ -1,5 +1,5 @@
 import { NextApiRequest, NextApiResponse } from 'next';
-import jwt from 'jsonwebtoken'; // Asegúrate de tener jwt decodificado instalado
+import jwt from 'jsonwebtoken';
 
 export default function handler(req, res) {
   const authHeader = req.headers.authorization;

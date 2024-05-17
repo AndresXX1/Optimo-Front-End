@@ -59,6 +59,7 @@ const RegisterPage = () => {
   const [phoneError, setPhoneError] = useState('');
   const [emailError, setEmailError] = useState('');
   const [passwordError , setPasswordError ] = useState('');
+
   const [values, setValues] = useState({
 
     password: '',
@@ -67,7 +68,9 @@ const RegisterPage = () => {
     email: '',
     phone: '',
     lastName: '',
+
   });
+
 
   const [errors, setErrors] = useState({
     name: '',
@@ -123,7 +126,7 @@ const RegisterPage = () => {
         }, 2000);
       }
     }
-  }, [error, formSubmitted]);
+  }, [error, formSubmitted, router, values]);
 
   
   const handleClickShowPassword = () => {
@@ -210,50 +213,89 @@ const RegisterPage = () => {
     if (!value || value.length < 5) {
       return 'El nombre debe tener al menos 5 caracteres';
     }
+
     if (!/^[A-Z][a-z]*$/.test(value)) {
+
       return 'El nombre debe comenzar con mayúscula y solo puede contener letras';
+
     }
+
     return '';
+
   };
   
   const validateLastName = (value) => {
+
     if (!value || value.length < 5) {
+
       return 'El apellido debe tener al menos 5 caracteres';
+
     }
     if (!/^[A-Z][a-z]*$/.test(value)) {
       return 'El apellido debe comenzar con mayúscula y solo puede contener letras';
     }
+
     return '';
+
   };
   
   const validatePhoneNumber = (value) => {
     if (!value) {
+
       return '';
+
     }
+
     if (!/^\d+$/.test(value)) {
+
       return 'El teléfono solo puede contener números';
+
     }
+
     return '';
+
   };
   
   const validateEmail = (value) => {
+
     if (!value) {
+
       return '';
+
     }
+
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)) {
+
       return 'Ingresa un correo electrónico válido';
+
     }
+
     return '';
+
   };
   
   const validatePassword = (value) => {
     if (!value || value.length < 8) {
+
+
       return 'La contraseña debe tener al menos 8 caracteres';
+
+
+
     }
+
+
+
     if (!/[a-zA-Z]/.test(value) || !/\d/.test(value) || !/[!@#$%^&*.-]/.test(value)) {
+
+
       return 'La contraseña debe contener al menos una letra, un número y un carácter especial';
+
     }
+
     return '';
+
+
   };
 
   return (

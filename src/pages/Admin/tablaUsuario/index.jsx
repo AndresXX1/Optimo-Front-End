@@ -4,12 +4,14 @@ import CancelIcon from '@mui/icons-material/Cancel';
 import SaveIcon from '@mui/icons-material/Save';
 import EditIcon from '@mui/icons-material/Edit';
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchUsers, updateUser } from '../../../Redux/reducer/reducer.js'; // Asegúrate de importar updateUser aquí
+import { fetchUsers, updateUser } from '../../../Redux/reducer/reducer.js';
 
 const UsersComponent = () => {
   const [editableUserId, setEditableUserId] = useState(null);
+
   const [editableUserValues, setEditableUserValues] = useState({
-    _id: '', // Asegúrate de incluir el ID del usuario
+
+    _id: '', 
     status: '',
     resetPasswordToken: null,
     name: '',
@@ -19,7 +21,8 @@ const UsersComponent = () => {
     bookings: [],
     __v: 0
   });
-  const [modifiedFields, setModifiedFields] = useState({}); // Para rastrear los campos modificados
+  
+  const [modifiedFields, setModifiedFields] = useState({}); 
   const dispatch = useDispatch();
   const usersFromRedux = useSelector((state) => state.users.entities);
   const roles = ["admin", "user", ];
@@ -32,7 +35,7 @@ const UsersComponent = () => {
     setEditableUserId(userId);
     const user = usersFromRedux.find(user => user._id === userId);
     setEditableUserValues(user);
-    setModifiedFields({}); // Reinicia los campos modificados cuando se edita un nuevo usuario
+    setModifiedFields({}); 
   };
 
   const handleInputChange = (field, value) => {
@@ -40,30 +43,34 @@ const UsersComponent = () => {
     ...prevValues,
       [field]: value
     }));
+
+
     setModifiedFields(prevFields => ({
     ...prevFields,
-      [field]: true // Marca el campo como modificado
+      [field]: true
     }));
   };
+
 
 const handleSave = async () => {
   if (window.confirm('¿Estás seguro de que quieres guardar los cambios?')) {
     try {
-      // Filtrar solo los campos modificados que existen en editableUserValues
+     
       const updatedFields = Object.keys(modifiedFields).filter(key => key in editableUserValues).reduce((acc, key) => {
         acc[key] = editableUserValues[key];
+
         return acc;
+
       }, {});
 
-      // Construir el objeto a enviar con solo los campos modificados y el ID
+  
       const updatedUser = {
-        id: editableUserValues._id, // Asegurarse de que este sea el ID correcto
+        id: editableUserValues._id, 
         ...updatedFields
       };
 
       console.log('Objeto a enviar:', updatedUser);
 
-      // Despachar updateUser con el objeto actualizado
       await dispatch(updateUser(updatedUser));
       setEditableUserId(null);
     } catch (error) {

@@ -5,7 +5,9 @@ export const fetchBookings = createAsyncThunk('bookings/fetchBookings', async ({
     try { 
         const url = `/api/bookings?filter=${filter}&id=${userId}`;
         const response = await axios.get(url);
+
         return response.data;
+
     } catch (error) {
         throw Error('Failed to fetch bookings');
     }
@@ -15,9 +17,9 @@ export const createBooking = createAsyncThunk(
     'bookings/createBooking',
     async (bookingData, { rejectWithValue }) => {
       try {
-        // Obtén el token de autenticación del localStorage
+        
         const token = localStorage.getItem('Token');
-        // Crea los encabezados de la solicitud con el token de autenticación
+       
         const headers = {
           Authorization: `Bearer ${token}`,
         };
@@ -57,22 +59,22 @@ const bookingsSlice = createSlice({
                 state.error = action.error.message;
             })
             builder
-            // Agrega un caso para manejar la acción cuando la solicitud está pendiente
+           
             .addCase(createBooking.pending, (state) => {
-              state.loading = true;   // Activa el indicador de carga
-              state.error = null;     // Limpia el mensaje de error
+              state.loading = true;  
+              state.error = null;     
             })
-            // Agrega un caso para manejar la acción cuando la solicitud se completa con éxito
+            
             .addCase(createBooking.fulfilled, (state, action) => {
-              state.loading = false;  // Desactiva el indicador de carga
-              state.error = null;     // Limpia el mensaje de error
-              // Actualiza el estado con la nueva reserva agregada
+              state.loading = false;  
+              state.error = null;     
+             
               state.bookings.push(action.payload); 
             })
-            // Agrega un caso para manejar la acción cuando la solicitud es rechazada (falla)
+            
             .addCase(createBooking.rejected, (state, action) => {
-              state.loading = false;         // Desactiva el indicador de carga
-              state.error = action.payload;  // Guarda el mensaje de error
+              state.loading = false;         
+              state.error = action.payload; 
             });
     },
 });

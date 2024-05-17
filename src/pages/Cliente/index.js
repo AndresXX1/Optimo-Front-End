@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchRoomsByBuilding, updateRoom,setSelectedBuildingId } from '../../Redux/reducer/rooms';
-import BuildingSelect from '../../pages/Admin/tablaOficinas/buildingSelect';
+import Selecteeed from '../../pages/Admin/tablaOficinas/Select';
 import Cards from '../../Components/Cliente/Cards/cards'; // Asegúrate de que este es el componente correcto
 import { Grid } from '@mui/material';
 import Filter from "../../Components/Cliente/Filter/filter"
@@ -50,7 +50,9 @@ const RoomsComponent = () => {
     try {
       if (!selectedBuildingId) {
         console.error('Error: selectedBuildingId is undefined');
+
         return;
+
       }
 
       await dispatch(
@@ -61,8 +63,7 @@ const RoomsComponent = () => {
         })
       );
       setEditableRoomId(null);
-      setModifiedFields({}); // Limpiar campos modificados después de guardar
-      // Cerrar los diálogos después de guardar
+      setModifiedFields({}); 
       setOpenDescriptionDialog({});
       setOpenLocationDialog({});
     } catch (error) {
@@ -94,7 +95,7 @@ const RoomsComponent = () => {
     <Grid container spacing={2}>
       <Grid item xs={12}>
         <div style={{ marginBottom: "30px", marginTop: "30px" }}>
-          <BuildingSelect
+          <Selecteeed
             onSelectBuilding={(buildingId) => {
               dispatch(setSelectedBuildingId(buildingId));
               dispatch(fetchRoomsByBuilding(buildingId));

@@ -5,7 +5,7 @@ import SaveIcon from '@mui/icons-material/Save';
 import EditIcon from '@mui/icons-material/Edit';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchRoomsByBuilding, updateRoom } from '../../../Redux/reducer/rooms';
-import BuildingSelect from './BuildingSelect';
+import Selecteeed from './Select';
 import { setSelectedBuildingId } from '../../../Redux/reducer/rooms'; 
 import Dialog from '@mui/material/Dialog';
 import DialogTitle from '@mui/material/DialogTitle';
@@ -60,7 +60,9 @@ const RoomsComponent = () => {
     try {
       if (!selectedBuildingId) {
         console.error('Error: selectedBuildingId is undefined');
+
         return;
+
       }
   
       await dispatch(
@@ -71,7 +73,7 @@ const RoomsComponent = () => {
         })
       );
       setEditableRoomId(null);
-      setModifiedFields({}); // Limpiar campos modificados después de guardar
+      setModifiedFields({});
     } catch (error) {
       console.error('Error updating room:', error);
     }
@@ -104,7 +106,7 @@ const RoomsComponent = () => {
       
       <div style={{marginBottom:"30px",marginTop:"30px"}}>
 
-      <BuildingSelect  
+      <Selecteeed  
   onSelectBuilding={(buildingId) => {
     dispatch(setSelectedBuildingId(buildingId)); 
     dispatch(fetchRoomsByBuilding(buildingId));
@@ -146,11 +148,11 @@ const RoomsComponent = () => {
       value={editableRoomValues.location}
       onChange={(e) => handleInputChange('location', e.target.value)}
       onClick={() => {
-        // Verifica si el diálogo ya está abierto y lo cierra si es así
+        
         if (openLocationDialog[room._id]) {
           closeLocationDialog(room._id);
         }
-        // Abre el diálogo
+        
         openLocationDialogFunc(room._id);
       }}
     />
@@ -214,11 +216,11 @@ const RoomsComponent = () => {
       value={editableRoomValues.description}
       onChange={(e) => handleInputChange('description', e.target.value)}
       onClick={() => {
-        // Verifica si el diálogo ya está abierto y lo cierra si es así
+      
         if (openDescriptionDialog[room._id]) {
           closeDescriptionDialog(room._id);
         }
-        // Abre el diálogo
+      
         openDescriptionDialogFunc(room._id);
       }}
     />

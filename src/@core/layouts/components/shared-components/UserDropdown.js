@@ -17,6 +17,7 @@ import HelpCircleOutline from 'mdi-material-ui/HelpCircleOutline'
 import LogoutVariant from 'mdi-material-ui/LogoutVariant'
 
 // Styled Components
+
 const BadgeContentSpan = styled('span')(({ theme }) => ({
   width: 8,
   height: 8,
@@ -41,12 +42,14 @@ const UserDropdown = () => {
   }
 
   // Usamos useEffect para obtener la ruta actual cuando el componente se monta
+
   const [currentPath, setCurrentPath] = useState('');
   useEffect(() => {
     setCurrentPath(window.location.pathname);
   }, []);
 
   // Función para obtener la ruta del perfil según la ubicación actual
+
   const getProfileRoute = () => {
     if (currentPath.startsWith('/Admin')) {
       return '/Admin/perfilUser';
@@ -68,15 +71,18 @@ const UserDropdown = () => {
   };
 
   // Obtener el nombre de usuario del objeto decodificado guardado en localStorage
+
   const userName = typeof window !== 'undefined' ? JSON.parse(localStorage.getItem('decodedToken') ?? '{}')?.name  ?? '' : '';
   const userRole = typeof window !== 'undefined' ? JSON.parse(localStorage.getItem('decodedToken') ?? '{}')?.role  ?? '' : '';
+
   // Función para cerrar sesión y limpiar el localStorage
+
 const handleLogout = () => {
   localStorage.removeItem('authToken');
   localStorage.removeItem('decodedToken');
-  // Limpiar el estado del componente
+ 
   setCurrentPath('');
-  // Redireccionar a la página de inicio de sesión
+
   router.push('/pages/login');
 };
 

@@ -20,14 +20,17 @@ const ReservationForm = () => {
 
   const dispatch = useDispatch();
   const router = useRouter();
+
   const [reservations, setReservations] = useState([
+
     { startDate: new Date(), endDate: new Date(), startTime: null, endTime: null, eventName: '', comment: '' },
   ]);
+
   const [isEnabled, setIsEnabled] = useState(false);
   const [RoomName, setRoomName] = useState('');
   const [loading, setLoading] = useState(false);
   const [loadingMessage, setLoadingMessage] = useState('');
-  const { id } = router.query; // Obtener el ID del room desde la URL
+  const { id } = router.query;
   const token = useSelector((state) => state.token);
   const isSmallScreen = useMediaQuery('(max-width:600px)');
 
@@ -66,9 +69,12 @@ const ReservationForm = () => {
     if (isStartTime) {
       newReservations[index].startTime = time;
     } else {
+
       if (newReservations[index].startTime && time <= newReservations[index].startTime) {
         alert("La hora de fin no puede ser anterior o igual a la hora de inicio.");
+
         return;
+
       }
       newReservations[index].endTime = time;
     }
@@ -98,7 +104,7 @@ const ReservationForm = () => {
   const handleSubmit = async (event) => {
     event.preventDefault();
   
-    // Obtener el decodedToken desde localStorage
+
     const decodedToken = JSON.parse(localStorage.getItem('decodedToken'));
     const userId = decodedToken ? decodedToken.userId : null;
   
@@ -106,7 +112,6 @@ const ReservationForm = () => {
     for (let i = 0; i < reservations.length; i++) {
       const reservation = reservations[i];
   
-      // Crear objetos de fecha válidos para startTime y endingTime
       const startDateTime = new Date(reservation.startDate);
       startDateTime.setHours(reservation.startTime);
       startDateTime.setMinutes(0);
@@ -122,15 +127,15 @@ const ReservationForm = () => {
         endingTime: endDateTime,
         comment: reservation.comment,
         tittle: reservation.eventName,
-        user: userId, // Usar el ID del usuario obtenido del decodedToken
-        room: id, // Usar el ID del room obtenido de la URL
+        user: userId, 
+        room: id, 
       };
   
       setLoadingMessage(`Loading ${i + 1}/${reservations.length}`);
       console.log("Datos enviados:", formattedReservation);
       try {
         const response = await dispatch(createBooking(formattedReservation)).unwrap();
-        // Mostrar notificación de éxito
+      
         toast.success('Reserva creada exitosamente', {
           position: 'top-right',
           autoClose: 3000,
@@ -142,7 +147,8 @@ const ReservationForm = () => {
         });
       } catch (error) {
         console.error('Error creating booking:', error);
-        // Mostrar notificación de error
+        
+     
         toast.error('Error al crear la reserva', {
           position: 'top-right',
           autoClose: 3000,
@@ -158,7 +164,7 @@ const ReservationForm = () => {
     }
     setLoading(false);
   
-    // Restablecer el estado de reservations para tener solo un campo de reservación
+
     setReservations([
       { startDate: new Date(), endDate: new Date(), startTime: null, endTime: null, eventName: '', comment: '' },
     ]);

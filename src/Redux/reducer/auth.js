@@ -8,12 +8,17 @@ const api = axios.create({
 
 export const registerUser = createAsyncThunk(
     'auth/registerUser',
+
     async (userData, { rejectWithValue }) => {
+
       try {
+
         const response = await api.post('/api/auth/register', userData);
+
         return response.data;
+
       } catch (error) {
-        // Asegúrate de que estás accediendo a la propiedad correcta del objeto de error
+       
         return rejectWithValue(error.response.data.message);
       }
     }
@@ -21,30 +26,51 @@ export const registerUser = createAsyncThunk(
   
 
 export const loginUser = createAsyncThunk(
+
   'auth/loginUser',
+
   async (loginData, { rejectWithValue }) => {
+
     try {
       const response = await api.post('/api/auth/login', loginData);
+
       return response.data;
+
     } catch (error) {
+
       return rejectWithValue(error.response.data);
+
     }
   }
+
 );
 
+
 export const updateUserData = createAsyncThunk(
+
   'auth/updateUserData',
+
   async (userData, { rejectWithValue, getState }) => {
+
     try {
+
       const { auth } = getState();
+
       const response = await api.put(`/api/users/${auth.decodedToken.userId}`, userData, {
+
         headers: {
+          
           Authorization: `Bearer ${auth.token}`,
+
         },
       });
+
       return response.data;
+
     } catch (error) {
+
       return rejectWithValue(error.response.data);
+
     }
   }
 );

@@ -38,42 +38,46 @@ const CreateBuilding = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
   
-    // Verificar si se cargó una imagen
+   
     const fileInput = document.querySelector('#upload-image');
     const file = fileInput.files[0];
     if (!file) {
-      // Mostrar notificación de error
+     
       toast.error('Por favor, carga una imagen.');
-      return; // Salir de la función si no hay imagen cargada
+
+      return;
+
     }
   
-    // Verificar que todos los campos estén llenos
+    
     const formData = new FormData(e.target);
     const formValues = Object.fromEntries(formData.entries());
     for (const key in formValues) {
       if (!formValues[key]) {
-        // Mostrar notificación de error si algún campo está vacío
+       
         toast.error(`Por favor, llena el campo "${key}".`);
-        return; // Salir de la función si hay un campo vacío
+        
+        return;
+
       }
     }
   
-    // Construir los datos del edificio para enviar
+   
     const buildingData = {
       name: formValues.name,
       address: formValues.address,
       description: formValues.description,
       city: formValues.city,
       country: formValues.country,
-      owner: currentUserEmail.email, // Utilizar el email obtenido del local storage
-      blueprints: '' // Inicialmente, la URL de los planos estará vacía
+      owner: currentUserEmail.email, 
+      blueprints: '' 
     };
   
-    // Si se selecciona un archivo de imagen, cargarlo y enviarlo a Cloudinary
+   
     const formDataImage = new FormData();
     formDataImage.append('file', file);
-    formDataImage.append('upload_preset', 'osbs0ds6'); // Reemplazar con tu upload preset
-    formDataImage.append('cloud_name', 'dot1uumxf'); // Reemplazar con tu cloud name
+    formDataImage.append('upload_preset', 'osbs0ds6'); 
+    formDataImage.append('cloud_name', 'dot1uumxf'); 
   
     try {
       const response = await fetch('https://api.cloudinary.com/v1_1/dot1uumxf/image/upload', {
@@ -82,27 +86,26 @@ const CreateBuilding = () => {
       });
       const data = await response.json();
       if (!response.ok) {
-        // La solicitud fue realizada pero el servidor respondió con un estado de error
-        // Imprimir el estado y el mensaje del error en la consola
+     
         console.error('Error del servidor:', data);
         throw new Error(data.message || 'Error en la solicitud');
       }
       const imageUrl = data.secure_url;
   
-      // Actualizar la URL de los planos en los datos del edificio
+     
       buildingData.blueprints = imageUrl;
   
-      // Limpiar el estado que almacena la URL de la imagen
+     
       setImgSrc('/images/logos/iconocam.png');
   
-      // Despachar la acción para crear el edificio
+      
       console.log('Datos del edificio a enviar:', buildingData);
       await dispatch(createBuilding(buildingData));
   
-      // Limpiar los campos del formulario
+     
       e.target.reset();
   
-      // Mostrar notificación de éxito
+      
       toast.success('¡Edificio creado exitosamente!', {
         position: 'top-right',
         autoClose: 3000,
@@ -113,7 +116,7 @@ const CreateBuilding = () => {
         progress: undefined,
       });
     } catch (error) {
-      // Mostrar un mensaje de error al usuario
+     
       console.error('Error al crear el edificio:', error.message);
       toast.error('Error al crear el edificio.');
     }

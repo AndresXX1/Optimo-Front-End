@@ -49,7 +49,7 @@ const ResetButtonStyled = styled(Button)(({ theme }) => ({
 
 const TabAccount = () => {
   const [imgSrc, setImgSrc] = useState('/images/avatars/1.png');
-  const [initialData, setInitialData] = useState(null); // Almacenar los datos originales
+  const [initialData, setInitialData] = useState(null); 
   const dispatch = useDispatch();
   const [decodedToken, setDecodedToken] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -69,11 +69,11 @@ const TabAccount = () => {
       const decodedTokenFromLocalStorage = JSON.parse(localStorage.getItem('decodedToken'));
       console.log('Decoded Token from Local Storage:', decodedTokenFromLocalStorage);
       setDecodedToken(decodedTokenFromLocalStorage);
-      setInitialData(decodedTokenFromLocalStorage); // Almacenar los datos originales al cargar
+      setInitialData(decodedTokenFromLocalStorage);
       if (decodedTokenFromLocalStorage && decodedTokenFromLocalStorage.image) {
-        setImgSrc(decodedTokenFromLocalStorage.image); // Usa la imagen del localStorage
+        setImgSrc(decodedTokenFromLocalStorage.image);
       } else {
-        setImgSrc('/images/avatars/1.png'); // O usa la imagen por defecto si no hay imagen en el localStorage
+        setImgSrc('/images/avatars/1.png');
       }
       setLoading(false);
     }
@@ -81,7 +81,7 @@ const TabAccount = () => {
 
   useEffect(() => {
     if (updateSuccess) {
-      // Mostrar notificación de éxito
+     
       toast.success('¡Cambios guardados exitosamente!', {
         position: 'top-right',
         autoClose: 3000,
@@ -90,10 +90,10 @@ const TabAccount = () => {
         pauseOnHover: true,
         draggable: true,
         progress: undefined,
-        onClose: () => setUpdateSuccess(false) // Restablecer el estado después de que la notificación se cierra
+        onClose: () => setUpdateSuccess(false) 
       });
   
-      // Mostrar el modal
+     
       handleClickOpen();
     }
   }, [updateSuccess]);
@@ -107,7 +107,7 @@ const TabAccount = () => {
         setImgSrc(reader.result);
         setDecodedToken(prevState => ({
           ...prevState,
-          image: reader.result // Actualizar la imagen en decodedToken
+          image: reader.result 
         }));
       };
       reader.readAsDataURL(files[0]);
@@ -117,11 +117,11 @@ const TabAccount = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
   
-    // Obtener el archivo de imagen seleccionado por el usuario
+    
     const fileInput = document.querySelector('#account-settings-upload-image');
     const file = fileInput.files[0];
   
-    // Construir los datos del usuario para enviar
+  
     const userData = {
       id: decodedToken? decodedToken.userId : '',
       name: e.target.name.value,
@@ -133,21 +133,21 @@ const TabAccount = () => {
       gender: e.target.gender.value,
     };
   
-    // Si imgSrc no es la imagen por defecto, inclúyelo en userData
+    
     if (imgSrc!== '/images/avatars/1.png') {
       userData.profilePicture = imgSrc;
     }
   
     setDecodedToken(prevState => ({
       ...prevState,
-      image: imgSrc // O la URL de la nueva imagen cargada
+      image: imgSrc 
     }));
-    // Si se selecciona un nuevo archivo de imagen, cargarlo y enviarlo
+   
     if (file) {
       const formData = new FormData();
       formData.append('file', file);
-      formData.append('upload_preset', 'osbs0ds6'); // Utiliza el nombre de tu preset de carga
-      formData.append('cloud_name', 'dot1uumxf'); // Utiliza tu cloud name
+      formData.append('upload_preset', 'osbs0ds6');
+      formData.append('cloud_name', 'dot1uumxf'); 
   
       try {
         const response = await fetch('https://api.cloudinary.com/v1_1/dot1uumxf/image/upload', {
@@ -157,7 +157,7 @@ const TabAccount = () => {
         const data = await response.json();
         const imageUrl = data.secure_url;
   
-        userData.profilePicture = imageUrl; // Actualiza la URL de la imagen cargada
+        userData.profilePicture = imageUrl; 
       } catch (error) {
         console.error('Error de carga:', error);
       }
@@ -168,9 +168,9 @@ const TabAccount = () => {
     try {
       await dispatch(updateUser(userData));
       console.log('Los datos han sido enviados correctamente');
-      setUpdateSuccess(true); // Marcar la actualización como exitosa
+      setUpdateSuccess(true); 
     } catch (error) {
-      // Manejar errores
+      
       console.error('Error actualizando usuario:', error);
       toast.error('Error al actualizar los datos del usuario.');
     }
@@ -178,8 +178,8 @@ const TabAccount = () => {
   
 
   const handleReset = () => {
-    setDecodedToken(initialData); // Restablecer los datos originales al presionar Reset
-    setImgSrc(initialData ? initialData.image : '/images/avatars/1.png'); // Restablecer la imagen original
+    setDecodedToken(initialData); 
+    setImgSrc(initialData ? initialData.image : '/images/avatars/1.png'); 
   };
 
   if (loading) {
@@ -193,18 +193,18 @@ const TabAccount = () => {
   const handleClose = (shouldLogout) => {
     setOpen(false);
     if (shouldLogout) {
-      // Lógica para cerrar sesión
+   
       console.log("Cerrar sesión");
-      // Aquí puedes agregar la lógica para cerrar sesión, por ejemplo, limpiar el token del localStorage y redirigir al usuario a la página de inicio de sesión
+     
     }
   };
 
   const handleLogout = () => {
     localStorage.removeItem('authToken');
     localStorage.removeItem('decodedToken');
-    // Limpiar el estado del componente
+ 
     setCurrentPath('');
-    // Redireccionar a la página de inicio de sesión
+
     router.push('/pages/login');
   };
 

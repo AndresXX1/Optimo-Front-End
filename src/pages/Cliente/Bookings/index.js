@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Button, Typography, Box } from '@mui/material';
 import CancelIcon from '@mui/icons-material/Cancel';
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchBookings } from '../../../Redux/reducer/bookings'; // Asegúrate de importar la acción fetchBookings aquí
+import { fetchBookings } from '../../../Redux/reducer/bookings';
 
 const BookingsComponent = () => {
   const [bookings, setBookings] = useState([]);
@@ -20,14 +20,14 @@ const BookingsComponent = () => {
     const userIdFromLocalStorage = JSON.parse(localStorage.getItem('decodedToken'));
     if (userIdFromLocalStorage && userIdFromLocalStorage.userId) {
       console.log("Enviando petición para obtener reservas del usuario...");
-      // Despachar la acción fetchBookings para obtener las reservas del usuario
+    
       dispatch(fetchBookings({ filter: 'user', userId: userIdFromLocalStorage.userId }));
       setUserId(userIdFromLocalStorage.userId);
     }
   }, [dispatch]);
 
   useEffect(() => {
-    // Actualizar el estado local con las reservas obtenidas del estado Redux
+    
     if (Array.isArray(bookingsFromRedux)) {
       console.log("Actualizando estado local con las reservas del Redux:", bookingsFromRedux);
       setBookings(bookingsFromRedux);
@@ -56,8 +56,10 @@ const BookingsComponent = () => {
             </TableRow>
           </TableHead>
           <TableBody>
+
             {bookings.map((booking) => (
               <TableRow key={booking._id}>
+                
                 <TableCell>{booking.tittle}</TableCell>
                 <TableCell>{booking.bookingToken}</TableCell>
                 <TableCell>{new Date(booking.startTime).toLocaleString()}</TableCell>

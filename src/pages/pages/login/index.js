@@ -22,21 +22,27 @@ import TextField from '@mui/material/TextField';
 import InputLabel from '@mui/material/InputLabel';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+
 // ** Icons Imports
+
 import EyeOutline from 'mdi-material-ui/EyeOutline';
 import EyeOffOutline from 'mdi-material-ui/EyeOffOutline';
+
 
 // ** Configs
 import themeConfig from 'src/configs/themeConfig';
 
 // ** Layout Import
+
 import BlankLayout from 'src/@core/layouts/BlankLayout';
 
 // ** Redux Action Import
+
 import { loginUser, clearAuthState} from '../../../Redux/reducer/auth';
 
 
 // ** Styled Components
+
 const Card = styled(MuiCard)(({ theme }) => ({
   [theme.breakpoints.up('sm')]: { width: '28rem' }
 }));
@@ -47,18 +53,25 @@ const LinkStyled = styled('a')(({ theme }) => ({
   color: theme.palette.primary.main
 }));
 
+
 const FormControlLabel = styled(MuiFormControlLabel)(({ theme }) => ({
   '&.MuiFormControlLabel-label': {
     fontSize: '0.875rem',
     color: theme.palette.text.secondary
   }
+
 }));
+
 
 const LoginPage = () => {
   const authState = useSelector(state => state.register); // Actualiza esto si cambias el nombre del reducer a 'register'
   const [redirected, setRedirected] = useState(false);
   const [userRole, setUserRole] = useState(null);
+
+
+
   const [values, setValues] = useState({
+
     email: '',
     password: '',
     showPassword: false
@@ -66,16 +79,17 @@ const LoginPage = () => {
 
   
 
-  const theme = useTheme();
-  const router = useRouter();
-  const dispatch = useDispatch();
 
+  const theme = useTheme();
+  const dispatch = useDispatch();
+  const router = useRouter();
+  
   useEffect(() => {
     console.log("authState:", authState); // Verificar el valor de authState
     if (authState && authState.decodedToken && authState.decodedToken.role) {
       console.log("Role encontrado:", authState.decodedToken.role);
       setUserRole(authState.decodedToken.role);
-
+      
       // Verificar si se debe redirigir y solo si no se ha redirigido antes
       if (!redirected) {
         setRedirected(true);
@@ -88,7 +102,7 @@ const LoginPage = () => {
         }
       }
     }
-  }, [authState, redirected]);
+  }, [authState, redirected, router]);
 
   useEffect(() => {
     console.log("userRole:", userRole); // Agregar este console.log para verificar el valor de userRole
@@ -121,11 +135,11 @@ const LoginPage = () => {
     e.preventDefault();
     try {
       await dispatch(loginUser({ email: values.email, password: values.password }));
-      // Suponiendo que loginUser es exitoso, guarda el token en localStorage
+     
       localStorage.setItem('authToken', authState.token);
-      // Despacha la acción para limpiar el estado específico
+     
       dispatch(clearAuthState());
-      // Muestra notificación de éxito
+    
       toast.success('¡Inicio de sesión exitoso!', {
         position: 'top-right',
         autoClose: 3000,
@@ -137,7 +151,7 @@ const LoginPage = () => {
       });
     } catch (error) {
       console.error('Error al iniciar sesión:', error);
-      // Muestra notificación de error
+     
       toast.error('Error al iniciar sesión. Por favor, verifica tus credenciales.', {
         position: 'top-right',
         autoClose: 3000,
@@ -197,12 +211,14 @@ const LoginPage = () => {
                   type={values.showPassword ? 'text' : 'password'}
                   endAdornment={
                     <InputAdornment position='end'>
+
                       <IconButton
                         edge='end'
                         onClick={handleClickShowPassword}
                         onMouseDown={handleMouseDownPassword}
                         aria-label='toggle password visibility'
                       >
+
                         {values.showPassword ? <EyeOutline /> : <EyeOffOutline />}
                       </IconButton>
                     </InputAdornment>

@@ -19,7 +19,7 @@ import { Widget } from 'cloudinary-react';
 import CloseIcon from '@mui/icons-material/Close';
 import BuildingSelect2 from './selectbuilding';
 import { fetchBuildingById } from '../../../Redux/reducer/building';
-import { createRoom } from '../../../Redux/reducer/rooms'; // Importar la acción createRoom
+import { createRoom } from '../../../Redux/reducer/rooms';
 import { useDispatch, useSelector } from 'react-redux';
 import { useRouter } from 'next/router';
 import { toast, ToastContainer } from 'react-toastify';
@@ -44,6 +44,7 @@ const TabSecurity = () => {
   const [floorPlanImage, setFloorPlanImage] = useState('/images/logos/iconocam.png');
   const [dialogOpen, setDialogOpen] = useState(false);
   const dispatch = useDispatch();
+
   const [offices, setOffices] = useState([
     {
       office: 'Oficina 1',
@@ -54,6 +55,7 @@ const TabSecurity = () => {
       description: '',
     },
   ]);
+
   const [images, setImages] = useState([]);
   const [cloudinaryImages, setCloudinaryImages] = useState([]);
   const [plans, setPlans] = useState(''); // Estado para la imagen del plano de piso
@@ -116,6 +118,8 @@ const TabSecurity = () => {
     newOffices[index][field] = newValue;
     setOffices(newOffices);
   };
+
+
   const handleImageUpload = async (event) => {
     const files = Array.from(event.target.files);
     const formData = new FormData();
@@ -126,15 +130,17 @@ const TabSecurity = () => {
       method: 'POST',
       body: formData,
     });
-  
     const data = await response.json();
-    setPlans(data.secure_url); // Actualiza la URL de la imagen del plano
-    setFloorPlanImage(data.secure_url); // Actualiza la imagen de vista previa del plano
+    setPlans(data.secure_url); 
+    setFloorPlanImage(data.secure_url); 
   };
 
+
   const handleSubmit = () => {
-    const officeData = offices[0]; // Suponiendo que solo hay una oficina en la lista
+    const officeData = offices[0]; 
+
     const roomData = {
+      
       name: officeData.name,
       booking: [],
       location: officeData.location,
@@ -165,17 +171,18 @@ const TabSecurity = () => {
             progress: undefined,
           });
           console.log('Room created successfully:', response);
-          // Redirigir o mostrar mensaje de éxito
+          
+
         })
         .catch((error) => {
           toast.error('Error al crear la oficina.');
           console.error('Error creating room:', error);
-          // Mostrar mensaje de error
+          
         });
     } else {
       toast.error('No building selected');
       console.error('No building selected');
-      // Mostrar mensaje de error
+      
     }
   };
 

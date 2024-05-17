@@ -41,12 +41,14 @@ const BuildingsComponent = () => {
       try {
         const updatedFields = Object.keys(modifiedFields).filter(key => key !== '_id').filter(key => key in editableBuildingValues).reduce((acc, key) => {
           acc[key] = editableBuildingValues[key];
+
           return acc;
+
         }, {});
   
-        console.log('Objeto a enviar al backend:', updatedFields); // línea para imprimir el objeto antes de enviarlo al backend
+        console.log('Objeto a enviar al backend:', updatedFields); 
   
-        await dispatch(updateBuilding({ id: editableBuildingValues._id, updatedBuilding: updatedFields })); //  esta es línea para usar updateBuilding y pasar el ID por la URL
+        await dispatch(updateBuilding({ id: editableBuildingValues._id, updatedBuilding: updatedFields })); 
         setEditableBuildingId(null);
       } catch (error) {
         console.error('Error updating building:', error);
@@ -57,6 +59,8 @@ const BuildingsComponent = () => {
   const handleCancel = () => {
     setEditableBuildingId(null);
   };
+
+  
   return (
     <div>
       <h2>Tabla de edificios</h2>

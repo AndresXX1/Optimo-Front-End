@@ -4,7 +4,9 @@ import axios from 'axios';
 export const fetchRoomsByBuilding = createAsyncThunk('rooms/fetchRoomsByBuilding', async (buildingId) => {
     console.log("Fetching rooms for building ID:", buildingId);
     const response = await axios.get(`/api/rooms/findByBuilding/${buildingId}`);
+
     return response.data; 
+
 });
 
 export const updateRoom = createAsyncThunk(
@@ -12,7 +14,9 @@ export const updateRoom = createAsyncThunk(
     async ({ buildingId, roomId, updateRoomData }) => {
         try {
             const response = await axios.patch(`/api/rooms/${buildingId}/types/${roomId}`, updateRoomData);
+
             return response.data;
+
         } catch (error) {
             throw error;
         }
@@ -25,7 +29,9 @@ export const fetchRoomById = createAsyncThunk(
     async (roomId) => {
         try {
             const response = await axios.get(`/api/rooms/${roomId}`);
+
             return response.data;
+
         } catch (error) {
             throw error;
         }
@@ -37,7 +43,9 @@ export const createRoom = createAsyncThunk(
     async ({ buildingId, roomData }) => {
         try {
             const response = await axios.post(`/api/rooms/${buildingId}/types`, roomData);
+
             return response.data;
+
         } catch (error) {
             throw error;
         }
@@ -48,7 +56,7 @@ const initialState = {
     rooms: [],
     loading: false,
     error: null,
-    selectedBuildingId: '' // Asegúrate de que selectedBuildingId esté inicializado aquí
+    selectedBuildingId: '' 
 };
 
 const roomsSlice = createSlice({
@@ -56,7 +64,7 @@ const roomsSlice = createSlice({
     initialState,
     reducers: {
         setSelectedBuildingId(state, action) {
-            state.selectedBuildingId = action.payload; // Actualiza selectedBuildingId con el valor proporcionado
+            state.selectedBuildingId = action.payload; 
         }
     },
     extraReducers: (builder) => {
@@ -85,21 +93,21 @@ const roomsSlice = createSlice({
                 state.loading = 'idle';
                 state.error = action.error.message;
             })
-            //casos para post room
+          
             builder
             .addCase(createRoom.pending, (state) => {
                 state.loading = 'loading';
             })
             .addCase(createRoom.fulfilled, (state, action) => {
                 state.loading = 'idle';
-                // Añadir la nueva sala creada a la lista de salas existente
+             
                 state.rooms.push(action.payload);
             })
             .addCase(createRoom.rejected, (state, action) => {
                 state.loading = 'idle';
                 state.error = action.error.message;
             })
-            //casos para traer un room por id
+         
 
             builder
     .addCase(fetchRoomById.pending, (state) => {
@@ -107,7 +115,7 @@ const roomsSlice = createSlice({
     })
     .addCase(fetchRoomById.fulfilled, (state, action) => {
         state.loading = 'idle';
-        state.rooms = [action.payload]; // Como estamos buscando una habitación específica, la almacenamos como un solo elemento en el array de habitaciones
+        state.rooms = [action.payload];
     })
     .addCase(fetchRoomById.rejected, (state, action) => {
         state.loading = 'idle';
@@ -116,6 +124,6 @@ const roomsSlice = createSlice({
     }
 });
 
-export const { setSelectedBuildingId } = roomsSlice.actions; // Exporta la acción setSelectedBuildingId
+export const { setSelectedBuildingId } = roomsSlice.actions; 
 
 export default roomsSlice.reducer;
