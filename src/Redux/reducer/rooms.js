@@ -19,6 +19,31 @@ export const updateRoom = createAsyncThunk(
     }
 );
 
+
+export const fetchRoomById = createAsyncThunk(
+    'rooms/fetchRoomById',
+    async (roomId) => {
+        try {
+            const response = await axios.get(`/api/rooms/${roomId}`);
+            return response.data;
+        } catch (error) {
+            throw error;
+        }
+    }
+);
+
+export const createRoom = createAsyncThunk(
+    'rooms/createRoom',
+    async ({ buildingId, roomData }) => {
+        try {
+            const response = await axios.post(`/api/rooms/${buildingId}/types`, roomData);
+            return response.data;
+        } catch (error) {
+            throw error;
+        }
+    }
+);
+
 const initialState = {
     rooms: [],
     loading: false,
@@ -59,7 +84,35 @@ const roomsSlice = createSlice({
             .addCase(updateRoom.rejected, (state, action) => {
                 state.loading = 'idle';
                 state.error = action.error.message;
-            });
+            })
+            //casos para post room
+            builder
+            .addCase(createRoom.pending, (state) => {
+                state.loading = 'loading';
+            })
+            .addCase(createRoom.fulfilled, (state, action) => {
+                state.loading = 'idle';
+                // Añadir la nueva sala creada a la lista de salas existente
+                state.rooms.push(action.payload);
+            })
+            .addCase(createRoom.rejected, (state, action) => {
+                state.loading = 'idle';
+                state.error = action.error.message;
+            })
+            //casos para traer un room por id
+
+            builder
+    .addCase(fetchRoomById.pending, (state) => {
+        state.loading = 'loading';
+    })
+    .addCase(fetchRoomById.fulfilled, (state, action) => {
+        state.loading = 'idle';
+        state.rooms = [action.payload]; // Como estamos buscando una habitación específica, la almacenamos como un solo elemento en el array de habitaciones
+    })
+    .addCase(fetchRoomById.rejected, (state, action) => {
+        state.loading = 'idle';
+        state.error = action.error;
+    });
     }
 });
 

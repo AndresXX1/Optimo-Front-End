@@ -23,6 +23,10 @@ class CustomDocument extends Document {
           />
           <link rel='apple-touch-icon' sizes='180x180' href='/images/apple-touch-icon1.png' />
           <link rel='shortcut icon' href='/images/favicon2.png' />
+
+          {/* Agrega el script de Cloudinary aquí */}
+          <script src="https://upload-widget.cloudinary.com/global/all.css" defer></script>
+          <script src="https://upload-widget.cloudinary.com/global/all.js" defer>  </script>
         </Head>
         <body>
           <Main />
@@ -61,8 +65,8 @@ CustomDocument.getInitialProps = async ctx => {
   });
 
   return {
-    ...initialProps,
-    styles: [...Children.toArray(initialProps.styles), ...emotionStyleTags]
+   ...initialProps,
+    styles: [...Children.toArray(initialProps.styles),...emotionStyleTags]
   };
 };
 

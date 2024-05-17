@@ -1,154 +1,207 @@
-// ** React Imports
-import { useState } from 'react'
-
-// ** MUI Imports
-import Box from '@mui/material/Box'
-import Grid from '@mui/material/Grid'
-import Link from '@mui/material/Link'
-import Alert from '@mui/material/Alert'
-import Select from '@mui/material/Select'
-import { styled } from '@mui/material/styles'
-import MenuItem from '@mui/material/MenuItem'
-import TextField from '@mui/material/TextField'
-import Typography from '@mui/material/Typography'
-import InputLabel from '@mui/material/InputLabel'
-import AlertTitle from '@mui/material/AlertTitle'
-import IconButton from '@mui/material/IconButton'
-import CardContent from '@mui/material/CardContent'
-import FormControl from '@mui/material/FormControl'
-import Button from '@mui/material/Button'
-
-// ** Icons Imports
-import Close from 'mdi-material-ui/Close'
+import { useState } from 'react';
+import { useDispatch } from 'react-redux';
+import { createBuilding } from "../../../Redux/reducer/building"
+import Box from '@mui/material/Box';
+import Grid from '@mui/material/Grid';
+import Typography from '@mui/material/Typography';
+import InputLabel from '@mui/material/InputLabel';
+import FormControl from '@mui/material/FormControl';
+import Select from '@mui/material/Select';
+import MenuItem from '@mui/material/MenuItem';
+import TextField from '@mui/material/TextField';
+import CardContent from '@mui/material/CardContent';
+import Button from '@mui/material/Button';
+import { styled } from '@mui/material/styles';
+import { toast, ToastContainer } from 'react-toastify'; 
+import 'react-toastify/dist/ReactToastify.css';
 
 const ImgStyled = styled('img')(({ theme }) => ({
   width: 200,
   height: 200,
   marginRight: theme.spacing(6.25),
   borderRadius: theme.shape.borderRadius
-}))
+}));
 
 const ButtonStyled = styled(Button)(({ theme }) => ({
   [theme.breakpoints.down('sm')]: {
     width: '100%',
     textAlign: 'center'
   }
-}))
+}));
 
-const ResetButtonStyled = styled(Button)(({ theme }) => ({
-  marginLeft: theme.spacing(4.5),
-  [theme.breakpoints.down('sm')]: {
-    width: '100%',
-    marginLeft: 0,
-    textAlign: 'center',
-    marginTop: theme.spacing(4)
-  }
-}))
+const CreateBuilding = () => {
+  const [imgSrc, setImgSrc] = useState('/images/logos/iconocam.png');
+  const dispatch = useDispatch();
+  const currentUserEmail = typeof window !== 'undefined' ? JSON.parse(localStorage.getItem('decodedToken')) : null;
+  console.log('Email del usuario obtenido del local storage:', currentUserEmail);
 
-const TabAccountst = () => {
-  // ** State
-  const [openAlert, setOpenAlert] = useState(true)
-  const [imgSrc, setImgSrc] = useState('/images/logos/iconocam.png')
-
-  const onChange = file => {
-    const reader = new FileReader()
-    const { files } = file.targetW
-    if (files && files.length !== 0) {
-      reader.onload = () => setImgSrc(reader.result)
-      reader.readAsDataURL(files[0])
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+  
+    // Verificar si se cargó una imagen
+    const fileInput = document.querySelector('#upload-image');
+    const file = fileInput.files[0];
+    if (!file) {
+      // Mostrar notificación de error
+      toast.error('Por favor, carga una imagen.');
+      return; // Salir de la función si no hay imagen cargada
+    }
+  
+    // Verificar que todos los campos estén llenos
+    const formData = new FormData(e.target);
+    const formValues = Object.fromEntries(formData.entries());
+    for (const key in formValues) {
+      if (!formValues[key]) {
+        // Mostrar notificación de error si algún campo está vacío
+        toast.error(`Por favor, llena el campo "${key}".`);
+        return; // Salir de la función si hay un campo vacío
+      }
+    }
+  
+    // Construir los datos del edificio para enviar
+    const buildingData = {
+      name: formValues.name,
+      address: formValues.address,
+      description: formValues.description,
+      city: formValues.city,
+      country: formValues.country,
+      owner: currentUserEmail.email, // Utilizar el email obtenido del local storage
+      blueprints: '' // Inicialmente, la URL de los planos estará vacía
+    };
+  
+    // Si se selecciona un archivo de imagen, cargarlo y enviarlo a Cloudinary
+    const formDataImage = new FormData();
+    formDataImage.append('file', file);
+    formDataImage.append('upload_preset', 'osbs0ds6'); // Reemplazar con tu upload preset
+    formDataImage.append('cloud_name', 'dot1uumxf'); // Reemplazar con tu cloud name
+  
+    try {
+      const response = await fetch('https://api.cloudinary.com/v1_1/dot1uumxf/image/upload', {
+        method: 'POST',
+        body: formDataImage
+      });
+      const data = await response.json();
+      if (!response.ok) {
+        // La solicitud fue realizada pero el servidor respondió con un estado de error
+        // Imprimir el estado y el mensaje del error en la consola
+        console.error('Error del servidor:', data);
+        throw new Error(data.message || 'Error en la solicitud');
+      }
+      const imageUrl = data.secure_url;
+  
+      // Actualizar la URL de los planos en los datos del edificio
+      buildingData.blueprints = imageUrl;
+  
+      // Limpiar el estado que almacena la URL de la imagen
+      setImgSrc('/images/logos/iconocam.png');
+  
+      // Despachar la acción para crear el edificio
+      console.log('Datos del edificio a enviar:', buildingData);
+      await dispatch(createBuilding(buildingData));
+  
+      // Limpiar los campos del formulario
+      e.target.reset();
+  
+      // Mostrar notificación de éxito
+      toast.success('¡Edificio creado exitosamente!', {
+        position: 'top-right',
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      });
+    } catch (error) {
+      // Mostrar un mensaje de error al usuario
+      console.error('Error al crear el edificio:', error.message);
+      toast.error('Error al crear el edificio.');
     }
   }
+  
+  const onChange = (file) => {
+    const reader = new FileReader();
+    const { files } = file.target;
+    if (files && files.length !== 0) {
+      reader.onload = () => setImgSrc(reader.result);
+      reader.readAsDataURL(files[0]);
+    }
+  };
 
   return (
     <CardContent>
-      <form>
-      <Typography style={{ marginTop: '00px',marginBottom:"40px" }} variant="h6" gutterBottom>
-          Crea un nuevo servicio
+      <ToastContainer />
+      <form onSubmit={handleSubmit}>
+        <Typography style={{ marginTop: '20px', marginBottom: '20px' }} variant="h6" gutterBottom>
+          Crea un nuevo edificio
         </Typography>
-        <Grid container spacing={7}>
-        <Grid item xs={12} sx={{ marginTop: 4.8, marginBottom: 3 }}>
-            <Box sx={{ display: 'flex', alignItems: 'center' ,marginLeft:"200px"}}>
-              <ImgStyled  src={imgSrc} alt='Profile Pic' />
-              <Box style={{
-                marginLeft:"30px",
-              
-              }}>
-                <ButtonStyled component='label' variant='contained' htmlFor='account-settings-upload-image'>
-                  Cambia la imagen del servicio
+        <Grid container spacing={3}>
+          <Grid item xs={12}>
+            <Box sx={{ display: 'flex', alignItems: 'center' }}>
+              <ImgStyled src={imgSrc} alt='Profile Pic' sx={{width:"300px"}} />
+              <Box sx={{ marginLeft: '30px' }}>
+                <ButtonStyled component='label' variant='contained' htmlFor='upload-image'>
+                  Carga una imagen del edificio
                   <input
                     hidden
                     type='file'
                     onChange={onChange}
                     accept='image/png, image/jpeg'
-                    id='account-settings-upload-image'
+                    id='upload-image'
                   />
                 </ButtonStyled>
-  
-                <Typography variant='body2' sx={{ marginTop: 5 }}>
-                  Modifica las imagenes! :D Cargalas en formato jpg y png.
+                <Typography variant='body2' sx={{ marginTop: '5px' }}>
+                  Modifica las imágenes. Cárgalas en formato jpg o png.
                 </Typography>
               </Box>
             </Box>
-          <Typography style={{ marginTop: '70px',marginBottom:"-20px" }} variant="h6" gutterBottom>
-          Datos del servicio
-        </Typography>
-          </Grid>
-
-
-          <Grid item xs={12} sm={6}>
-            <TextField fullWidth label='Nombre' placeholder='Ej: complejo Esperanza'  />
           </Grid>
           <Grid item xs={12} sm={6}>
-            <TextField fullWidth label='Direccion' placeholder='Ej:Siempreviva 127' />
+            <TextField fullWidth label='Nombre' placeholder='Nombre del edificio' name='name' />
           </Grid>
           <Grid item xs={12} sm={6}>
-            <TextField fullWidth label='Pisos Totales' placeholder='Ej:7' />
+            <TextField fullWidth label='Dirección' placeholder='Dirección del edificio' name='address' />
           </Grid>
           <Grid item xs={12} sm={6}>
-            <TextField fullWidth label='Oficinas Totales' placeholder='Ej:50' />
-          </Grid>
-
-
-          <Grid item xs={12} sm={6}>
-              <FormControl fullWidth>
-                <InputLabel id='form-layouts-separator-select-label'>Pais</InputLabel>
-                <Select
-                  label='Country'
-                  defaultValue=''
-                  id='form-layouts-separator-select'
-                  labelId='form-layouts-separator-select-label'
-                >
-                  <MenuItem value='Arg'>Argentina</MenuItem>
-                  <MenuItem value='Col'>Colombia</MenuItem>
-                  <MenuItem value='Ecu'>Ecuador</MenuItem>
-                  <MenuItem value='Chile'>Chile</MenuItem>
-                  <MenuItem value='Ven'>Venezuela</MenuItem>
-                  <MenuItem value='Uru'>Uruguay</MenuItem>
-                  <MenuItem value='Bol'>Bolivia</MenuItem>
-                  <MenuItem value='Peru'>Peru</MenuItem>
-                </Select>
-              </FormControl>
+            <TextField fullWidth label='Descripción' placeholder='Descripción del edificio' name='description' />
           </Grid>
           <Grid item xs={12} sm={6}>
-            <TextField fullWidth label='Ciudad' placeholder='Ej: La pampa' />
+            <TextField fullWidth label='Ciudad' placeholder='Ciudad' name='city' />
           </Grid>
-            </Grid>
- 
-
-          
-
-          <Grid item xs={12} sm = {6}>
-            <Button style={{
-              marginTop: "60px"
-            }} variant='contained' sx={{ marginRight: 3.5 }}>
-              Save Changes
+          <Grid item xs={12} sm={6}>
+            <TextField
+              fullWidth
+              label='Pisos Totales'
+              placeholder='Ej:7'
+              name='totalFloors'
+              
+              
+            />
+          </Grid>
+          <Grid item xs={12} sm={6}>
+            <FormControl fullWidth>
+              <InputLabel>País</InputLabel>
+              <Select label='País' defaultValue='' name='country'>
+                <MenuItem value='Argentina'>Argentina</MenuItem>
+                <MenuItem value='Colombia'>Colombia</MenuItem>
+                <MenuItem value='Ecuador'>Ecuador</MenuItem>
+                <MenuItem value='Chile'>Chile</MenuItem>
+                <MenuItem value='Venezuela'>Venezuela</MenuItem>
+                <MenuItem value='Uruguay'>Uruguay</MenuItem>
+                <MenuItem value='Perú'>Perú</MenuItem>
+              </Select>
+            </FormControl>
+          </Grid>
+          <Grid item xs={12}>
+            <Button type='submit' variant='contained'>
+            Guardar
             </Button>
-
           </Grid>
-      
+        </Grid>
       </form>
     </CardContent>
-  )
-}
+  );
+};
 
-export default TabAccountst
+
+export default CreateBuilding;
