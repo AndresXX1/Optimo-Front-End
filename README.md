@@ -5,7 +5,7 @@
 * 📁 Soporta la subida y bajada de datos
 * 🪟 Realizada con Node.js, React, Redux toolkit, axios, Next y estilada con material UI
 
- <img width="1459" alt="スクリーンショット 2023-11-20 2 23 51" src="https://github.com/AndresXX1/back-pf-hoteles/blob/main/images/Imagen%20de%20WhatsApp%202024-01-24%20a%20las%2019.10.42_a6838362.jpg"> 
+ <img width="1459" alt="スクリーンショット 2023-11-20 2 23 51" src="public/opti/Imagen de WhatsApp 2024-05-28 a las 17.38.34_72715ebd.jpg"> 
 
 ## 🌟 Quick Start
 
